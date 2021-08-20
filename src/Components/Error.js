@@ -1,8 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-
+import Results from './Results'
 /*
 * 
 * Description:
@@ -16,11 +12,17 @@ import App from './App';
 *   Schedule: 10am 
 * 
 */
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const Error = () => {
+    return (  	
+        <div id = "c3">
+	        <div id="error">
+        
+	        </div>
+            <br></br>
 
-
+	       <Results/>
+	    </div>
+    );
+}
+ 
+export default Error;

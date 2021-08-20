@@ -1,8 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-
+import Wrapper from './Wrapper'
 /*
 * 
 * Description:
@@ -16,11 +12,10 @@ import App from './App';
 *   Schedule: 10am 
 * 
 */
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
-
+const Main = () => {
+    return ( 
+       <Wrapper/>
+     );
+}
+ 
+export default Main;
