@@ -1,5 +1,6 @@
 import Canvas from './Canvas'
 import Error from './Error'
+import {useState} from 'react'
 /*
 * 
 * Description:
@@ -15,8 +16,17 @@ import Error from './Error'
 */
 const Wrapper = () => {
 
-    const setAlphabet = () => alert("To be implemented")
     
+    const [alphabet,setAlphabetWord]=useState('');
+    const [showRunButton,setShowRunButton]=useState(false);
+    
+    const setAlphabet = () => 
+    {
+        if(alphabet!==''){
+            setShowRunButton(true);
+        } 
+       alert("To be implemented")
+    }    
 
     const exportJson = () => alert("To be implemented")
     
@@ -26,8 +36,8 @@ const Wrapper = () => {
     return (
         <div id="wrapper">
         <div id="c1">
-            <input type="text" id="alphabet"/> 
-            <input type="submit" className="button" value="Set Alphabet" onClick={setAlphabet} />  (e.g.: "1, 0")<br></br>
+            <input type="text" id="alphabet" value={alphabet} onChange={(e)=>setAlphabetWord(e.target.value)}/> 
+            <input type="submit" className="button" value="Set Alphabet"  onClick={setAlphabet} />  (e.g.: "1, 0")<br></br>
             <input type="text" id="json-area" />
             <input type="submit" className="button" value="Download JSON" onClick={exportJson} />
             <input type="submit" className="button" value="Upload JSON" onClick={importJson} /><br></br>
@@ -43,7 +53,7 @@ const Wrapper = () => {
                 <b>SET INITIAL STATE (S key):</b> once a state is selected, press S to set it as the start state.<br></br>
             </div>
         </div>
-        <Canvas/>
+        <Canvas showRunBotton={showRunButton}/>
         <Error/>
     </div>
       );

@@ -261,6 +261,7 @@ footer a:link, footer a:visited {
   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#81766C', endColorstr='#A99E93',GradientType=0);
   border:1px solid #3C2F23;
   color:#D7CEC4;
+  cursor: no-drop;
 }
 
 #container {
