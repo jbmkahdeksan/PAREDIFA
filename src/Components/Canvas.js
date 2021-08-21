@@ -52,11 +52,10 @@ const Canvas = (props) => {
             e.nativeEvent.offsetY);
            
         }
-    useEffect(() => {
-     
-      setCanvasObj(canvasRef.current.getContext('2d'));
-    
+    useEffect(() => { 
+        setCanvasObj(canvasRef.current.getContext('2d'));  
     }, [])
+
     
     return (             
         <div id = "c2">
@@ -69,7 +68,7 @@ const Canvas = (props) => {
                     </React.Fragment>
                 }
             
-                <canvas onClick={(e)=>algo(e)} ref={canvasRef}  style={{background:props.showRunBotton?"#f7f1e3":""}} id="main-canvas" width="600" height="600"/>
+                <canvas onClick={ (e) => algo(e) } ref={canvasRef}  style={{background:props.showRunBotton?"#f7f1e3":""}} id="main-canvas" width="600" height="600"/>
             </div>
         </div>
      );

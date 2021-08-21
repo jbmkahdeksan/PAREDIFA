@@ -16,7 +16,7 @@
 const Results = () => {
     return ( 
         <div id="results">
-            
+
         </div>  
     );
 }
