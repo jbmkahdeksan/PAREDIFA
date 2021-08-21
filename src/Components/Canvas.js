@@ -18,7 +18,7 @@ const Canvas = (props) => {
     const [inputWord,setInputWord]=useState('');
     const canvasRef = useRef(null)
     const [context,setCanvasObj]=useState(null);
-    const [mouseRelativeToNode,setMouseRelativeToNode]=useState({});
+
     const algo=(e)=>{
         //Our first draw
         context.clearRect(0, 0, 600, 600);
