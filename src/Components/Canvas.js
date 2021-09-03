@@ -99,7 +99,7 @@ const Canvas = (props) => {
     
         if(context){
             clean();
-            if(states.length>0)console.log("im going in")
+           
             states.forEach( item => drawState(context,item,isNaming,stateOver) )        
     }
 
