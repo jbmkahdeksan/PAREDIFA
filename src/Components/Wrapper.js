@@ -53,7 +53,7 @@ const Wrapper = () => {
                 <b>SET INITIAL STATE (S key):</b> once a state is selected, press S to set it as the start state.<br></br>
             </div>
         </div>
-        <Canvas showRunBotton={showRunButton}/>
+        <Canvas showRunBotton={true}/>
         <Error/>
     </div>
       );
