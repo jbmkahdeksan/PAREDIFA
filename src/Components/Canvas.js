@@ -41,12 +41,14 @@ const Canvas = (props) => {
         Modifies state attributes: final, start, name 
     */
     const modifyState = (state, final, start, letter) => {
-          
+            if( (state.name.length === 4 && letter !== 'Backspace') || (typeof letter === 'string' && letter.length > 3 && letter !== 'Backspace')) return; 
+            if( state.name.length === 1 && letter === 'Backspace' ) return; 
             const name = letter === undefined ?
             state.name : letter === 'Backspace' ?
             state.name.slice(0, state.name.length-1) : 
              state.name.length < 4 ? state.name + letter : state.name;
              setSelected({...selected,name:name})
+           
             setStates( states.map(estado => state.id === estado.id? {...estado, final:final, start:start, name:name} : estado ) )
         }
 
@@ -139,7 +141,7 @@ const Canvas = (props) => {
     
         if(context){
             clean();
-           // if(states.length>0)console.log("im going in")
+            if(states.length>0)console.log("im going in")
             states.forEach( item => drawState(context,item,isNaming,stateOver) )        
     }
 
@@ -147,7 +149,10 @@ const Canvas = (props) => {
     
 
 
-
+/*
+    Sets the selected state and returns a new state mapped with some 
+    properties that were changed
+*/
 const mapEstado = (id, estado, coordinates) => {
     if(id === estado.id){
         setSelected( {...estado, ...coordinates} );
@@ -164,6 +169,7 @@ const modifyStateInfo = (e) =>{
     setMouseCoord({ x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY });
 
     const state = getState();
+   
     if((mouseDown || e.type==='click') && state && !isNaming ){
     let coordinates=e.type === 'click' ? {x:state.x, y:state.y} : {x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY};
         const selecionada = selected;
@@ -176,23 +182,34 @@ const modifyStateInfo = (e) =>{
             id = selecionada.id;
             coordinates = {x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY};
         }
-        setStates( states.map( estado => mapEstado(id, estado, coordinates) ) )
+        setStates( states.map( (estado) => mapEstado(id, estado, coordinates) ) )
         
          return;
  }
-    if(state){
-        if(state.id !== stateOver){
-            
-            setStateOver(state.id)
-        }
-    }else{
-        if(stateOver !== -1){
-            setStateOver(-1)
-           
-        }
+
+ /*
+
+ */
+if(isNaming)return;
+ if(state){
+    if(state.id !== stateOver){
+        if(selected!==-1 &&  state.id===selected.id )return;
+        setStateOver(state.id)
+    }
+}else{
+    if(selected!==-1 && e.type==='click'){
       
+        setStates(states.map((estado)=>estado.id===selected.id?{...estado,selected:false}:estado));
+        setSelected(-1);
+        return;
+    }
+    if(stateOver !== -1){
+        setStateOver(-1)
        
     }
+  
+   
+}
    
 
     
