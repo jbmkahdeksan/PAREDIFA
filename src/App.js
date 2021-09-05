@@ -1,5 +1,7 @@
 import Main from './Components/Main'
 import {BrowserRouter, Route,Switch} from 'react-router-dom';
+import { useState } from 'react';
+import ThemeContext from './Components/Context';
 /*
 * 
 * Description:
@@ -14,11 +16,15 @@ import {BrowserRouter, Route,Switch} from 'react-router-dom';
 * 
 */
 function App() {
+
+  const [states,setStates]=useState([]);
   return (
     <BrowserRouter>
-      <Switch>
-           <Route path='/' exact component={Main}/>
-      </Switch>
+      <ThemeContext.Provider value={{states,setStates}}>
+          <Switch>
+              <Route path='/' exact component={Main}/>
+          </Switch>
+        </ThemeContext.Provider>
     </BrowserRouter>
   );
 }

@@ -1,4 +1,5 @@
-import React, { useRef, useEffect ,useState, useCallback} from 'react';
+import React, { useRef, useEffect ,useState, useCallback, useContext} from 'react';
+import ThemeContext from './Context';
 import { drawState } from './DrawState';
 /*
 * 
@@ -19,7 +20,8 @@ const Canvas = (props) => {
     const [inputWord,setInputWord]=useState('');
     const canvasRef = useRef(null)
     const [context,setCanvasObj]=useState(null);
-    const [states,setStates]=useState([]);
+    //const [states,setStates]=useState([]);
+    const {states,setStates} = useContext(ThemeContext);
     const [mouseDown,setMouseDown]=useState(false)
     const [mouseCoord,setMouseCoord]=useState({});
     const [selected,setSelected]=useState(-1);
@@ -41,8 +43,12 @@ const Canvas = (props) => {
         Modifies state attributes: final, start, name 
     */
     const modifyState = (state, final, start, letter) => {
-            if( (state.name.length === 4 && letter !== 'Backspace') || (typeof letter === 'string' && letter.length > 3 && letter !== 'Backspace')) return; 
-            if( state.name.length === 1 && letter === 'Backspace' ) return; 
+            if( isNaming 
+                &&  
+                (state.name.length === 4 && letter !== 'Backspace') 
+                || 
+                (typeof letter === 'string' && letter.length > 3 && letter !== 'Backspace') ) return; 
+            if( isNaming &&  (state.name.length === 1 && letter === 'Backspace' )) return; 
             const name = letter === undefined ?
             state.name : letter === 'Backspace' ?
             state.name.slice(0, state.name.length-1) : 

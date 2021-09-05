@@ -1,6 +1,7 @@
 import Canvas from './Canvas'
 import Error from './Error'
-import {useState} from 'react'
+import {useState,useContext} from 'react'
+import ThemeContext from './Context';
 /*
 * 
 * Description:
@@ -19,7 +20,7 @@ const Wrapper = () => {
     
     const [alphabet,setAlphabetWord]=useState('');
     const [showRunButton,setShowRunButton]=useState(false);
-
+    const {states,setStates} = useContext(ThemeContext);
     const [statesStringify,setStatesStringify]=useState('');
     const setAlphabet = () => 
     {
@@ -29,11 +30,14 @@ const Wrapper = () => {
        alert("To be implemented")
     }    
 
-    const exportJson = () => {}
+    const exportJson = () => {
+        setStatesStringify(JSON.stringify(states));
+    }
     
 
-    const importJson = () => alert("To be implemented")
-    
+    const importJson = () => {
+       setStates([{"id":1630816682698,"x":233,"y":185,"final":false,"start":false,"name":"x","selected":false},{"id":1630816682835,"x":200,"y":155,"final":false,"start":false,"name":"x","selected":false},{"id":1630816682986,"x":168,"y":220,"final":false,"start":false,"name":"x","selected":false},{"id":1630816683293,"x":117,"y":204,"final":false,"start":false,"name":"xxxx","selected":true},{"id":1630816683442,"x":83,"y":328,"final":false,"start":false,"name":"x","selected":false}])
+    }
     return (
         <div id="wrapper">
         <div id="c1">
