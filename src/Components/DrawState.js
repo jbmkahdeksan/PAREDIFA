@@ -49,20 +49,22 @@ export const drawStateCircle = (context, x,  y) => {
 }
 
 
-export const drawStateText = (context, x, y, name) => {
+export const drawStateText = (context,item,isNaming,stateOver) => {
                     context.globalAlpha = 1;
     //                context.strokeStyle = "rgb(255, 135, 20)";
                    // context.strokeStyle = "rgb(145, 127, 49)";
                    context.strokeStyle ="rgb(217, 187, 58)"
+                   if( item.id===stateOver|| (isNaming && !item.selected)) context.strokeStyle ="rgb(145, 127, 49)"
+                   if(item.selected ) context.strokeStyle ="rgb(194, 95, 0)"
                     context.stroke();
                     context.globalAlpha = 1;
                     context.font = "15px Georgia";
                     context.textAlign = "center";
                     context.textBaseline = "middle";
                     context.fillStyle = "rgb(6, 11, 16)";
-                    context.fillText(name,
-                        x,
-                        y);
+                    context.fillText(item.name,
+                        item.x,
+                        item.y);
 }
 
 
@@ -86,7 +88,7 @@ export const drawColor=(context,item,isNaming,stateOver) => {
 export const drawState=(context,item,isNaming,stateOver)=>{
     drawStateCircle(context, item.x,item.y);
     drawColor(context,item,isNaming,stateOver)
-    drawStateText(context, item.x, item.y, item.name);
+    drawStateText(context, item,isNaming,stateOver);
         
     if (item.final)  drawFinal(context, item.x, item.y);
 

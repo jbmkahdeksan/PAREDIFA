@@ -149,7 +149,7 @@ const Canvas = (props) => {
         if(context){
             clean();
        
-            states.forEach( item => drawState(context,item,isNaming,stateOver) )        
+            states.forEach( item => drawState(context, item, isNaming, stateOver) )        
     }
 
     }, [states, clean, context, stateOver, isNaming]);
@@ -200,13 +200,13 @@ const modifyStateInfo = (e) =>{
 if(isNaming)return;
  if(state){
     if(state.id !== stateOver){
-        if(selected!==-1 &&  state.id===selected.id )return;
+        if(selected !== -1 &&  state.id === selected.id )return;
         setStateOver(state.id)
     }
 }else{
-    if(selected!==-1 && e.type==='click'){
+    if(selected !== -1 && e.type === 'click'){
       
-        setStates(states.map((estado)=>estado.id===selected.id?{...estado,selected:false}:estado));
+        setStates( states.map( (estado) => estado.id === selected.id ? {...estado, selected : false } : estado ) );
         setSelected(-1);
         return;
     }
@@ -252,7 +252,7 @@ if(isNaming)return;
         
                     <canvas 
                         
-                        onClick = { (e)=>modifyStateInfo(e) }
+                        onClick = { (e) => modifyStateInfo(e) }
                         onMouseMove = { (e) => modifyStateInfo(e) } 
                         onMouseDown = { (e) => { setMouseDown(true); modifyStateInfo(e) } } 
                         onMouseUp = { () => { setMouseDown(false) } }  
