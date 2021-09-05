@@ -45,9 +45,9 @@ const Canvas = (props) => {
     const modifyState = (state, final, start, letter) => {
             if( isNaming 
                 &&  
-                (state.name.length === 4 && letter !== 'Backspace') 
+                ( (state.name.length === 4 && letter !== 'Backspace') 
                 || 
-                (typeof letter === 'string' && letter.length > 3 && letter !== 'Backspace') ) return; 
+                (typeof letter === 'string' && letter.length > 3 && letter !== 'Backspace') ) ) return; 
             if( isNaming &&  (state.name.length === 1 && letter === 'Backspace' )) return; 
             const name = letter === undefined ?
             state.name : letter === 'Backspace' ?
@@ -55,7 +55,8 @@ const Canvas = (props) => {
              state.name.length < 4 ? state.name + letter : state.name;
              setSelected({...selected,name:name})
            
-            setStates( states.map(estado => state.id === estado.id? {...estado, final:final, start:start, name:name} : estado ) )
+             // comentar si dejar si el estripar denuevo s o f se deja como el brasielno
+            setStates( states.map(estado => state.id === estado.id? {...estado, final: final ? !estado.final : estado.final, start : start ? !estado.start : estado.start, name: name} : {...estado,start:false} ) )
         }
 
      
@@ -94,8 +95,8 @@ const Canvas = (props) => {
         if(!isNaming && estadoSeleccionado !==-1){
    
             if(e.key === 'Delete' ) deleteState(estadoSeleccionado.id);
-            if(e.key === 'f')    modifyState(estadoSeleccionado, true, false);
-            if(e.key === 's')    modifyState(estadoSeleccionado, false, true);
+            if(e.key === 'f') modifyState(estadoSeleccionado, true, null);
+            if(e.key === 's') modifyState(estadoSeleccionado, null, true);
             if(e.key === 'r')    setIsNaming(true);
         }
   
@@ -147,7 +148,7 @@ const Canvas = (props) => {
     
         if(context){
             clean();
-          
+       
             states.forEach( item => drawState(context,item,isNaming,stateOver) )        
     }
 
