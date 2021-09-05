@@ -22,42 +22,68 @@ const Canvas = (props) => {
     const [states,setStates]=useState([]);
     const [mouseDown,setMouseDown]=useState(false)
     const [mouseCoord,setMouseCoord]=useState({});
-  
+    const [selected,setSelected]=useState(-1);
     const [isNaming,setIsNaming]=useState(false);
     const [stateOver,setStateOver]=useState(null);
     
 
-
+    /*
+        Adds a state, property name should be changed once the algo for evaluating the dfa is complete
+    
+    */
+  
     const addState = () => {
-     
-        if( !getState() )   {
-        setStates( [...states, {id:Date.now(), ...mouseCoord, final:false, start:false, name:'x' } ] );
-        }
+        if( !getState() )  setStates( [...states, {id:Date.now(), ...mouseCoord, final:false, start:false, name:'x' } ] );
     }
 
-        const modifyState = (state, final, start, letter) => {
+
+    /*
+        Modifies state attributes: final, start, name 
+    */
+    const modifyState = (state, final, start, letter) => {
+          
             const name = letter === undefined ?
             state.name : letter === 'Backspace' ?
             state.name.slice(0, state.name.length-1) : 
              state.name.length < 4 ? state.name + letter : state.name;
+             setSelected({...selected,name:name})
             setStates( states.map(estado => state.id === estado.id? {...estado, final:final, start:start, name:name} : estado ) )
         }
 
+     
+    /*
+        Creates a new array of states without the deleted one
+    */    
     const deleteState = (id) => setStates(states.filter( state => state.id !== id ) );
 
 
 
+    /*
+        VGarcia way of checking if in the current mouse position theres a state
+    */
     const isMouseOverState =(state)  => ( Math.sqrt(Math.pow (mouseCoord.x - state.x, 2) + Math.pow (mouseCoord.y- state.y, 2) ) < 20 );
             
+    /*
+        Returns null if there isnt a state in the current mouse position
+    */
     const getState = ()=>states.find(states => isMouseOverState(states) ) ?? null;
 
-    const handleKeyDown =useCallback( (e) => {
-         const estado = getState();
+    /*
+        Handles methods such as:
+            -Adding state
+            -Deleting a state
+            -Modfies state:  Makes is final or initial, changes its name
+            -Handles isNaming useState 
 
-        if(!estado && e.key === 'q' && !isNaming) addState();
-        //const estadoSeleccionado = states.find(state => state.id === selectedState);
-        const estadoSeleccionado = states.find(state => state.selected); //maybe use the index
-        if(!isNaming && estadoSeleccionado !== undefined){
+    */
+    const handleKeyDown =useCallback( (e) => {
+        
+
+        if( e.key === 'q' && !isNaming) { 
+            if(!getState()) addState();
+        }
+        const estadoSeleccionado = selected;
+        if(!isNaming && estadoSeleccionado !==-1){
    
             if(e.key === 'Delete' ) deleteState(estadoSeleccionado.id);
             if(e.key === 'f')    modifyState(estadoSeleccionado, true, false);
@@ -73,9 +99,12 @@ const Canvas = (props) => {
      
     
       
-    }, [deleteState, addState, getState, states, isNaming ])    
+    }, [deleteState, addState, getState, states, isNaming, selected])    
     
 
+    /*
+        Cleans canvas
+    */
     const clean=useCallback(()=>{
       
             context.clearRect(0, 0, 600, 600);
@@ -88,6 +117,13 @@ const Canvas = (props) => {
     }, [context])
 
 
+    /*
+        On window opening the following happens:
+            -Retrieves canvas reference  
+            - Adds keydown listener to the window
+        On window closing the following happens:
+            -Removes keydown listener
+    */
     useEffect(() => { 
         setCanvasObj( canvasRef.current.getContext('2d') );          
   
@@ -95,34 +131,55 @@ const Canvas = (props) => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [handleKeyDown])
 
+    /*
+        This listens to any change on states and other useStates
+        Paints canvas based on any change of the listeners
+    */
   useEffect(()=>{
     
         if(context){
             clean();
-           
+           // if(states.length>0)console.log("im going in")
             states.forEach( item => drawState(context,item,isNaming,stateOver) )        
     }
 
     }, [states, clean, context, stateOver, isNaming]);
     
 
-    
-    
+
+
+const mapEstado = (id, estado, coordinates) => {
+    if(id === estado.id){
+        setSelected( {...estado, ...coordinates} );
+        return  {...estado, ...coordinates, selected:true} 
+    }else{
+        return {...estado, selected:false}
+    }
+}
 
    
-    const modifyStateInfo = (e) =>{
+const modifyStateInfo = (e) =>{
       
        
-        setMouseCoord({ x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY });
-    
-        const state =getState();
-        if((mouseDown || e.type==='click') && state && !isNaming ){
-         const coordinates=e.type==='click'?{x:state.x,y:state.y}:{x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY};
-         
-            setStates(states.map(estado => state.id === estado.id ? {...estado, ...coordinates,selected:true} : {...estado,selected:false} ) )
-             return;
-     }
+    setMouseCoord({ x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY });
 
+    const state = getState();
+    if((mouseDown || e.type==='click') && state && !isNaming ){
+    let coordinates=e.type === 'click' ? {x:state.x, y:state.y} : {x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY};
+        const selecionada = selected;
+        let id = state.id;
+        let should = false;
+        if(selecionada !== -1 && state.id !== selecionada.id){
+            should = ( Math.sqrt(Math.pow (selecionada.x - state.x, 2) + Math.pow (selecionada.y - state.y, 2) ) < 20 );
+        }
+        if(should){
+            id = selecionada.id;
+            coordinates = {x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY};
+        }
+        setStates( states.map( estado => mapEstado(id, estado, coordinates) ) )
+        
+         return;
+ }
     if(state){
         if(state.id !== stateOver){
             

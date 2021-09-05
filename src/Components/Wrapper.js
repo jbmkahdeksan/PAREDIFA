@@ -19,7 +19,8 @@ const Wrapper = () => {
     
     const [alphabet,setAlphabetWord]=useState('');
     const [showRunButton,setShowRunButton]=useState(false);
-    
+
+    const [statesStringify,setStatesStringify]=useState('');
     const setAlphabet = () => 
     {
         if(alphabet!==''){
@@ -28,7 +29,7 @@ const Wrapper = () => {
        alert("To be implemented")
     }    
 
-    const exportJson = () => alert("To be implemented")
+    const exportJson = () => {}
     
 
     const importJson = () => alert("To be implemented")
@@ -38,7 +39,7 @@ const Wrapper = () => {
         <div id="c1">
             <input type="text" id="alphabet" value={alphabet} onChange={(e)=>setAlphabetWord(e.target.value)}/> 
             <input type="submit" className="button" value="Set Alphabet"  onClick={setAlphabet} />  (e.g.: "1, 0")<br></br>
-            <input type="text" id="json-area" />
+            <input type="text" id="json-area" value={statesStringify} readOnly/>
             <input type="submit" className="button" value="Download JSON" onClick={exportJson} />
             <input type="submit" className="button" value="Upload JSON" onClick={importJson} /><br></br>
             <div id="instructions">
@@ -53,7 +54,7 @@ const Wrapper = () => {
                 <b>SET INITIAL STATE (S key):</b> once a state is selected, press S to set it as the start state.<br></br>
             </div>
         </div>
-        <Canvas showRunBotton={true}/>
+        <Canvas  showRunBotton={true}/>
         <Error/>
     </div>
       );
