@@ -36,7 +36,13 @@ const Wrapper = () => {
     
 
     const importJson = () => {
-       setStates([{"id":1630816682698,"x":233,"y":185,"final":false,"start":false,"name":"x","selected":false},{"id":1630816682835,"x":200,"y":155,"final":false,"start":false,"name":"x","selected":false},{"id":1630816682986,"x":168,"y":220,"final":false,"start":false,"name":"x","selected":false},{"id":1630816683293,"x":117,"y":204,"final":false,"start":false,"name":"xxxx","selected":true},{"id":1630816683442,"x":83,"y":328,"final":false,"start":false,"name":"x","selected":false}])
+       setStates([
+                            {"id":1630816682698,"x":233,"y":185,"final":false,"start":false,"name":"x","selected":false},
+                            {"id":1630816682835,"x":200,"y":155,"final":false,"start":false,"name":"x","selected":false},
+                            {"id":1630816682986,"x":168,"y":220,"final":false,"start":false,"name":"x","selected":false},
+                            {"id":1630816683293,"x":117,"y":204,"final":false,"start":false,"name":"xxxx","selected":true},
+                            {"id":1630816683442,"x":83,"y":328,"final":false,"start":false,"name":"x","selected":false}
+                        ]);
     }
     return (
         <div id="wrapper">

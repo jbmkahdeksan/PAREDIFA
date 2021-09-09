@@ -60,6 +60,12 @@ h3 {
   overflow: hidden; 
 }
 
+.canvitas{
+  position: "relative";
+  background:"#f7f1e3";
+  width:"600px";
+  height:"600px";
+}
 
 /* specific divs */
 
