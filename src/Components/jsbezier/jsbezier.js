@@ -63,12 +63,12 @@
  *
  */
 
-(function() {
 
-    var root = this;
+
+
 
     if(typeof Math.sgn == "undefined") {
-        Math.sgn = function(x) { return x == 0 ? 0 : x > 0 ? 1 :-1; };
+        Math.sgn = function(x) { return x === 0 ? 0 : x > 0 ? 1 :-1; };
     }
 
     var Vectors = {
@@ -91,7 +91,7 @@
      * argument you pass to the pointOnPath function: it is a ratio of distance travelled along the curve.  Distance is the distance in pixels from
      * the point to the curve.
      */
-    var _distanceFromCurve = function(point, curve) {
+    export var _distanceFromCurve = function(point, curve) {
         var candidates = [],
             w = _convertToBezier(point, curve),
             degree = curve.length - 1, higherDegree = (2 * degree) - 1,
@@ -117,7 +117,7 @@
     /**
      * finds the nearest point on the curve to the given point.
      */
-    var _nearestPointOnCurve = function(point, curve) {
+    export var _nearestPointOnCurve = function(point, curve) {
         var td = _distanceFromCurve(point, curve);
         return {point:_bezier(curve, curve.length - 1, td.location, null, null), location:td.location};
     };
@@ -147,7 +147,7 @@
             var lb = Math.max(0, k - m),
                 ub = Math.min(k, n);
             for (i = lb; i <= ub; i++) {
-                j = k - i;
+                var  j = k - i;
                 w[i+j].y += cdTable[j][i] * z[j][i];
             }
         }
@@ -201,8 +201,8 @@
         a = curve[0].y - curve[degree].y;
         b = curve[degree].x - curve[0].x;
         c = curve[0].x * curve[degree].y - curve[degree].x * curve[0].y;
-
-        var max_distance_above = max_distance_below = 0.0;
+        var max_distance_above, max_distance_below;
+         max_distance_above = max_distance_below = 0.0;
 
         for (var i = 1; i < degree; i++) {
             var value = a * curve[i].x + b * curve[i].y + c;
@@ -308,7 +308,7 @@
     };
 
     var _isPoint = function(curve) {
-        return curve[0].x == curve[1].x && curve[0].y == curve[1].y;
+        return curve[0].x === curve[1].x && curve[0].y === curve[1].y;
     };
 
     /**
@@ -361,14 +361,14 @@
     /**
      * finds the point that is 'distance' along the path from 'location'.
      */
-    var _pointAlongPathFrom = function(curve, location, distance) {
+    export var _pointAlongPathFrom = function(curve, location, distance) {
         return _pointAlongPath(curve, location, distance).point;
     };
 
     /**
      * finds the location that is 'distance' along the path from 'location'.
      */
-    var _locationAlongPathFrom = function(curve, location, distance) {
+    export var _locationAlongPathFrom = function(curve, location, distance) {
         return _pointAlongPath(curve, location, distance).location;
     };
 
@@ -381,7 +381,7 @@
         var p1 = _pointOnPath(curve, location),
             p2 = _pointOnPath(curve.slice(0, curve.length - 1), location),
             dy = p2.y - p1.y, dx = p2.x - p1.x;
-        return dy == 0 ? Infinity : Math.atan(dy / dx);
+        return dy === 0 ? Infinity : Math.atan(dy / dx);
     };
 
     /**
@@ -389,7 +389,7 @@
      if this point is greater than location 1, the gradient at location 1 is returned.
      if this point is less than location 0, the gradient at location 0 is returned.
      */
-    var _gradientAtPointAlongPathFrom = function(curve, location, distance) {
+    export var _gradientAtPointAlongPathFrom = function(curve, location, distance) {
         var p = _pointAlongPath(curve, location, distance);
         if (p.location > 1) p.location = 1;
         if (p.location < 0) p.location = 0;
@@ -400,7 +400,7 @@
      * calculates a line that is 'length' pixels long, perpendicular to, and centered on, the path at 'distance' pixels from the given location.
      * if distance is not supplied, the perpendicular for the given location is computed (ie. we set distance to zero).
      */
-    var _perpendicularToPathAt = function(curve, location, length, distance) {
+   export var _perpendicularToPathAt = function(curve, location, length, distance) {
         distance = distance == null ? 0 : distance;
         var p = _pointAlongPath(curve, location, distance),
             m = _gradientAtPoint(curve, p.location),
@@ -410,21 +410,7 @@
         return [{x:p.point.x + x, y:p.point.y + y}, {x:p.point.x - x, y:p.point.y - y}];
     };
 
-    var jsBezier = this.jsBezier = {
-        distanceFromCurve : _distanceFromCurve,
-        gradientAtPoint : _gradientAtPoint,
-        gradientAtPointAlongCurveFrom : _gradientAtPointAlongPathFrom,
-        nearestPointOnCurve : _nearestPointOnCurve,
-        pointOnCurve : _pointOnPath,
-        pointAlongCurveFrom : _pointAlongPathFrom,
-        perpendicularToCurveAt : _perpendicularToPathAt,
-        locationAlongCurveFrom:_locationAlongPathFrom,
-        getLength:_length,
-        version:"0.9.0"
-    };
+ 
 
-    if (typeof exports !== "undefined") {
-        exports.jsBezier = jsBezier;
-    }
+ 
 
-}).call(typeof window !== 'undefined' ? window : this);

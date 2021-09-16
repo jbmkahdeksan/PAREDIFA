@@ -24,7 +24,7 @@ export const drawStart = (context, x, y) => {
 
 
 export const drawFinal = (context, x, y) => {
-    context.beginPath();
+   context.beginPath();
     context.arc(x,
         y,
         20* 10 / 8,
@@ -35,7 +35,7 @@ export const drawFinal = (context, x, y) => {
 }
 
 
-export const drawStateCircle = (context, item, {isNaming, isNamingTr}) => {
+export const drawStateCircle = (context, item, {isNaming, isNamingTr,  namingFixedTr}) => {
     context.beginPath();
     context.arc(item.x,
         item.y,
@@ -44,7 +44,7 @@ export const drawStateCircle = (context, item, {isNaming, isNamingTr}) => {
         Math.PI * 2,
         false);
 
-        context.globalAlpha = (isNaming || isNamingTr) && ( !item.selected || isNamingTr) ? 0.5 : 1;
+        context.globalAlpha = (isNaming || isNamingTr ||  namingFixedTr) && ( !item.selected || (isNamingTr ||  namingFixedTr)) ? 0.5 : 1;
 }
 
 
@@ -59,7 +59,7 @@ export const drawStateText = (context,item) => {
                         item.y);
 }
 
-const drawStateOutColor=(context,item, {isNaming, isNamingTr},stateOver, transitioning)=>{
+const drawStateOutColor=(context,item, {isNaming, isNamingTr,  namingFixedTr},stateOver, transitioning)=>{
    // context.globalAlpha = 0.5;
    // context.globalAlpha = isNaming ? 0.5 : 1;
     //afuera mientras hace transicion "rgb(6, 65, 126)"
@@ -73,7 +73,7 @@ const drawStateOutColor=(context,item, {isNaming, isNamingTr},stateOver, transit
   if( item.id===stateOver.id ) context.strokeStyle ="rgb(145, 127, 49)"
   if(item.selected ) context.strokeStyle ="rgb(194, 95, 0)"
      context.stroke();
-     context.globalAlpha =  (isNaming || isNamingTr) && ( !item.selected || isNamingTr)? 0.5 : 1;
+     context.globalAlpha =  (isNaming || isNamingTr ||  namingFixedTr) && ( !item.selected || (isNamingTr ||  namingFixedTr))? 0.5 : 1;
      //context.globalAlpha = 1;
 }
 export const drawColor=(context,item,isNaming,stateOver, transitioning) => {
@@ -84,6 +84,7 @@ export const drawColor=(context,item,isNaming,stateOver, transitioning) => {
                     context.fill();
                     return;
                    }
+                  
                   context.fillStyle="rgb(255, 232, 136)";
                
                  if( item.id===stateOver.id ) context.fillStyle ="rgb(211, 195, 128)";
@@ -97,11 +98,11 @@ export const drawColor=(context,item,isNaming,stateOver, transitioning) => {
 
 
 
-export const drawState=(context, item, {isNaming=false, isNamingTr=false}, stateOver, transitioning)=>{
+export const drawState=(context, item, {isNaming=false, isNamingTr=false, namingFixedTr=false}, stateOver, transitioning)=>{
     
-    drawStateCircle(context, item ,{isNaming, isNamingTr});
+    drawStateCircle(context, item ,{isNaming, isNamingTr, namingFixedTr});
     drawColor(context,item, isNaming, stateOver, transitioning);
-    drawStateOutColor(context, item,  {isNaming, isNamingTr}, stateOver, transitioning);
+    drawStateOutColor(context, item,  {isNaming, isNamingTr, namingFixedTr}, stateOver, transitioning);
     drawStateText(context, item);
         
     if (item.final)  drawFinal(context, item.x, item.y, transitioning);
@@ -110,3 +111,5 @@ export const drawState=(context, item, {isNaming=false, isNamingTr=false}, state
     if(item.start) drawStart(context, item.x, item.y, transitioning);
 
 }
+
+

@@ -1,7 +1,8 @@
 import Main from './Components/Main'
 import {BrowserRouter, Route,Switch} from 'react-router-dom';
 import { useState } from 'react';
-import ThemeContext from './Components/Context';
+import ThemeContext from './Components/ContextStates';
+import ThemeContextTr from './Components/ContextTransitions';
 /*
 * 
 * Description:
@@ -18,13 +19,16 @@ import ThemeContext from './Components/Context';
 function App() {
 
   const [states,setStates]=useState([]);
+  const [transitions,setTranstions]=useState([]);
   return (
     <BrowserRouter>
-      <ThemeContext.Provider value={{states,setStates}}>
-          <Switch>
-              <Route path='/' exact component={Main}/>
-          </Switch>
-        </ThemeContext.Provider>
+      <ThemeContextTr.Provider value={{transitions, setTranstions}}>
+          <ThemeContext.Provider value={{states, setStates}}>
+              <Switch>
+                  <Route path='/' exact component={Main}/>
+              </Switch>
+            </ThemeContext.Provider>
+      </ThemeContextTr.Provider>
     </BrowserRouter>
   );
 }

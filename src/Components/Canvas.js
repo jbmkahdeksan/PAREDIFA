@@ -1,10 +1,14 @@
 import React, { useRef, useEffect ,useState, useCallback, useContext} from 'react';
-import ThemeContext from './Context';
-import { drawState } from './DrawState';
-import {drawTempTransition, drawTransitionCircle} from './Curvas'
+import ThemeContext from './ContextStates';
+import ThemeContextTr from './ContextTransitions';
+import { drawState} from './DrawState';
+import {drawTempTransition, drawTransitionCircle, drawTransitionOver, drawHoverTrans} from './Curvas'
 import Transition from './Classes/Transition';
-import { isOverState, cleanCanvas, handleMouseEvent,  commitStateChanges, setNamingSymbol, commitTemporaryTransition} from './Utils';
+import { isOverState, cleanCanvas, handleMouseEvent, 
+     commitStateChanges, setNamingSymbol, commitTemporaryTransition, 
+     commitTrChanges, commitSymbolChangesTr, handleEnterTr, handleMouseClickTr, handleDeleteTs} from './Utils';
 import Layers from './Layers';
+
 /*
 * 
 * Description:
@@ -39,7 +43,16 @@ const Canvas = (props) => {
     const [temporaryTransition,setTemporaryTransition]=useState({chosen:false,object:null,final:false,name:'',count:0});
     const [isNamingTr,setIsNamingTr]=useState(false);
     const [symbol,setSymbol]=useState('');
-    const [transitions,setTranstions]=useState([]);
+    //const [transitions,setTranstions]=useState([]);
+    const {transitions,setTranstions} = useContext(ThemeContextTr);
+    const [selectedStates,setSelectedStates]=useState({});
+    const [auxState, setAuxState]=useState(-1);
+    const [bezCurve,setBezCurv]=useState([]);
+    const [transOver,setTransOver]=useState(-1);
+    const [namingFixedTr,setNamingFixedTr]=useState(false);
+    const [selectedTr, setSelectedTr]=useState(-1);
+    
+    
     /*
         Adds a state, property name should be changed once the algo for evaluating the dfa is complete
     
@@ -72,17 +85,20 @@ const Canvas = (props) => {
     /*
         VGarcia way of checking if in the current mouse position theres a state
     */
+  
     const isMouseOverState = (state)  => isOverState(mouseCoord,state);
             
     /*
         Returns null if there isnt a state in the current mouse position
     */
+  
     const getState = () => states.find(states => isMouseOverState(states) ) ?? null;
 
 
-    const updateTemporaryTransition = (selected) => {
+    const updateTemporaryTransition = (selected, stateOver) => {
         commitTemporaryTransition(selected, contextAux1, contextAux2, 
-            temporaryTransition, setTemporaryTransition, setIsNamingTr  );
+            temporaryTransition, setTemporaryTransition, setIsNamingTr ,
+             selectedStates, setSelectedStates , stateOver, symbol, auxState, mouseCoord);
 
     }
     /*
@@ -95,11 +111,17 @@ const Canvas = (props) => {
     */
     const handleKeyDown = useCallback( (e) => {
         
-        if( e.key === 'q' && !isNaming && !isNamingTr) { 
+        if( e.key === 'q' && !isNaming && !isNamingTr && !namingFixedTr) { 
             if(!getState()) addState();
         }
         const estadoSeleccionado = selected;
-        if(!isNaming &&  !isNamingTr && estadoSeleccionado !==-1){
+        if(namingFixedTr  && selectedTr!==-1 && e.key==='Delete')
+        {
+            handleDeleteTs(selectedTr, transitions, setTranstions, setBezCurv, setNamingFixedTr, setSelectedTr, setSymbol, contextAux1);
+            return;
+        }
+        if(!isNaming &&  !isNamingTr && !namingFixedTr && estadoSeleccionado !==-1)
+        {
    
             if(e.key === 'Delete' ) deleteState(estadoSeleccionado.id);
             if(e.key === 'f' ) modifyState(estadoSeleccionado, true, null);
@@ -109,30 +131,67 @@ const Canvas = (props) => {
           //  setTemporaryTransition({chosen:true,object:selected,final:selected.final,name:selected.name});
         }
   
+        if(e.key==='Enter' && namingFixedTr){
+            handleEnterTr(symbol, transitions,  setTranstions, setBezCurv, setNamingFixedTr, setSelectedTr, contextAux1, selectedTr, bezCurve, setSymbol) 
+
+       return;
+    }
         if(e.key === 'Enter' && isNaming){ 
             setIsNaming(false)
             return;
         }
         if(e.key === 'Enter' && isNamingTr){ 
-            console.log(symbol)
+    
+            
             if(symbol.length>0){
             
-                setTranstions([...transitions, new Transition(Date.now(), selected,selected, symbol)]);
+                if(selectedStates.from.id===selectedStates.to.id)
+                { 
+                    setTranstions([...transitions, new Transition(Date.now(),selectedStates.from,selectedStates.to,symbol)]);
+                   
+                }
+                 if( selectedStates.from.id!==selectedStates.to.id )setTranstions([...transitions, new Transition(Date.now(), selectedStates.from, selectedStates.to, symbol)]);
                 setSymbol('');
             }
             cleanCanvas(contextAux1);
            setIsNamingTr(false);
+           setSelectedStates({});
+          
             return;
         }
+        if(namingFixedTr) commitSymbolChangesTr(e, selectedTr, symbol, setSymbol, contextAux1);
         if(isNaming) modifyState(estadoSeleccionado, estadoSeleccionado.final, estadoSeleccionado.start, e.key);
-        if (isNamingTr) setNamingSymbol(e, symbol, setSymbol, selected, contextAux1);
+        if (isNamingTr) setNamingSymbol(e, symbol, setSymbol, selected, contextAux1, selectedStates);
     
       
-    }, [transitions, deleteState, addState, getState, states, isNaming, selected,temporaryTransition, stateOver, updateTemporaryTransition, isNamingTr, symbol, contextAux1])    
+    }, [bezCurve, selectedTr, namingFixedTr, selectedStates, transitions, deleteState, addState, getState, states, isNaming, selected,temporaryTransition, stateOver, updateTemporaryTransition, isNamingTr, symbol, contextAux1])    
     
  
   
+useEffect(() => {
+    if(contextTransitions){
+        if(transitions.length>0) {
+            cleanCanvas(contextTransitions);
+        
+           contextTransitions.lineWidth = 3;
+          
+            transitions.forEach(trans=> {
+             
+                const obj=trans.state_src.id===trans.state_dst.id?{...trans.state_src, color:true,id:trans.id}:{state_src: trans.state_src ,state_dst: trans.state_dst, symbol: trans.symbols, id:trans.id};
+            
+            
+                trans.state_src.id===trans.state_dst.id? drawTransitionCircle(contextTransitions, obj , trans.symbols, false) : drawTransitionOver(contextTransitions, obj,false,false)
+           
+              setBezCurv(items => [...items, obj.curve])
+             }
+              )
+        }
+    }
+},[transitions, contextTransitions])
 
+useEffect(()=>{
+    //console.log(bezCurve)
+},[bezCurve])
     /*
         Cleans canvas
     */
@@ -167,35 +226,87 @@ const Canvas = (props) => {
   useEffect(()=>{
         if(contextStates){
             clean();
-           // if(states.length>0)console.log("im oging in")
-            states.forEach( item => drawState(contextStates, item, { isNaming , isNamingTr},stateOver, undefined, ) )        
+          // if(states.length>0)console.log("im oging in")
+            states.forEach( item => drawState(contextStates, item, { isNaming , isNamingTr, namingFixedTr}, stateOver, undefined, ) )        
         }
-    }, [states, clean, contextStates , isNaming, stateOver, isNamingTr]);
+    }, [states, clean, contextStates , isNaming, stateOver, isNamingTr, namingFixedTr]);
     
     useEffect(() => {
         if(selected!==-1 &&  temporaryTransition.chosen)
-        { drawTempTransition(selected, mouseCoord, contextAux1);
-            
+        { 
+            drawTempTransition(selected, mouseCoord, contextAux1);
+        
         }
         },[mouseCoord, selected, temporaryTransition, contextAux1])
 
 
 
-const modifyStateInfo = (e) =>{
+const HoverTrans=(state, e,mousedown)=>{
+  //  if(namingFixedTr && state && (e.type==='click' || mousedown || e.type=='mousemove') && selectedTr!==-1 ){
+      //  setSelected( {...state, x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY  } );
+      //  setNamingFixedTr(bef=> !bef);
+       // setSelectedTr(-1);
+       // return;
+   // }
+    if(e.type==='click' && namingFixedTr && !state && selectedTr!==-1 ) {
+       
+        handleMouseClickTr(symbol, transitions,  setTranstions, setBezCurv, setNamingFixedTr, setSelectedTr, contextAux1 , selectedTr, bezCurve, setSymbol)      
+        return;
+    }
+    if(e.type==='click' && transOver!==-1 && !state) {
+        cleanCanvas(contextTransitions)
+        setNamingFixedTr(true);
+        setSelectedTr(transOver);
+        setSymbol(transOver.trInfo.symbol);
+       
+        return;
+    }
+
+        if(namingFixedTr)return;
+  
+    let shouldClear={answer:false};
+   
+    
+        bezCurve.forEach(item => 
+            commitTrChanges(item, setTransOver, e, temporaryTransition.chosen? contextAux2 : contextAux1, state, temporaryTransition,shouldClear ) 
+            
+        )
+   
+    if(!shouldClear.answer && !temporaryTransition.chosen){
+       
+        cleanCanvas(contextAux1)
+        setTransOver(-1)
+    }
+    if(!shouldClear.answer  && temporaryTransition.chosen)
+{
+    
+    cleanCanvas(contextAux2)
+    setTransOver(-1)
+}
+    
+}
+
+
+const modifyStateInfo =(e)=>{
       
        
     setMouseCoord({ x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY });
-
+   
     const state = getState();
+    
+    if(!isNaming && !isNamingTr && bezCurve.length>0) HoverTrans(state,e,mouseDown)
     if(isNamingTr && e.type==='click' ) 
     {
         setIsNamingTr(false);
         cleanCanvas(contextAux1);
+        setSelectedStates({});
         setSymbol('');
+        setAuxState(-1);
     }
     if((mouseDown || e.type==='click') && state && !isNaming ){
        handleMouseEvent(e, state, states, selected, setStates, setSelected, mouseDown, 
-                                     temporaryTransition, contextAux2, contextAux1, setTemporaryTransition
+                                     temporaryTransition, contextAux2, contextAux1, setTemporaryTransition, 
+                                     contextTransitions, transitions, bezCurve, setBezCurv
                                     );
          return;
     }
@@ -203,20 +314,32 @@ const modifyStateInfo = (e) =>{
 
 if(isNaming)return;
 if(state){
+    
     if(state.id !== stateOver.id){
-        if(selected !== -1 &&  state.id === selected.id )return;
-        setStateOver(state)
+
+        if(selected !== -1 &&  state.id === selected.id ){
+            setAuxState(selected);
+            return;
+        }
+        if(stateOver.id!==-1 && stateOver.id===state.id)return;
+        if(stateOver.id!==-1 && stateOver.id!==state.id)setStateOver(state)
+        if(stateOver.id===-1){setStateOver(state)}
+   
+       // setStateOver(state)
+       //drawHoverPrueba(state, isNaming, isNamingTr, contextAux1);
+ 
     }
 }else{
     if(selected !== -1 && e.type === 'click'){
       
         setStates( states.map( (estado) => estado.id === selected.id ? {...estado, selected : false } : estado ) );
         setSelected(-1);
+        setAuxState(-1);
      
         if(temporaryTransition.chosen){
             cleanCanvas(contextAux2);
             cleanCanvas(contextAux1);
-           
+            setSelectedStates({});
           
             setTemporaryTransition({chosen:false,object:null,final:false,name:'',count:0})
         }
@@ -224,12 +347,37 @@ if(state){
     }
     if(stateOver.id !== -1){
         setStateOver({id:-1})
-       // console.log("wii")
+        setAuxState(-1);
+      
        
     }
   
    
 }
+   }
+
+   const handleMouseUp=(e)=>{
+    setMouseDown(false)
+    if(!isOverState(selected,{x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY }))return;
+    //setBezCurv([]);
+  
+    setTranstions(transitions.map(item=>{
+        
+        if(item.state_src.id===selected.id ){
+            //console.log(item.state_src, e.nativeEvent.offsetX, e.nativeEvent.offsetY)          
+            return {...item, state_src:{...item.state_src,  x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY  }}
+        }
+        if(item.state_dst.id===selected.id ){
+            return {...item, state_dst:{...item.state_dst,  x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY  }}
+        }
+       // if(item.state_src.id===selected.id){
+          //  return {...item, state_src:{...item.state_src,  x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY  }}
+       // }
+        return item;
+
+    } ))
+    //setBezCurv([]);
+    cleanCanvas(contextAux1)
    }
 
 
@@ -263,7 +411,7 @@ if(state){
                         onClick = { (e) => modifyStateInfo(e) }
                         onMouseMove = { (e) => modifyStateInfo(e) } 
                         onMouseDown = { (e) => { setMouseDown(true); modifyStateInfo(e) } } 
-                        onMouseUp = { () => { setMouseDown(false) } }  
+                        onMouseUp = { (e) => handleMouseUp(e)  }  
                         style={{position: "relative",background:"#f7f1e3",width:"600px",height:"600px"}}
                    >
                        <Layers  

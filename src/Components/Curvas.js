@@ -1,7 +1,7 @@
 
 import { isOverState } from "./Utils";
-import Coord from './Classes/Coord';
 import Bezcurve from './Classes/Bezcurve';
+import Coord from './Classes/Coord';
 
 /*
 * 
@@ -33,30 +33,21 @@ const clean=(context)=>{
 }
 
 
-
+//temporal, works for self loop and curves among the canvas rectangle
 export const  drawTempTransition = (state, mousePos, context3, hoveredState) =>{
-	// context=context3;
-	clean(context3);
-   // if(temporaryTransition.object){
-		//console.log(temporaryTransition.object)
-		//clean(context3);
-		//drawState(context3,{...temporaryTransition.object,final:temporaryTransition.final,name:temporaryTransition.name},null,null,temporaryTransition);
-		//setTemporaryTransition({...temporaryTransition,chosen:true,object:null})
-	//	console.log("wecome")
-	//}
 
-	
-	//drawState(context3Main,state,null,null,true);
+	clean(context3);
+
 
 	context3.strokeStyle = context3.fillStyle = "rgb(6, 11, 16)";
 
 	let src = {x:state.x,y: state.y};
-	let dst = {x:mousePos.x, y:mousePos.y};
+	//let dst = {x:mousePos.x, y:mousePos.y};
 
-	let aux_angle = Math.atan2(dst.y - src.y, dst.x - src.x);
+	let aux_angle = Math.atan2(mousePos.y - src.y, mousePos.x - src.x);
 	let multiplier = 20;//20;
-	dst.x = dst.x - Math.cos(aux_angle) * multiplier;
-	dst.y = dst.y - Math.sin(aux_angle) * multiplier;
+	mousePos.x = mousePos.x - Math.cos(aux_angle) * multiplier;
+	mousePos.y = mousePos.y - Math.sin(aux_angle) * multiplier;
 	src.x = src.x + Math.cos(aux_angle) * multiplier;
 	src.y = src.y + Math.sin(aux_angle) * multiplier;
 
@@ -65,21 +56,21 @@ export const  drawTempTransition = (state, mousePos, context3, hoveredState) =>{
 	//vector2_dir = normalizeVector(vector2_dir); //***** */
 	//vector2_dir = multiplyVector(vector2_dir, 20);
 
-	let middle_pt1 = {x:src.x + (dst.x - src.x)/3,
-		y:src.y + (dst.y - src.y)/3};
+	let middle_pt1 = {x:src.x + (mousePos.x - src.x)/3,
+		y:src.y + (mousePos.y - src.y)/3};
 
-	let middle_pt2 = {x:src.x + 2*(dst.x - src.x)/3,
-		y:src.y + 2*(dst.y - src.y)/3};
+	let middle_pt2 = {x:src.x + 2*(mousePos.x - src.x)/3,
+		y:src.y + 2*(mousePos.y - src.y)/3};
 
-	let vector2_ort = {x:src.y - dst.y,
-		y:dst.x - src.x};
+	let vector2_ort = {x:src.y - mousePos.y,
+		y:mousePos.x - src.x};
 	vector2_ort = normalizeVector(vector2_ort); //** */
 	vector2_ort = multiplyVector(vector2_ort, 7.5);
 
 	//let arrow_pt = {x:dst.x - (vector2_dir.x * 2) + vector2_ort.x * 2,
 	//	y:dst.y - (vector2_dir.y * 2) + vector2_ort.y};
 
-	let aux_mlt = Math.sqrt(Math.pow(dst.x - src.x, 2) + Math.pow(dst.y - src.y, 2)) / 40;
+	let aux_mlt = Math.sqrt(Math.pow(mousePos.x - src.x, 2) + Math.pow(mousePos.y - src.y, 2)) / 40;
 
 	let quadPoint1 = {x:middle_pt1.x + vector2_ort.x * aux_mlt,
 		y: middle_pt1.y + vector2_ort.y * aux_mlt};
@@ -93,8 +84,8 @@ export const  drawTempTransition = (state, mousePos, context3, hoveredState) =>{
 		quadPoint1.y,
 		quadPoint2.x,
 		quadPoint2.y,
-		dst.x,
-		dst.y);
+		mousePos.x,
+		mousePos.y);
 
 	
 	
@@ -104,8 +95,8 @@ export const  drawTempTransition = (state, mousePos, context3, hoveredState) =>{
 			context3.arc(state.x - 20,
 				state.y - 20,
 				20,
-				0,
-				Math.PI * 2,
+				39.3,
+				12,
 				false);
 			context3.stroke();
 
@@ -119,36 +110,39 @@ export const  drawTempTransition = (state, mousePos, context3, hoveredState) =>{
 			context3.moveTo(arrow_p1.x, arrow_p1.y);
 			context3.lineTo(arrow_p2.x, arrow_p2.y);
 			context3.lineTo(arrow_p3.x, arrow_p3.y);
-			context3.closePath();
+			//context3.closePath();
 			context3.fill();
 			return;
 		}
 
 
-	context3.stroke();
+		context3.stroke();
 
-	context3.beginPath();
-
-	let arrowAngle = Math.atan2(quadPoint2.x - dst.x, quadPoint2.y - dst.y) + Math.PI;
-	let arrowWidth = 13;
-
-	context3.moveTo(dst.x - (arrowWidth * Math.sin(arrowAngle - Math.PI / 6)), 
-	           dst.y - (arrowWidth * Math.cos(arrowAngle - Math.PI / 6)));
-
-	context3.lineTo(dst.x, dst.y);
-
-	context3.lineTo(dst.x - (arrowWidth * Math.sin(arrowAngle + Math.PI / 6)), 
-	           dst.y - (arrowWidth * Math.cos(arrowAngle + Math.PI / 6)));
-
-	context3.fill();
+		context3.beginPath();
+	
+		let arrowAngle = Math.atan2(quadPoint2.x - mousePos.x, quadPoint2.y - mousePos.y) + Math.PI;
+		let arrowWidth = 13;
+	
+		context3.moveTo(mousePos.x - (arrowWidth * Math.sin(arrowAngle - Math.PI / 6)), 
+		mousePos.y - (arrowWidth * Math.cos(arrowAngle - Math.PI / 6)));
+	
+		context3.lineTo(mousePos.x, mousePos.y);
+	
+		context3.lineTo(mousePos.x - (arrowWidth * Math.sin(arrowAngle + Math.PI / 6)), 
+		mousePos.y - (arrowWidth * Math.cos(arrowAngle + Math.PI / 6)));
+	
+		context3.fill();
 }
 
 
-export const drawTransitionCircle=(context3, tr, text)=> {
-	console.log("circle drwaing")
-	clean(context3);
+export const drawTransitionCircle=(context3, tr, text, clear=true)=> {
+	
+	if(clear) clean(context3);
 	context3.globalAlpha=1;
-	context3.strokeStyle = context3.fillStyle = "rgb(194, 95, 0)";
+	if(!clear)	context3.lineWidth = 3;
+	//if(tr.color!==undefined)context3.strokeStyle = context3.fillStyle = "rgb(6, 11, 16)";
+	//context3.strokeStyle = context3.fillStyle = "rgb(194, 95, 0)";
+	tr.color!==undefined? context3.strokeStyle = context3.fillStyle = "rgb(6, 11, 16)" :context3.strokeStyle = context3.fillStyle = "rgb(194, 95, 0)";
 	let center = {x:tr.x,
 		y:tr.y};
 	//let arrow_tilt = new Coord(10, 3);
@@ -187,8 +181,8 @@ export const drawTransitionCircle=(context3, tr, text)=> {
 	context3.arc(center.x,
 		center.y,
 		STATE.RADIUS,
-		0,
-		Math.PI * 2,
+		39.3,
+		12,
 		false);
 
 	context3.stroke();
@@ -199,30 +193,33 @@ export const drawTransitionCircle=(context3, tr, text)=> {
 	context3.lineTo(arrow_p3.x, arrow_p3.y);
 	context3.closePath();
 	context3.fill();
-
+	//tr.curve = new Bezcurve(tr, quadPoint1, quadPoint2, tr);
 	//symbol
+	if(!clear)tr.curve=new Bezcurve({x:tr.x,y:tr.y}, 0, 0, {x:tr.x,y:tr.y},{id: tr.id, symbol: text });
 	context3.font = "15px Georgia";
 }
 
-function drawTransitionOver(ctx, tr) {
-	ctx.beginPath();
+export const drawTransitionOver=(ctx, tr, naming=false, clear=true)=> {
+	if(clear) clean(ctx);
+	ctx.globalAlpha=1;
 
-	let src = new Coord(tr.state_src.Coord.x,
-		tr.state_src.Coord.y);
-	let dst = new Coord(tr.state_dst.Coord.x,
-		tr.state_dst.Coord.y);
+	if(naming)ctx.strokeStyle = ctx.fillStyle = "rgb(194, 95, 0)";
+	if(!naming)ctx.strokeStyle = ctx.fillStyle = "rgb(6, 11, 16)";
+	ctx.beginPath();
+	//if(naming)console.log(tr)
+	let src = new Coord(tr.state_src.x,
+		tr.state_src.y);
+	let dst = new Coord(tr.state_dst.x,
+		tr.state_dst.y);
 
 	let aux_angle = Math.atan2(dst.y - src.y, dst.x - src.x);
-	let multiplier = tr.state_src.radius;
+	let multiplier = STATE.RADIUS;
 	dst.x = dst.x - Math.cos(aux_angle) * multiplier;
 	dst.y = dst.y - Math.sin(aux_angle) * multiplier;
 	src.x = src.x + Math.cos(aux_angle) * multiplier;
 	src.y = src.y + Math.sin(aux_angle) * multiplier;
 
-	let vector2_dir = new Coord(dst.x - src.x,
-		dst.y - src.y);
-	vector2_dir = normalizeVector(vector2_dir);
-	vector2_dir = multiplyVector(vector2_dir, 20);
+
 
 	let middle_pt1 = new Coord(src.x + (dst.x - src.x)/3,
 		src.y + (dst.y - src.y)/3);
@@ -235,8 +232,8 @@ function drawTransitionOver(ctx, tr) {
 	vector2_ort = normalizeVector(vector2_ort);
 	vector2_ort = multiplyVector(vector2_ort, 7.5);
 
-	let arrow_pt = new Coord(dst.x - (vector2_dir.x * 2) + vector2_ort.x * 2,
-		dst.y - (vector2_dir.y * 2) + vector2_ort.y);
+	//let arrow_pt = new Coord(dst.x - (vector2_dir.x * 2) + vector2_ort.x * 2,
+		//dst.y - (vector2_dir.y * 2) + vector2_ort.y);
 
 	let aux_mlt = Math.sqrt(Math.pow(dst.x - src.x, 2) + Math.pow(dst.y - src.y, 2)) / 40;
 
@@ -255,7 +252,7 @@ function drawTransitionOver(ctx, tr) {
 		dst.x,
 		dst.y);
 
-	tr.curve = new Bezcurve(src, quadPoint1, quadPoint2, dst);
+	tr.curve = new Bezcurve(src, quadPoint1, quadPoint2, dst, {id: tr.id, symbol: tr.symbol, src_info : {x : tr.state_src.x, y : tr.state_src.y}, dst_info : {x : tr.state_dst.x, y : tr.state_dst.y} } );
 
 	ctx.stroke();
 
@@ -281,7 +278,23 @@ function drawTransitionOver(ctx, tr) {
 	           dst.y - (arrowWidth * Math.cos(arrowAngle + Math.PI / 6)));
 
 	ctx.fill();
+	drawTrText(ctx, src, dst, tr.symbol, aux_mlt, vector2_ort)
 
+
+}
+const normalizeVector=(vec) =>{
+	let aux = Math.pow(vec.x, 2) + Math.pow(vec.y, 2);
+	aux = Math.sqrt(aux);
+
+	return {x:vec.x / aux, y:vec.y / aux};
+}
+
+
+const multiplyVector=(vec, value)=> {
+	return {x:vec.x * value,y: vec.y * value};
+}
+
+const drawTrText=(ctx, src, dst, symbol, aux_mlt, vector2_ort)=>{
 	let text_pos = new Coord(0, 0);
 	text_pos = new Coord(src.x + (dst.x - src.x)/2 + vector2_ort.x * aux_mlt,
 		src.y + (dst.y - src.y)/2 + vector2_ort.y * aux_mlt);
@@ -309,18 +322,106 @@ function drawTransitionOver(ctx, tr) {
 
 	//symbol
 	ctx.font = "15px Georgia";
-	ctx.fillText(tr.symbols,
+	ctx.fillText(symbol,
 		text_pos.x,
 		text_pos.y);
 }
-const normalizeVector=(vec) =>{
-	let aux = Math.pow(vec.x, 2) + Math.pow(vec.y, 2);
-	aux = Math.sqrt(aux);
 
-	return {x:vec.x / aux, y:vec.y / aux};
+export const  drawHoverTrans=(ctx,src, dst, quadPoint1,quadPoint2, symbol)=>{
+
+	ctx.lineWidth = 3;
+	ctx.globalAlpha=1;
+	ctx.strokeStyle = ctx.fillStyle = "rgb(145, 127, 49)";
+	ctx.beginPath();
+	ctx.moveTo(src.x, src.y);
+	ctx.bezierCurveTo(quadPoint1.x,
+		quadPoint1.y,
+		quadPoint2.x,
+		quadPoint2.y,
+		dst.x,
+		dst.y);
+		ctx.stroke();
+
+		//arrow
+		ctx.beginPath();
+		let arrowAngle = Math.atan2(quadPoint2.x - dst.x, quadPoint2.y - dst.y) + Math.PI;
+		let arrowWidth = 13;
+
+		ctx.moveTo(dst.x - (arrowWidth * Math.sin(arrowAngle - Math.PI / 6)), 
+	           dst.y - (arrowWidth * Math.cos(arrowAngle - Math.PI / 6)));
+
+		ctx.lineTo(dst.x, dst.y);
+
+		ctx.lineTo(dst.x - (arrowWidth * Math.sin(arrowAngle + Math.PI / 6)), 
+	           dst.y - (arrowWidth * Math.cos(arrowAngle + Math.PI / 6)));
+
+		ctx.fill();
+		let vector2_ort = new Coord(src.y - dst.y,
+			dst.x - src.x);
+		vector2_ort = normalizeVector(vector2_ort);
+		vector2_ort = multiplyVector(vector2_ort, 7.5);
+		let aux_mlt = Math.sqrt(Math.pow(dst.x - src.x, 2) + Math.pow(dst.y - src.y, 2)) / 40;
+		drawTrText(ctx, src, dst, symbol, aux_mlt, vector2_ort)
+
 }
 
 
-const multiplyVector=(vec, value)=> {
-	return {x:vec.x * value,y: vec.y * value};
+export const hoverSelfLoop = (context3, tr, text, clear=true) => {
+	if(clear) clean(context3);
+	
+	if(!clear)	context3.lineWidth = 3;
+	context3.globalAlpha=1;
+	context3.strokeStyle = context3.fillStyle = "rgb(145, 127, 49)";
+	let center = {x:tr.x,
+		y:tr.y};
+
+	let arrow_p1 = {x:0,y: 0};
+	let arrow_p2 = {x:0, y:0};
+	let arrow_p3 = {x:0,y: 0};
+
+
+
+		context3.font = "15px Georgia";
+
+		center = {x: tr.x - STATE.RADIUS,
+			y: tr.y - STATE.RADIUS};
+
+		arrow_p1 = { x:tr.x,
+			y: tr.y - STATE.RADIUS};
+		arrow_p2 = {x: arrow_p1.x - STATE.RADIUS / 3 - 2,
+			y: arrow_p1.y - STATE.RADIUS / 2};
+		arrow_p3 = {x: arrow_p1.x + STATE.RADIUS / 3 - 3,
+			y: arrow_p1.y - STATE.RADIUS / 2 - 3};
+
+		//tr.cyclealignment = "topleft";
+
+		context3.textAlign = "right";
+		context3.textBaseline = "top";
+		context3.fillText(text,
+			center.x - STATE.RADIUS - 2,
+			center.y - STATE.RADIUS / 2);
+	
+
+
+
+
+	context3.beginPath();
+
+	context3.arc(center.x,
+		center.y,
+		STATE.RADIUS,
+		39.3,
+		12,
+		false);
+
+	context3.stroke();
+
+	context3.beginPath();
+	context3.moveTo(arrow_p1.x, arrow_p1.y);
+	context3.lineTo(arrow_p2.x, arrow_p2.y);
+	context3.lineTo(arrow_p3.x, arrow_p3.y);
+	context3.closePath();
+	context3.fill();
+
+	context3.font = "15px Georgia";
 }

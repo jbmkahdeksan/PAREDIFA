@@ -1,7 +1,8 @@
 import Canvas from './Canvas'
 import Error from './Error'
 import {useState,useContext} from 'react'
-import ThemeContext from './Context';
+import ThemeContext from './ContextStates';
+import ThemeContextTr from './ContextTransitions';
 /*
 * 
 * Description:
@@ -21,6 +22,7 @@ const Wrapper = () => {
     const [alphabet,setAlphabetWord]=useState('');
     const [showRunButton,setShowRunButton]=useState(false);
     const {states,setStates} = useContext(ThemeContext);
+    const {transitions,setTranstions} = useContext(ThemeContextTr);
     const [statesStringify,setStatesStringify]=useState('');
     const setAlphabet = () => 
     {
@@ -30,19 +32,22 @@ const Wrapper = () => {
        alert("To be implemented")
     }    
 
+    const mapState=(item)=>{
+        return {id:item.id,x:item.x,y:item.y,start:item.start,final:item.final,name:item.name};
+    }
     const exportJson = () => {
-        setStatesStringify(JSON.stringify(states));
+        const object={states: states.map(item=>mapState(item)), transitions: transitions}
+        setStatesStringify(JSON.stringify(object));
     }
     
 
     const importJson = () => {
-       setStates([
-                            {"id":1630816682698,"x":233,"y":185,"final":false,"start":false,"name":"x","selected":false},
-                            {"id":1630816682835,"x":200,"y":155,"final":false,"start":false,"name":"x","selected":false},
-                            {"id":1630816682986,"x":168,"y":220,"final":false,"start":false,"name":"x","selected":false},
-                            {"id":1630816683293,"x":117,"y":204,"final":false,"start":false,"name":"xxxx","selected":true},
-                            {"id":1630816683442,"x":83,"y":328,"final":false,"start":false,"name":"x","selected":false}
-                        ]);
+       setStates([{"id":1631757420473,"x":132,"y":96,"start":false,"final":true,"name":"x"},
+                        {"id":1631757420816,"x":241,"y":100,"start":false,"final":false,"name":"x"}]);
+                        setTranstions([{"id":1631757423465,
+                        "state_src":{"id":1631757420473,"x":132,"y":96,"final":false,"start":false,"name":"x"},
+                        "state_dst":{"id":1631757420816,"x":241,"y":100,"final":false,"start":false,"name":"x","selected":false},"symbols":"1"}]);
+
     }
     return (
         <div id="wrapper">
