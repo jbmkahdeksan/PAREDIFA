@@ -2,7 +2,7 @@ import React, { useRef, useEffect ,useState, useCallback, useContext} from 'reac
 import ThemeContext from './ContextStates';
 import ThemeContextTr from './ContextTransitions';
 import { drawState} from './DrawState';
-import {drawTempTransition, drawTransitionCircle, drawTransitionOver, drawHoverTrans} from './Curvas'
+import {drawTempTransition, drawTransitionCircle, drawTransitionOver} from './Curvas'
 import Transition from './Classes/Transition';
 import { isOverState, cleanCanvas, handleMouseEvent, 
      commitStateChanges, setNamingSymbol, commitTemporaryTransition, 
@@ -86,7 +86,7 @@ const Canvas = (props) => {
         VGarcia way of checking if in the current mouse position theres a state
     */
   
-    const isMouseOverState = (state)  => isOverState(mouseCoord,state);
+    const isMouseOverState = (state)  => isOverState(mouseCoord, state);
             
     /*
         Returns null if there isnt a state in the current mouse position
@@ -164,7 +164,7 @@ const Canvas = (props) => {
         if (isNamingTr) setNamingSymbol(e, symbol, setSymbol, selected, contextAux1, selectedStates);
     
       
-    }, [bezCurve, selectedTr, namingFixedTr, selectedStates, transitions, deleteState, addState, getState, states, isNaming, selected,temporaryTransition, stateOver, updateTemporaryTransition, isNamingTr, symbol, contextAux1])    
+    }, [setTranstions, bezCurve, selectedTr, namingFixedTr, selectedStates, transitions, deleteState, addState, getState, states, isNaming, selected,temporaryTransition, stateOver, updateTemporaryTransition, isNamingTr, symbol, contextAux1])    
     
  
   
@@ -357,17 +357,21 @@ if(state){
    }
 
    const handleMouseUp=(e)=>{
-    setMouseDown(false)
-    if(!isOverState(selected,{x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY }))return;
-    //setBezCurv([]);
-  
+    setMouseDown(false);
+    if( !isOverState(selected, {x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY } ) )return;
+   
+    //nothing to repaint if its the same x and y
+    const shouldUpdateTr=transitions.find(tr=> (selected.x === tr.state_src.x && selected.y===tr.state_src.y) || (selected.x === tr.state_dst.x && selected.y===tr.state_dst.y));
+    if(shouldUpdateTr!==undefined) return;
     setTranstions(transitions.map(item=>{
+        //console.log(item.state_src, e.nativeEvent.offsetX, e.nativeEvent.offsetY)  
         
         if(item.state_src.id===selected.id ){
-            //console.log(item.state_src, e.nativeEvent.offsetX, e.nativeEvent.offsetY)          
+         // if(selected.x ===item.state_src.x && selected.y===item.state_src.y)return {...item, state_rc:{...item.state_src, x:selected.x, y: selected.y}};     
             return {...item, state_src:{...item.state_src,  x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY  }}
         }
         if(item.state_dst.id===selected.id ){
+            //if(selected.x ===item.state_dst.x && selected.y===item.state_dst.y)return {...item, state_rc:{...item.state_src, x:selected.x, y: selected.y}};
             return {...item, state_dst:{...item.state_dst,  x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY  }}
         }
        // if(item.state_src.id===selected.id){
@@ -376,8 +380,8 @@ if(state){
         return item;
 
     } ))
-    //setBezCurv([]);
-    cleanCanvas(contextAux1)
+   
+    //cleanCanvas(contextAux1)
    }
 
 
