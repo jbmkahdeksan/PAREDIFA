@@ -311,7 +311,7 @@ const modifyStateInfo =(e)=>{
          return;
     }
 
-    if(state)console.log(isOverState( { x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY },state));
+    
 if(isNaming)return;
 
 if(state){
@@ -347,7 +347,7 @@ if(state){
         return;
     }
     if(stateOver.id !== -1){
-        console.log("wooo")
+    
         setStateOver({id:-1})
         setAuxState(-1);
       
@@ -380,6 +380,7 @@ if(state){
           //  return {...item, state_src:{...item.state_src,  x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY  }}
        // }
         return item;
+        
 
     } ))
    
