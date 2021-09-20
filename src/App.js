@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ThemeContext from './Components/ContextStates';
 import ThemeContextMsg from './Components/ContextMessage';
 import ThemeContextTr from './Components/ContextTransitions';
+import ThemeContextMsgInfo from './User_Interface_New/ContextMsg'
 import NavBar from './User_Interface_New/NavBar'
 import Body from './User_Interface_New/Body'
 /*
@@ -24,19 +25,23 @@ function App() {
   const [states,setStates]=useState([]);
   const [transitions,setTranstions]=useState([]);
   const [msgShow, setMsgShow]= useState(false);
+  const [msgInfo, setMsgInfo]=useState({bg:'',header:'',body:''});
   return (
     <BrowserRouter>
-    <ThemeContextMsg.Provider value={{msgShow, setMsgShow}}>
-      <ThemeContextTr.Provider value={{transitions, setTranstions}}>
-          <ThemeContext.Provider value={{states, setStates}}>
-            <NavBar/>
-              <Switch>
-                  <Route exact path="/" component={Body}/>
-                
-              </Switch>
-            </ThemeContext.Provider>
-      </ThemeContextTr.Provider>
-      </ThemeContextMsg.Provider>
+      <ThemeContextMsg.Provider value={{msgShow, setMsgShow}}>
+          <ThemeContextMsgInfo.Provider value={{msgInfo, setMsgInfo}}>
+              <ThemeContextTr.Provider value={{transitions, setTranstions}}>
+                  <ThemeContext.Provider value={{states, setStates}}>
+                      <NavBar/>
+
+                        <Switch>
+                            <Route exact path="/" component={Body}/>
+                          
+                        </Switch>
+                    </ThemeContext.Provider>
+              </ThemeContextTr.Provider>
+            </ThemeContextMsgInfo.Provider>
+        </ThemeContextMsg.Provider>
     </BrowserRouter>
   );
 }

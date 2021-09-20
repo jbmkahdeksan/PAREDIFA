@@ -3,30 +3,37 @@ import Col from 'react-bootstrap/Col';
 import Toast from 'react-bootstrap/Toast';
 import { useContext, useEffect } from 'react';
 import ThemeContextMsg from '../Components/ContextMessage';
+import ThemeContextMsgInfo from './ContextMsg'
 const Message = (props) => {
+
     const {msgShow, setMsgShow} = useContext(ThemeContextMsg);
+    const {msgInfo, setMsgInfo} = useContext(ThemeContextMsgInfo);
+  
     useEffect(()=>{console.log("asdas")},[msgShow])
+  
     return (
          <>
              <Row>
-      <Col xs={6}>
-        <Toast onClose={()=>setMsgShow(false)} position={'bottom-center'} show={msgShow} delay={3000} autohide>
-          <Toast.Header>
-            <img
-              src="holder.js/20x20?text=%20"
-              className="rounded me-2"
-              alt=""
-            />
-            <strong className="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-          </Toast.Header>
-          <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
-        </Toast>
-      </Col>
-      <Col xs={6}>
+            <Col xs={6}>
+              <Toast 
+                className="tostada"
+                bg={msgInfo.bg}
+                onClose={ () => setMsgShow(false) } 
+                show={msgShow} 
+                delay={3000} 
+                autohide
+              >
+                <Toast.Header >
+                  <strong className="me-auto">{msgInfo.header}</strong>
+      
+                </Toast.Header>
+                <Toast.Body>{msgInfo.body}</Toast.Body>
+              </Toast>
+            </Col>
+          <Col xs={6}>
        
-      </Col>
-    </Row>
+         </Col>
+          </Row>
         </> 
         );
 }

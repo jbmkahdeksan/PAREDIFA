@@ -1,10 +1,13 @@
 import Modal from 'react-bootstrap/Modal'
+import { BsInfoCircle } from "react-icons/bs";
 import ListGroup from 'react-bootstrap/ListGroup'
 //Handle todos, tasks todo in Todo
 const TodosModal = (props) => {
     return (  
         <>
-            <Modal
+            <Modal 
+                   
+             
                     size="lg"
                     show={props.show}
                     onHide={props.handleShow}
@@ -12,20 +15,24 @@ const TodosModal = (props) => {
                 >
                     <Modal.Header closeButton>
                     <Modal.Title id="example-modal-sizes-title-lg">
-                       Todos
+                       {props.title}{ ' ' }
+                       {
+                           props.FaM && 
+                           <BsInfoCircle  className="infoDowloadFa" title="Double click to download FA"/>
+                       }
                     </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body >
                         <ListGroup>
-                            <ListGroup.Item  variant="dark">
+                            <ListGroup.Item onDoubleClick={ props.handleDoubleClick } action variant="dark">
                                 Dark
                             </ListGroup.Item>
-                            <ListGroup.Item  variant="dark">
+                            <ListGroup.Item action  variant="dark">
                                 Dark
                             </ListGroup.Item>
                         </ListGroup>
                     </Modal.Body>
-      </Modal>
+                </Modal>
         </>
        );
 }

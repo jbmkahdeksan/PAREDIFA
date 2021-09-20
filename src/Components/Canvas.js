@@ -8,6 +8,8 @@ import { isOverState, cleanCanvas, handleMouseEvent,
      commitStateChanges, setNamingSymbol, commitTemporaryTransition, 
      commitTrChanges, commitSymbolChangesTr, handleEnterTr, handleMouseClickTr, handleDeleteTs} from './Utils';
 import Layers from './Layers';
+import ThemeContextMsgInfo from '../User_Interface_New/ContextMsg';
+import ThemeContextMsg from './ContextMessage';
 
 /*
 * 
@@ -51,7 +53,9 @@ const Canvas = (props) => {
     const [transOver,setTransOver]=useState(-1);
     const [namingFixedTr,setNamingFixedTr]=useState(false);
     const [selectedTr, setSelectedTr]=useState(-1);
-    
+
+    const {msgShow, setMsgShow} = useContext(ThemeContextMsg);
+    const {msgInfo, setMsgInfo} = useContext(ThemeContextMsgInfo);
     
     /*
         Adds a state, property name should be changed once the algo for evaluating the dfa is complete
@@ -78,8 +82,23 @@ const Canvas = (props) => {
     /*
         Creates a new array of states without the deleted one
     */    
-    const deleteState = (id) => setStates(states.filter( state => state.id !== id ) );
+    const deleteState = (id) => 
+    {
+        setStates(states.filter( state => state.id !== id ) );
+        if(transitions.length > 0) 
+        {
+            setBezCurv([]);
+            const newTransitions = transitions.filter(tr => !(tr.state_dst.id === id || tr.state_src.id === id));
+            setTranstions(newTransitions);
+            if(newTransitions.length === 0) cleanCanvas(contextTransitions);
+            setMsgInfo({bg:'danger', header:'WOW!',body:'cuidado perro!'})
+            setMsgShow(true);
+         
+        }
 
+        
+        
+    }
 
 
     /*

@@ -1,4 +1,4 @@
-.aboutUs,.email,.saveFa,.todos{
+.aboutUs,.email,.saveFa,.todos,.downloadFa,.infoDowloadFa{
     cursor: pointer;
   }
 
@@ -22,15 +22,22 @@
    
   }
 
+.FaResults{
+  height:500px;
+  margin-top: 2.5%;
+  overflow-y: scroll;
+  
+}
+
 
   @media only screen and (max-width: 600px) { 
 
-    .screen1,.screen2{
+    .screen1,.FaResults{
       display: none; 
     } 
   }
   .divCanvitas{
-    height: 100%;
+   
     width: 44.33%;
     min-height: 500px;
   }
@@ -47,10 +54,20 @@
       
   }
 
-  .saveFa{
+  .downloadFa{
     margin-right:20%;
   }
 
+
   .guideContainer{
       text-align:center;
+  }
+
+
+  .tostada{
+    position:absolute;
+    left: 40%;
+    top: 0;
+    z-index: 1;
+
   }
