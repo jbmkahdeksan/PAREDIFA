@@ -44,7 +44,7 @@ const Canvas = (props) => {
     const [isNamingTr,setIsNamingTr]=useState(false);
     const [symbol,setSymbol]=useState('');
     //const [transitions,setTranstions]=useState([]);
-    const {transitions,setTranstions} = useContext(ThemeContextTr);
+    const {transitions, setTranstions} = useContext(ThemeContextTr);
     const [selectedStates,setSelectedStates]=useState({});
     const [auxState, setAuxState]=useState(-1);
     const [bezCurve,setBezCurv]=useState([]);
@@ -295,7 +295,7 @@ const modifyStateInfo =(e)=>{
     const state = getState();
     
     if(!isNaming && !isNamingTr && bezCurve.length>0) HoverTrans(state,e,mouseDown)
-    if(isNamingTr && e.type==='click' ) 
+    if(isNamingTr && (e.type==='click' )) 
     {
         setIsNamingTr(false);
         cleanCanvas(contextAux1);
@@ -311,8 +311,9 @@ const modifyStateInfo =(e)=>{
          return;
     }
 
-
+    if(state)console.log(isOverState( { x:e.nativeEvent.offsetX, y:e.nativeEvent.offsetY },state));
 if(isNaming)return;
+
 if(state){
     
     if(state.id !== stateOver.id){
@@ -346,6 +347,7 @@ if(state){
         return;
     }
     if(stateOver.id !== -1){
+        console.log("wooo")
         setStateOver({id:-1})
         setAuxState(-1);
       
@@ -390,7 +392,7 @@ if(state){
             <div id="canvas" >
              
             
-                {props.showRunBotton && 
+                {false && 
                     <React.Fragment>
                         <input 
                             type = "text" 
@@ -412,11 +414,12 @@ if(state){
         
                    <div  
                         className="canvitas"
+                        id="canvitas"
                         onClick = { (e) => modifyStateInfo(e) }
                         onMouseMove = { (e) => modifyStateInfo(e) } 
                         onMouseDown = { (e) => { setMouseDown(true); modifyStateInfo(e) } } 
                         onMouseUp = { (e) => handleMouseUp(e)  }  
-                        style={{position: "relative",background:"#f7f1e3",width:"600px",height:"600px"}}
+                       
                    >
                        <Layers  
                                     canvasRefStates={ canvasRefStates } 
@@ -426,8 +429,7 @@ if(state){
                         />
                    </div>
 
-                 
-                   <button onClick={()=>{contextAux1.clearRect(0, 0, 600, 600); contextAux1.globalAlpha=0.3}}> eeee</button>
+          
    
               
             </div>

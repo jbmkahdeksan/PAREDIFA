@@ -12,6 +12,7 @@
 */
 
 export   default class Transition{
+	
 	constructor(id, state_src, state_dst, symbols){
 		this.id = id;
 		this.state_src = state_src;

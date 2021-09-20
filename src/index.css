@@ -1,23 +1,13 @@
-/* css Zen Garden submission 085 - 'Oceans Apart', by Ryan Sims, http://www.justwatchthesky.com */
-/* css released under Creative Commons License - http://creativecommons.org/licenses/by-nc-sa/1.0/  */
-/* All associated graphics copyright 2004, Ryan Sims */
-/* Added: March 4th, 2004 */
-
-/* IMPORTANT */
-/* This design is not a template. You may not reproduce it elsewhere without the 
-   designer's written permission. However, feel free to study the CSS and use 
-   techniques you learn from it elsewhere. */
 
 
-/* Basic Elements */
-
-body { 
+#bodyJ { 
   font: 11px trebuchet ms, arial, helvetica, sans-serif; 
   color: #9F927F; 
   background: #E8E0D5 repeat-y center;
   height: 100%;
   margin: 10px; 
   line-height: 150%;
+  
 }
 
 p { 
@@ -277,7 +267,7 @@ footer a:link, footer a:visited {
   text-align: left;
 }
 div {
-    height: 100%;
+    
     float: left;
 }
 #c1 {
@@ -292,6 +282,13 @@ div {
     margin: 5px;
     width: 200px;
 }
+
+
+.aboutUs{
+  cursor: pointer;
+}
+
+
 /* extra divs */
 
 .extra1, .extra2, .extra3, .extra4, .extra5, .extra6 {display:none}

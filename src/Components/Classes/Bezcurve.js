@@ -15,9 +15,9 @@
 export default class Bezcurve{
     constructor(start, coord1, coord2, end, trInfo ) {
    
-        this.id=Date.now()-trInfo.id;
-        this.trInfo=trInfo;
-        this.curve=[start,coord1,coord2,end];
+        this.id = Date.now() - trInfo.id;
+        this.trInfo = trInfo;
+        this.curve = [start, coord1, coord2, end];
     
      
 

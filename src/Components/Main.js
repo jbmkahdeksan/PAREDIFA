@@ -1,4 +1,5 @@
 import Wrapper from './Wrapper'
+
 /*
 * 
 * Description:
@@ -14,7 +15,10 @@ import Wrapper from './Wrapper'
 */
 const Main = () => {
     return ( 
-       <Wrapper/>
+      <>
+      
+        <Wrapper/>
+       </>
      );
 }
  

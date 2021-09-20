@@ -22,7 +22,7 @@ export const getStateName = (state, letter) => {
     return letter === undefined ?
     state.name : letter === 'Backspace' ?
     state.name.slice(0, state.name.length-1) : 
-     state.name.length < 4 ? state.name + letter : state.name;
+    state.name.length < 4 ? state.name + letter : state.name;
 }
 
 
@@ -167,7 +167,7 @@ export const commitStateChanges = (isNaming, state, final, start, letter, tempor
 export const commitTemporaryTransition = (selected, contextAux1,  contextAux2, temporaryTransition, setTemporaryTransition, setIsNamingTr, selectedStates, setSelectedStates, stateOver, symbol, auxState, e) => 
 {
 
- 
+   
     if (temporaryTransition.count<=2) 
     {
 

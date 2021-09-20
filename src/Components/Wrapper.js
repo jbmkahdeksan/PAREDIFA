@@ -3,6 +3,9 @@ import Error from './Error'
 import {useState,useContext} from 'react'
 import ThemeContext from './ContextStates';
 import ThemeContextTr from './ContextTransitions';
+import { BsPeople } from "react-icons/bs";
+import About from './About'
+
 /*
 * 
 * Description:
@@ -24,6 +27,8 @@ const Wrapper = () => {
     const {states,setStates} = useContext(ThemeContext);
     const {transitions,setTranstions} = useContext(ThemeContextTr);
     const [statesStringify,setStatesStringify]=useState('');
+    const [showAbout, setShowAbout] = useState(false);
+
     const setAlphabet = () => 
     {
         if(alphabet!==''){
@@ -40,6 +45,9 @@ const Wrapper = () => {
         setStatesStringify(JSON.stringify(object));
     }
     
+    const handleShow=()=>{
+        setShowAbout(!showAbout);
+    }
 
     const importJson = () => {
        setStates([{"id":1631757420473,"x":132,"y":96,"start":false,"final":true,"name":"x"},
@@ -50,8 +58,13 @@ const Wrapper = () => {
 
     }
     return (
+        <>
+      
+      <About show={showAbout} handleShow={handleShow} ></About>
         <div id="wrapper">
+                 
         <div id="c1">
+
             <input type="text" id="alphabet" value={alphabet} onChange={(e)=>setAlphabetWord(e.target.value)}/> 
             <input type="submit" className="button" value="Set Alphabet"  onClick={setAlphabet} />  (e.g.: "1, 0")<br></br>
             <input type="text" id="json-area" value={statesStringify} readOnly/>
@@ -67,11 +80,17 @@ const Wrapper = () => {
                 <b>RENAME STATE (R key):</b> once a state is selected, press R to enter the renaming mode. In the renaming mode, press ENTER to set the state name.<br></br>
                 <b>SET FINAL STATE (F key):</b> once a state is selected, press F to set it as a final state.<br></br>
                 <b>SET INITIAL STATE (S key):</b> once a state is selected, press S to set it as the start state.<br></br>
+            
+            </div>
+            <div className="aboutUs" title="About">
+                <BsPeople  onClick={handleShow} size={30}/>
             </div>
         </div>
+        
         <Canvas  showRunBotton={true}/>
         <Error/>
     </div>
+    </>
       );
 }
  

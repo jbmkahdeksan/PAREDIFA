@@ -16,20 +16,20 @@ import React from "react";
 const Layers = (props) => {
     return (
         <React.Fragment>
-                            <canvas 
+                <canvas 
                                             
                         
-                                            ref = { props.canvasRefAux2 }  
-                                            style = { { background : "transparent", position: "absolute", left: 0, top: 0, zIndex:4}  } 
-                                            width = "600" height = "600" 
+                    ref = { props.canvasRefAux2 }  
+                    style = { { background : "transparent", position: "absolute", left: 0, top: 0, zIndex:4}  } 
+                    width = "500" height = "500" 
                                             
-                                        />
+                />
                 <canvas 
                                             
                         
                     ref = { props.canvasRefAux1 }  
                     style = { { background : "transparent", position: "absolute", left: 0, top: 0, zIndex:3}  } 
-                    width = "600" height = "600" 
+                    width = "500" height = "500" 
                     
                 />
                 <canvas 
@@ -37,7 +37,7 @@ const Layers = (props) => {
                         
                     ref = { props.canvasRefStates }  
                     style = { { background : "transparent", position: "absolute", left: 0, top: 0, zIndex:2}  } 
-                    width = "600" height = "600" 
+                    width = "500" height = "500" 
                   
                 />
 
@@ -47,7 +47,7 @@ const Layers = (props) => {
 
                     ref = { props.canvasRefTr}  
                     style = { { background : "transparent", position: "absolute", left: 0, top: 0, zIndex:1}  } 
-                    width = "600" height = "600" 
+                    width = "500" height = "500" 
                    
                 />
       </React.Fragment>
