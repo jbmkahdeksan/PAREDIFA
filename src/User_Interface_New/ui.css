@@ -2,6 +2,13 @@
     cursor: pointer;
   }
 
+  body{
+    height: 650px;
+    max-height: 650px;
+    min-height: 650px;
+    overflow:hidden;
+    
+  }
   .item{
       display:flex;
     
@@ -29,12 +36,53 @@
   
 }
 
+.tox{
 
+  width:400px;
+  margin-top: 75.5%;
+  margin-left:3%;
+  min-height: 100px;
+
+}
+
+
+@media only screen and (max-width: 1250px) { 
+
+  .screen1{
+     display: none; 
+   } 
+   .tox{
+     display:none;
+   }
+ 
+ }
+
+@media only screen and (max-width: 1150px) { 
+
+ .FaResults{
+    display: none; 
+  } 
+  .divCanvitas{
+    margin-left:30%;
+  }
+
+}
+@media only screen and (max-width: 800px) { 
+
+
+   .divCanvitas{
+     margin-left:15%;
+   }
+ 
+ }
   @media only screen and (max-width: 600px) { 
 
-    .screen1,.FaResults{
+    .FaResults{
       display: none; 
-    } 
+    }
+    .divCanvitas{
+      margin-left:0;
+    }
   }
   .divCanvitas{
    

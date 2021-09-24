@@ -1,5 +1,5 @@
 import Canvas from '../Components/Canvas';
-import { BsFillQuestionCircleFill } from "react-icons/bs";
+import { BsQuestion } from "react-icons/bs";
 import { BsCloudDownload } from "react-icons/bs";
 import {useState} from 'react'
 import GuideModal from './GuideModal'
@@ -21,7 +21,7 @@ const CanvasContainer = () => {
         <>
             <div className="guideContainer">
                     
-                    <BsFillQuestionCircleFill className="guide"  onClick={handleShowIns} title="Instructions" size={23}/>{ ' ' }
+                    <BsQuestion className="guide"  onClick={handleShowIns} title="Instructions" size={23}/>{ ' ' }
                     <BsCloudUpload className="saveFa" size={23} title="Save FA" onClick={handleShowSaveFa}/>{ ' ' }
                     <BsCloudDownload onClick={handleDownload} className="downloadFa" size={23} title="Download FA"  />
             </div>
