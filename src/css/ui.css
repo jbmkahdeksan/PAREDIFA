@@ -6,9 +6,21 @@
     height: 650px;
     max-height: 650px;
     min-height: 650px;
-    overflow:hidden;
+    overflow:scroll;
     
   }
+
+  #teamInfo{
+    margin:auto;
+    text-align:center;
+}
+
+#about,#instructions{
+  color:white
+}
+#about:hover,#instructions:hover{
+  color:gold
+}
   .item{
       display:flex;
     
@@ -113,9 +125,10 @@
 
 
   .tostada{
-    position:absolute;
-    left: 40%;
-    top: 0;
-    z-index: 1;
+    position:fixed;
+    display:block;
+    left: auto;
+    top:0 ;
+    z-index: 11;
 
   }

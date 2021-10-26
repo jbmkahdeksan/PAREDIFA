@@ -1,8 +1,8 @@
 import TodosModal from './TodosModal';
-import Message from './Message';
+import Message from '../Message/Message';
 import {useContext} from 'react';
-import ThemeContextMsg from '../Components/ContextMessage';
-import ThemeContextMsgInfo from './ContextMsg'
+import ThemeContextMsg from '../Context/ContextMessage';
+import ThemeContextMsgInfo from '../Context/ContextMsg'
 const FAmodal = (props) => {
     const handleDoubleClick=()=>{
         props.handleShowFA();

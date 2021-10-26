@@ -1,0 +1,75 @@
+$color: #61dafb;
+
+@mixin flexBox($direction, $justify, $align) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.contenedor{
+  margin:0;
+  padding: 0;
+  height: 10vh;
+  @include flexBox(row, center, center);
+  overflow: hidden;
+
+  section {
+    width: 10vh;
+    height: 10vh;
+    transition: 200ms ease;
+    @include flexBox(row, center, center);
+    
+    div {
+      position: absolute;
+      &:nth-child(4) { // Cicrle kenel
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $color;
+        animation: animateFade 2s infinite linear;
+      }
+      
+      @for $i from 1 through 3 { // Cicrle around
+        &:nth-child(#{$i}) {
+          width: 10vh;
+          height: 10vh;
+          border-top: 1px solid $color;
+          border-left: 1px solid $color;
+          border-radius: 50%;
+          animation: animateSpin-#{$i} 2s infinite linear;
+        }
+      }
+    }
+  }
+  
+
+}
+
+@for $i from 1 through 11 {
+  @keyframes animateSpin-#{$i} {
+    0% {
+      transform: rotatez(120deg * $i) rotatex(50deg) rotatez(0deg);
+    }
+    100% {
+      transform: rotatez(120deg * $i) rotatex(50deg) rotatez(360deg);
+    }
+    0%, 20%, 40%, 60%, 80%, 100% {
+      box-shadow: -2px -2px 2px $color;
+    }
+    10%,30%,50%,70%,90% {
+      box-shadow: -2px -2px 5px $color;
+    }
+  }
+}
+
+@keyframes animateFade {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: scale(0.8);
+    box-shadow: -2px 0px 2px $color;
+  }
+  10%,30%,50%,70%,90% {
+    transform: scale(1);
+    box-shadow: -2px 0px 5px $color;
+  }
+}

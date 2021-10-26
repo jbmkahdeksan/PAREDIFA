@@ -8,9 +8,7 @@ const FaSaveModal = (props) => {
     const [loading,setLoading] = useState(false);
     const [faName,setFaName]=useState('');
 
-    useEffect(()=>{
-        console.log(faName);
-    },[faName])
+
     return (
         <>
       <Modal show={props.show} onHide={() => { setLoading(false); props.handleClose() }}>

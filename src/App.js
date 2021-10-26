@@ -1,12 +1,11 @@
-import Main from './Components/Main'
-import {BrowserRouter, Route,Switch} from 'react-router-dom';
+import {BrowserRouter, Route,Switch, Redirect} from 'react-router-dom';
 import { useState } from 'react';
-import ThemeContext from './Components/ContextStates';
-import ThemeContextMsg from './Components/ContextMessage';
-import ThemeContextTr from './Components/ContextTransitions';
-import ThemeContextMsgInfo from './User_Interface_New/ContextMsg'
-import NavBar from './User_Interface_New/NavBar'
-import Body from './User_Interface_New/Body'
+import ThemeContext from './Components/Context/ContextStates';
+import ThemeContextMsg from './Components/Context/ContextMessage';
+import ThemeContextTr from './Components/Context/ContextTransitions';
+import ThemeContextMsgInfo from './Components/Context/ContextMsg'
+import NavBar from './Components/Navbar/NavBar'
+import Body from './Components/Body'
 /*
 * 
 * Description:
@@ -36,7 +35,7 @@ function App() {
 
                         <Switch>
                             <Route exact path="/" component={Body}/>
-                          
+                            <Redirect exact to="/" />
                         </Switch>
                     </ThemeContext.Provider>
               </ThemeContextTr.Provider>
