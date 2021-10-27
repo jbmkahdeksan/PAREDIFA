@@ -1,7 +1,7 @@
 const radius = 20;
 const CANVAS={
   width:900,
-  height:900
+  height:500
 }
 export const arrowStart = (node2, angle) => ({
   x: node2.x + -radius * Math.cos(angle + Math.PI),

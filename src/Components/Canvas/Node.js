@@ -15,7 +15,7 @@ const Node = ({
 }) => {
   const RADIUS = 20;
   const STAGE = {
-    height: 900,
+    height: 500,
     width: 900,
   };
   const [color, setColor] = useState("#ffeaa7");
@@ -30,7 +30,7 @@ const Node = ({
     //user is out of bounds
     if (coords.y < 19) coords.y = 23;
     if (coords.x < 19) coords.x = 23;
-    if (coords.y > STAGE.height) coords.y = 878;
+    if (coords.y > STAGE.height) coords.y = 478;
     if (coords.x > STAGE.width) coords.x = 878;
 
     updateCoordNode(coords, nodeInfo.id);

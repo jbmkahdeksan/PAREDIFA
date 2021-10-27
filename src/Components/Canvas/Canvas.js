@@ -363,20 +363,21 @@ const Canvas = () => {
   };
   return (
     <>
-      <button onClick={() => setShowModal(true)}>Export</button>
+      
       <Stage
         onDblClick={handleTmpTr}
         ref={stageRef}
-        style={{ borderStyle: "solid", marginTop: "5%" }}
+        className='stageCanva'
+      
         onMouseMove={(e) => {
           setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY });
         }}
         type="stage"
         onclick={(e) => handleSelection(e)}
         width={900}
-        height={900}
+        height={500}
       >
-        <Layer>
+        <Layer >
           {nodes.map((node, index) => (
             <Node
               mouseCoord={mouseCoord}

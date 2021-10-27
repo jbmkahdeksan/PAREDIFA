@@ -3,9 +3,7 @@
   }
 
   body{
-    height: 650px;
-    max-height: 650px;
-    min-height: 650px;
+
     overflow:scroll;
     
   }
@@ -20,6 +18,79 @@
 }
 #about:hover,#instructions:hover{
   color:gold
+}
+
+
+.canvas,.canvasExtra{
+  height:50%
+}
+
+.inputString{
+  height: 120px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  text-align: center!important;
+  border-right: 1px solid #dee2e6!important;
+  width: 41.66666667%;
+  flex: 0 0 auto;
+  border-width: 2px!important;
+
+}
+.json{
+  text-align: center!important;
+}
+.jsonInput{
+  width: 41.66666667%;
+ 
+}
+
+.runByStep,.runCont,.jsonDownload,.jsonUpload{
+  margin-top:2%;
+  
+}
+.runByStep,.jsonDownload{
+  margin-right:1%
+}
+#testString{
+  margin-top:5%;
+  margin-left:13%;
+  width:75%
+}
+
+#jsonInput{
+  margin-top:7%;
+  margin-left:13%;
+  width:75%;
+  text-align: center!important;
+}
+
+#setAlphabet{
+  margin-top:20%;
+  margin-left:13%;
+}
+.alphabet{
+  width: 16.66666667%;
+  height: 120px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left:2%;  
+  border-right:1px solid #dee2e6!important;
+  border-left:1px solid #dee2e6!important;
+  border-width: 2px!important;
+}
+.canvasExtra{
+  display:flex;
+}
+.canvas{
+  margin-left: 2%;
+
+}
+
+.konvajs-content{
+  border-radius: 10px;
+  border-style: solid;
+  width: 910px !important;
+  height: 510px !important;
 }
   .item{
       display:flex;
@@ -119,11 +190,18 @@
   }
 
 
-  .guideContainer{
-      text-align:center;
-  }
-
-
+.canvasContainer, .canvas{
+  display:flex;
+  flex-direction: column;
+}
+.buttonsCanvas{
+  margin-right:5%;
+  margin-top: 0.5%;
+  gap:10px;
+  display:flex;
+  justify-content: flex-end;
+  
+}
   .tostada{
     position:fixed;
     display:block;
