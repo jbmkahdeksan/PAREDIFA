@@ -1,7 +1,7 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Toast from "react-bootstrap/Toast";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
 const Message = () => {

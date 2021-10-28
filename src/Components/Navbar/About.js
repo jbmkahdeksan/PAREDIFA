@@ -1,7 +1,6 @@
 import Offcanvas from "react-bootstrap/Offcanvas";
 
-
-
+import logo from "../../Images/una.png";
 const About = ({ show, handleShow, ...props }) => {
   const data = {
     authors: [
@@ -55,9 +54,6 @@ const About = ({ show, handleShow, ...props }) => {
         <Offcanvas.Body style={{ dispaly: "inline" }}>
           <div>
             <strong>
-              <p>{data.course.college}</p>
-            </strong>
-            <strong>
               <p>
                 {data.course.id} - {data.course.name}
               </p>
@@ -81,6 +77,8 @@ const About = ({ show, handleShow, ...props }) => {
                 <br></br>
               </div>
             ))}
+            <br></br>
+            <img src={logo} width="150" height="150" alt="UNA LOGO"/>
             <br></br>
             Version 2.0
           </div>

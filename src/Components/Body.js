@@ -1,24 +1,18 @@
-
-import CanvasContainer from './Canvas/CanvasContainer'
+import CanvasContainer from "./Canvas/CanvasContainer";
 const Body = () => {
-    
-    return (
-        <>
-            <div className="item">
-                
-         
-               <div style={{width: '70%'}}>
-                <CanvasContainer/>
-               </div>
-                <div style={{width: '30%'}}>
-            hola2
-                </div>
+  return (
+    <>
+      <div className="item">
+        <div className='canvasFlex'>
+          <CanvasContainer />
+        </div>
+        <div className='outPutsFlex'>
+            <div className='errors'>hello</div>
+            <div className='accepted'>Hello2</div>
+        </div>
+      </div>
+    </>
+  );
+};
 
-
-            </div>
-            
-        </>
-      );
-}
- 
 export default Body;

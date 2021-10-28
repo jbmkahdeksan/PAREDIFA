@@ -5,6 +5,8 @@
   body{
 
     overflow:scroll;
+    overflow-x: hidden;
+    margin-bottom: 2%;
     
   }
 
@@ -13,6 +15,15 @@
     text-align:center;
 }
 
+.spinner{
+  text-align:center;
+}
+.automataRun{
+  margin-right:auto;
+  margin-left:auto;
+  margin-top:1%;
+  margin-bottom:3%
+}
 #about,#instructions{
   color:white
 }
@@ -189,7 +200,23 @@
     margin-right:20%;
   }
 
+  .outPutsFlex{
+    
+    width:30%;
+    display:flex;
+    border-left: 1px solid #dee2e6!important;
+    border-width: 4px!important;
+    flex-direction:column !important;
+  }
+  .canvasFlex{
+    width:70%
+  }
 
+  .errors,.accepted{
+    height:50%;
+    width:100%
+
+  }
 .canvasContainer, .canvas{
   display:flex;
   flex-direction: column;

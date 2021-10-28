@@ -18,7 +18,7 @@ const NavBar = () => {
         <Container>
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto" onMouseLeave={() => setMouseIn(false)}>
-              {mouseIn && <Reactive setMouseIn={setMouseIn} />}
+              {mouseIn && <Reactive/>}
               <Navbar.Brand
                 className={mouseIn ? "mt-3" : ""}
                 onMouseOver={() => setMouseIn(true)}
@@ -32,9 +32,11 @@ const NavBar = () => {
                       height="30"
                       className="d-inline-block align-top"
                     />{" "}
+                
                   </>
                 )}
-                PAREDIFA
+              PAREDIFA
+               
               </Navbar.Brand>
             </Nav>
           </Navbar.Collapse>

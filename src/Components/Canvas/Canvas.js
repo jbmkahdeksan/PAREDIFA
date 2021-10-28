@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
 import ThemeContextMsg from "../Context/ContextMessage";
-import InformationModal from "../Modals/InformationModal";
+import ThemeContext from "../Context/ContextStates";
+import ThemeContextTr from "../Context/ContextTransitions";
+import ThemeContextGeneral from "../Context/GeneralInfo";
 import { Stage, Layer } from "react-konva";
 import TemporaryEdge from "./TemporaryEdge";
 import Node from "./Node";
 import Edge from "./Edge";
-import axios from 'axios'
 
 /*
  *
@@ -21,24 +22,22 @@ import axios from 'axios'
  *   Schedule: 10am
  *
  */
-const Canvas = () => {
+const Canvas = (props) => {
   //const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   //const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
-  const [mouseCoord, setMouseCoord] = useState({});
+  const [mouseCoord, setMouseCoord] = useState({}); //HANDLE AFTER DELETEDAOSKDOASKD
   const [mouseDown, setMouseDown] = useState(false);
-  const [nodes, setNodes] = useState([]);
-  const [edge, setEdge] = useState([]);
+  const { nodes, setNodes } = useContext(ThemeContext);
+  const { edge, setEdge } = useContext(ThemeContextTr);
   const [selected, setSelected] = useState("-1");
   const [selectedTr, setSelectedTr] = useState("-1");
-  const [showModal, setShowModal] = useState(false);
   const [namingState, setIsNamingState] = useState(false);
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
   const [isFillingSymbol, setIsFillingSymbol] = useState(false);
   const [addingTr, setAddingTr] = useState({ state: false, tr: "-1" });
-  const stageRef = React.useRef(null);
+  const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
-  const handleClose = () => setShowModal(false);
 
   const updateCoordEdges = (coord, id) => {
     setEdge(
@@ -95,11 +94,11 @@ const Canvas = () => {
             )
           );
         }
-       
+
         if (e.key === "Delete") {
           setEdge(edge.filter((ed) => ed.id !== selectedTr));
           setSelectedTr("-1");
-          if(isFillingSymbol) setIsFillingSymbol(false);
+          if (isFillingSymbol) setIsFillingSymbol(false);
         }
 
         return;
@@ -137,6 +136,10 @@ const Canvas = () => {
         return;
       }
       if (e.key === "q") {
+        if(generalInfo.alphabet.length===0){
+          setGeneralInfo({ ...generalInfo, showAlphabetDefault:true });
+          return;
+        }
         setNodes([
           ...nodes,
           {
@@ -157,7 +160,7 @@ const Canvas = () => {
         ]);
       }
       if (selected === "-1") return;
-      
+
       if (e.key === "Delete" && !addingTr.state) {
         setSelected("-1");
         setNodes([]);
@@ -187,7 +190,18 @@ const Canvas = () => {
         setIsNamingState(true);
       }
     },
-    [nodes, mouseCoord, selected, namingState, edge, selectedTr, addingTr.state, isFillingSymbol]
+    [
+      nodes,
+      setNodes,
+      mouseCoord,
+      selected,
+      namingState,
+      edge,
+      setEdge,
+      selectedTr,
+      addingTr.state,
+      isFillingSymbol,
+    ]
   );
 
   const modifyCoordNodo = (coords, id) => {
@@ -196,7 +210,6 @@ const Canvas = () => {
       nodes.map((nodo) => (nodo.id === id ? { ...nodo, ...coords } : nodo))
     );
   };
-
 
   const handleSelection = (e) => {
     if (namingState) {
@@ -209,11 +222,11 @@ const Canvas = () => {
       if (isFillingSymbol) return;
       if (addingTr.state) {
         setIsFillingSymbol(true);
-        
+
         if (isFillingSymbol) return;
 
         //****AQUIIII */
-    
+
         const edgeTo = edge.reduce((stored, current) => {
           if (selected === selectedNode.id) {
             if (
@@ -223,7 +236,7 @@ const Canvas = () => {
               stored++;
             }
           }
-          console.log(selected,selectedNode.id)
+          console.log(selected, selectedNode.id);
           if (selected !== selectedNode.id) {
             if (current.from.id !== current.to.id) {
               if (
@@ -236,7 +249,7 @@ const Canvas = () => {
           }
           return stored;
         }, 0);
-        
+
         if (edgeTo) {
           setMsgShow(true);
           setMsgInfo({
@@ -248,7 +261,7 @@ const Canvas = () => {
           setEdge(edge.filter((ed) => ed.type !== "temporary"));
           setAddingTr({ state: false, tr: "-1" });
           setIsFillingSymbol(false);
-          
+
           return;
         }
 
@@ -267,16 +280,16 @@ const Canvas = () => {
               : ed
           )
         );
-        console.log(edge)
-        console.log('wtf')
+        console.log(edge);
+        console.log("wtf");
         setSelectedTr(addingTr.tr);
         setAddingTr({ state: false, tr: "-1" });
         setSelected("-1");
-              
+
         return;
       }
-      if(selectedTr!=='-1'){
-        setEdge(edge.filter(ed=> ed.symbol.length!==0))
+      if (selectedTr !== "-1") {
+        setEdge(edge.filter((ed) => ed.symbol.length !== 0));
       }
       setSelectedTr("-1");
       setSelected(e.target.attrs.id);
@@ -307,30 +320,24 @@ const Canvas = () => {
       }
     }
   };
+
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-  const downloadURI =async (uri, name) => {
-    const link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    console.log(link.href,'href')
-
-     await axios.post('http://localhost:3001/',{file:link.href});
-
-    
-    
-    link.click();
-    document.body.removeChild(link);
-  };
-  const handleImage = (firstName, lastName, id, time) => {
-    const uri = stageRef.current.toDataURL();
-
-    downloadURI(uri, `${id}_${time}_${firstName}_${lastName}.png`);
-  };
+  useEffect(() => {
+    if (generalInfo.wipeData) {
+      setAddingTr((e) => ({ state: false, tr: "-1" }));
+      setIsFillingSymbol(e => false)
+      setIsNamingState(e=> false)
+      setSelectedTr(e => '-1')
+      setSelected(e => '-1')
+      setMouseDown(e => false)
+      
+    }
+  }, [generalInfo.wipeData]);
 
   const handleTmpTr = (e) => {
     if (e.target.attrs.type !== "nodo") return;
@@ -338,7 +345,7 @@ const Canvas = () => {
     const coord = e.target.attrs.coord;
 
     if (isFillingSymbol) return;
-   
+
     const id = Date.now().toString();
     setAddingTr({ state: true, tr: id });
     setEdge([
@@ -363,12 +370,10 @@ const Canvas = () => {
   };
   return (
     <>
-      
       <Stage
         onDblClick={handleTmpTr}
-        ref={stageRef}
-        className='stageCanva'
-      
+        ref={props.stageRef}
+        className="stageCanva"
         onMouseMove={(e) => {
           setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY });
         }}
@@ -377,7 +382,7 @@ const Canvas = () => {
         width={900}
         height={500}
       >
-        <Layer >
+        <Layer>
           {nodes.map((node, index) => (
             <Node
               mouseCoord={mouseCoord}
@@ -446,11 +451,6 @@ const Canvas = () => {
             ))}
         </Layer>
       </Stage>
-      <InformationModal
-        cb={handleImage}
-        show={showModal}
-        handleClose={handleClose}
-      />
     </>
   );
 };

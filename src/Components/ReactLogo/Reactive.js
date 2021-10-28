@@ -12,7 +12,7 @@ import "./temp.scss";
  *   Schedule: 10am
  *   Example taked from: https://www.decolore.net/react-animation-examples/
  */
-const Reactive = ({ setMouseIn }) => {
+const Reactive = () => {
   return (
     <div className="contenedor">
       <section>
