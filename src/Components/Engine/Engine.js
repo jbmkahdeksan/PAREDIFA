@@ -102,28 +102,36 @@ export const runAnimation = (
     }, timeSkipAmount * timeSkipCount++);
   });
 
+  
   setTimeout(() => {
 
-    setRunInfo({
+    const obj ={
       nowRunning: false,
       transitionID: null,
       stateID: null,
       input: null,
       currentChar: null,
       finalState:`${objInfoAux.input}:${queue.at(-1).stateID}`
-    });
+    }
+    setRunInfo(obj);
     //let endingState = getStateByID(queue.at(-1).stateID)
-    cb({
-      nowRunning: false,
-      transitionID: null,
-      stateID: null,
-      input: null,
-      currentChar: null,
-      finalState:`${objInfoAux.input}:${queue.at(-1).stateID}`
-    })
+    cb(obj)
 
     //logResult(endingState.name, endingState.end);
   }, timeSkipAmount * timeSkipCount++);
+
+  setTimeout(() => {
+    const obj ={
+      nowRunning: false,
+      transitionID: null,
+      stateID: null,
+      input: null,
+      currentChar: null,
+      finalState:``
+    }
+    console.log('fuck this')
+    setRunInfo(obj);
+  },(timeSkipAmount * timeSkipCount++)+100)
 };
 
 /**

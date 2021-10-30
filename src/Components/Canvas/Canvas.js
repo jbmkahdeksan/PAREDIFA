@@ -10,6 +10,7 @@ import TemporaryEdge from "./TemporaryEdge";
 import Node from "./Node";
 import Edge from "./Edge";
 import ShapeRI from "./ShapeRI";
+import ResultShape from "./ResultShape";
 
 /*
  *
@@ -435,6 +436,11 @@ const Canvas = (props) => {
           {runInfo.nowRunning && (
             <ShapeRI input={runInfo.input} currentChar={runInfo.currentChar} />
           )}
+          {runInfo.finalState.length>0 && 
+          <ResultShape
+            ch={nodes.find(nod => nod.id===runInfo.finalState.split(":")[1])?.final?'\u{2705}':"\u{274C}"}
+          />
+          }
           {nodes.map((node, index) => (
             <Node
               mouseCoord={mouseCoord}
@@ -452,6 +458,7 @@ const Canvas = (props) => {
               setMouseDown={setMouseDown}
               nodeRunningId={runInfo.stateID}
               running={runInfo.nowRunning}
+     
             />
           ))}
         </Layer>

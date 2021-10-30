@@ -79,7 +79,7 @@ const Node = ({
               : color
           }
         />
-        {(nodeInfo.start || (nodeRunningId && nodeRunningId === nodeInfo.id)) && (
+        {(nodeInfo.start  || (nodeRunningId && nodeRunningId === nodeInfo.id)) && (
           <Shape
             id={nodeInfo.id}
             sceneFunc={(ctx, shape) => {
