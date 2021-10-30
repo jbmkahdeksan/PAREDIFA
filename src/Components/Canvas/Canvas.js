@@ -4,10 +4,12 @@ import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
+import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import { Stage, Layer } from "react-konva";
 import TemporaryEdge from "./TemporaryEdge";
 import Node from "./Node";
 import Edge from "./Edge";
+import ShapeRI from "./ShapeRI";
 
 /*
  *
@@ -34,36 +36,50 @@ const Canvas = (props) => {
   const [namingState, setIsNamingState] = useState(false);
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   const [isFillingSymbol, setIsFillingSymbol] = useState(false);
   const [addingTr, setAddingTr] = useState({ state: false, tr: "-1" });
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
-
+  const findAnotherAlphabet = useCallback(
+    (id, key) => {
+      return (
+        edge.reduce((stored, current) => {
+          if (
+            current.from.id === id &&
+            current.symbol?.split(",").indexOf(key) !== -1
+          ) {
+            console.log(current.symbol?.split(","), "symbols");
+            stored++;
+          }
+          return stored;
+        }, 0) >= 1
+      );
+    },
+    [edge]
+  );
   const updateCoordEdges = (coord, id) => {
     setEdge(
       edge.map((arrow) => {
-        if (arrow.from.id === id && arrow.to.id === id) {
-          return {
-            ...arrow,
-            from: { ...arrow.from, ...coord },
-            to: { ...arrow.to, ...coord },
-          };
-        }
-        if (arrow.from.id === id) {
-          return {
-            ...arrow,
-            from: { ...arrow.from, ...coord },
-            to: { ...arrow.to },
-          };
-        }
-        if (arrow.to.id === id) {
-          return {
-            ...arrow,
-            from: { ...arrow.from },
-            to: { ...arrow.to, ...coord },
-          };
-        }
-        return arrow;
+        return arrow.from.id === id && arrow.to.id === id
+          ? {
+              ...arrow,
+              from: { ...arrow.from, ...coord },
+              to: { ...arrow.to, ...coord },
+            }
+          : arrow.from.id === id
+          ? {
+              ...arrow,
+              from: { ...arrow.from, ...coord },
+              to: { ...arrow.to },
+            }
+          : arrow.to.id === id
+          ? {
+              ...arrow,
+              from: { ...arrow.from },
+              to: { ...arrow.to, ...coord },
+            }
+          : arrow;
       })
     );
   };
@@ -82,15 +98,37 @@ const Canvas = (props) => {
           setEdge(
             edge.map((ed) =>
               ed.id === selectedTr
-                ? { ...ed, symbol: ed.symbol.slice(0, ed.symbol.length - 1) }
+                ? { ...ed, symbol: ed.symbol.slice(0, ed.symbol.length - 2) }
                 : ed
             )
           );
         }
         if (e.key.length === 1) {
+          if (generalInfo.alphabet.indexOf(e.key) === -1) {
+            setMsgShow(true);
+            setMsgInfo({
+              bg: "light",
+              header: "Information message",
+              body: "The letter you are trying to add to the transition is not defined in the alphabet.",
+            });
+            return;
+          }
+
           setEdge(
             edge.map((ed) =>
-              ed.id === selectedTr ? { ...ed, symbol: ed.symbol + e.key } : ed
+              ed.id === selectedTr
+                ? {
+                    ...ed,
+                    symbol:
+                      ed.symbol.length === 0 &&
+                      !findAnotherAlphabet(ed.from.id, e.key)
+                        ? e.key
+                        : [...ed.symbol].indexOf(e.key) === -1 &&
+                          !findAnotherAlphabet(ed.from.id, e.key)
+                        ? ed.symbol + "," + e.key
+                        : ed.symbol,
+                  }
+                : ed
             )
           );
         }
@@ -136,8 +174,8 @@ const Canvas = (props) => {
         return;
       }
       if (e.key === "q") {
-        if(generalInfo.alphabet.length===0){
-          setGeneralInfo({ ...generalInfo, showAlphabetDefault:true });
+        if (generalInfo.alphabet.length === 0) {
+          setGeneralInfo({ ...generalInfo, showAlphabetDefault: true });
           return;
         }
         setNodes([
@@ -156,6 +194,9 @@ const Canvas = (props) => {
             shadowBlur: 10,
             shadowOpacity: 0.6,
             name: `S${nodes.length}`,
+            scaleX: 1,
+            scaleY: 1,
+            running: false,
           },
         ]);
       }
@@ -201,6 +242,11 @@ const Canvas = (props) => {
       selectedTr,
       addingTr.state,
       isFillingSymbol,
+      generalInfo,
+      setGeneralInfo,
+      setMsgInfo,
+      setMsgShow,
+      findAnotherAlphabet,
     ]
   );
 
@@ -321,7 +367,6 @@ const Canvas = (props) => {
     }
   };
 
-
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -330,12 +375,11 @@ const Canvas = (props) => {
   useEffect(() => {
     if (generalInfo.wipeData) {
       setAddingTr((e) => ({ state: false, tr: "-1" }));
-      setIsFillingSymbol(e => false)
-      setIsNamingState(e=> false)
-      setSelectedTr(e => '-1')
-      setSelected(e => '-1')
-      setMouseDown(e => false)
-      
+      setIsFillingSymbol((e) => false);
+      setIsNamingState((e) => false);
+      setSelectedTr((e) => "-1");
+      setSelected((e) => "-1");
+      setMouseDown((e) => false);
     }
   }, [generalInfo.wipeData]);
 
@@ -351,6 +395,7 @@ const Canvas = (props) => {
     setEdge([
       ...edge,
       {
+        running: false,
         id: id,
         symbol: "",
         type: "temporary",
@@ -368,6 +413,10 @@ const Canvas = (props) => {
       },
     ]);
   };
+
+  useEffect(() => {
+    console.log(runInfo, "runInfo");
+  }, [runInfo]);
   return (
     <>
       <Stage
@@ -383,6 +432,9 @@ const Canvas = (props) => {
         height={500}
       >
         <Layer>
+          {runInfo.nowRunning && (
+            <ShapeRI input={runInfo.input} currentChar={runInfo.currentChar} />
+          )}
           {nodes.map((node, index) => (
             <Node
               mouseCoord={mouseCoord}
@@ -398,6 +450,8 @@ const Canvas = (props) => {
               isNamingTr={selectedTr}
               addingTr={addingTr}
               setMouseDown={setMouseDown}
+              nodeRunningId={runInfo.stateID}
+              running={runInfo.nowRunning}
             />
           ))}
         </Layer>
@@ -436,7 +490,12 @@ const Canvas = (props) => {
                 symbol={edge.symbol}
                 isNamingState={namingState}
                 isNamingTr={selectedTr}
+                running={runInfo.transitionID}
+                isRunning={runInfo.nowRunning}
                 key={index}
+                currentChar={
+                  runInfo.input ? runInfo.input[runInfo.currentChar - 1] : ""
+                }
                 node1={
                   edge.to.id === selected && mouseDown
                     ? { ...edge.to, ...mouseCoord }

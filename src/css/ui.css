@@ -196,6 +196,10 @@
       
   }
 
+  .accepted{
+    overflow-y:scroll
+  }
+
   .downloadFa{
     margin-right:20%;
   }
@@ -213,8 +217,11 @@
   }
 
   .errors,.accepted{
-    height:50%;
-    width:100%
+
+   height:50%;
+    width:100%;
+    overflow:scroll;
+    overflow-x: hidden;
 
   }
 .canvasContainer, .canvas{

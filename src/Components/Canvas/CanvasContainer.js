@@ -12,8 +12,18 @@ import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
 import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextGeneral from "../Context/GeneralInfo";
-import Spinner from 'react-bootstrap/Spinner';
-const CanvasContainer = () => {
+import ThemeContextRunInfo from "../Context/ContextRunInfo";
+import Spinner from "react-bootstrap/Spinner";
+import { preProcessAutomata } from "../Engine/Engine";
+
+import d3 from "d3";
+const CanvasContainer = ({
+  handleIncorrectSymbolChanges,
+  inputString,
+  setInputString,
+  ready,
+  cb,
+}) => {
   const stageRef = useRef(null);
   // modal information handlers
   const [showInformationModal, setShowInformationModal] = useState(false);
@@ -25,6 +35,7 @@ const CanvasContainer = () => {
   const [showAlphabetModal, setShowAlphabetModal] = useState(false);
   const handleCloseAlphabetModal = () => setShowAlphabetModal(false);
 
+  //input string
 
   //application information
 
@@ -36,8 +47,7 @@ const CanvasContainer = () => {
   //
   //default alphabet modal
   const handleCloseDefaultAlphabetModal = () =>
-  setGeneralInfo({...generalInfo, showAlphabetDefault:false });
-
+    setGeneralInfo({ ...generalInfo, showAlphabetDefault: false });
 
   const [jsonInfo, setJsonInfo] = useState("");
 
@@ -45,12 +55,15 @@ const CanvasContainer = () => {
   const [fetching, setFeching] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  //runInfo
+  const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
+
   const downloadURI = async (uri, name) => {
     const link = document.createElement("a");
     link.download = name;
     link.href = uri;
     document.body.appendChild(link);
-    console.log(link.href, "href");
+    //console.log(link.href, "href");
     setFeching(true);
     setProgress(90);
     // await axios.post('http://localhost:3001/',{file:link.href});
@@ -65,8 +78,101 @@ const CanvasContainer = () => {
   };
 
   const downloadApplicationInfo = () => {
-    if(nodes.length > 0)
-    setJsonInfo(JSON.stringify(nodes));
+    if (nodes.length > 0) setJsonInfo(JSON.stringify(edge));
+  };
+
+  const algo = () => {
+    var w = 900;
+    var h = 500;
+
+    var dataset = {
+      nodes: [
+        { name: "Adam" },
+        { name: "Bob" },
+        { name: "Carrie" },
+        { name: "Donovan" },
+        { name: "Edward" },
+        { name: "Felicity" },
+        { name: "George" },
+        { name: "Hannah" },
+        { name: "Iris" },
+        { name: "Jerry" },
+      ],
+      edges: [
+        { source: 0, target: 0, symbol: "Z" },
+        { source: 0, target: 2, symbol: "Z" },
+        { source: 0, target: 3, symbol: "Z" },
+        { source: 0, target: 4 },
+        { source: 1, target: 5 },
+        { source: 2, target: 5 },
+        { source: 2, target: 5 },
+        { source: 3, target: 4 },
+        { source: 5, target: 8 },
+        { source: 5, target: 9 },
+        { source: 6, target: 7 },
+        { source: 7, target: 8 },
+        { source: 8, target: 9 },
+      ],
+    };
+    const algo = {
+      start: false,
+      selected: false,
+      final: false,
+      width: 40,
+      height: 40,
+      type: "circle",
+      shadowColor: "black",
+      shadowBlur: 10,
+      shadowOpacity: 0.6,
+    };
+    var force = d3.layout
+      .force()
+      .nodes(dataset.nodes)
+      .links(dataset.edges)
+      .size([w, h])
+      .linkDistance(100)
+      .charge(-1000)
+      .gravity(0.1)
+      .theta(0.8)
+      .alpha(0.1)
+      .start();
+
+    force.on("end", () => console.log("fuck u"));
+
+    force.on("tick", function () {
+      const array = [];
+      const arrayEdge = [];
+      dataset.nodes.forEach((nod, index) =>
+        array.push({
+          id: index.toString(),
+          name: `S${index}`,
+          x: nod.x,
+          y: nod.y,
+          ...algo,
+        })
+      );
+
+      dataset.edges.forEach((ed, index) =>
+        arrayEdge.push({
+          id: index.toString(),
+          symbol: "1",
+          type: "fixed",
+          from: {
+            id: `${array[ed.source.index].id}`,
+            x: array[ed.source.index].x,
+            y: array[ed.source.index].y,
+          },
+          to: {
+            id: `${array[ed.target.index].id}`,
+            x: array[ed.target.index].x,
+            y: array[ed.target.index].y,
+          },
+        })
+      );
+
+      setNodes(array);
+      setEdge(arrayEdge);
+    });
   };
 
   const handleCopyClipboard = () => {
@@ -81,10 +187,10 @@ const CanvasContainer = () => {
     }
   };
 
-  const validateOpening=()=>{
-    if(nodes.length>0){
-      setShowWipeModal(true)
-    }else{
+  const validateOpening = () => {
+    if (nodes.length > 0) {
+      setShowWipeModal(true);
+    } else {
       setMsgShow(true);
       setMsgInfo({
         bg: "light",
@@ -92,23 +198,39 @@ const CanvasContainer = () => {
         body: "You havent drawn anything!",
       });
     }
-    
-  }
+  };
+
+  const handleInputChanges = (e) => {
+    handleIncorrectSymbolChanges(e.target.value);
+    setInputString(e.target.value);
+  };
+  const handleContinuos = () => {
+    preProcessAutomata(
+      nodes,
+      setNodes,
+      edge,
+      inputString,
+      setEdge,
+      runInfo,
+      setRunInfo,
+      cb
+    );
+  };
+
   return (
     <>
       <div className="canvasContainer">
-        {false && 
+        {runInfo.nowRunning && (
           <>
             <div className="automataRun">
               <h1>Automata is running...</h1>
-              <div className='spinner'>
-              <Spinner animation="grow" variant="info" />
+              <div className="spinner">
+                <Spinner animation="grow" variant="info" />
               </div>
-    
             </div>
           </>
-        }
-        {true && (
+        )}
+        {!runInfo.nowRunning && (
           <div className="canvasExtra">
             <div className="alphabet">
               <div className="btn-group-sm">
@@ -124,16 +246,27 @@ const CanvasContainer = () => {
             </div>
             <div className="inputString">
               <Form.Control
+                value={inputString}
+                onChange={(e) => handleInputChanges(e)}
                 type="text"
                 id="testString"
                 placeholder="Test string"
               />
               <div className="btn-group-sm">
-                <Button variant="primary" className="runByStep">
+                <Button
+                  variant="primary"
+                  disabled={!ready}
+                  className="runByStep"
+                >
                   {" "}
                   Run by steps
                 </Button>
-                <Button variant="primary" className="runCont">
+                <Button
+                  disabled={!ready}
+                  variant="primary"
+                  className="runCont"
+                  onClick={handleContinuos}
+                >
                   {" "}
                   Run continuously
                 </Button>
@@ -157,7 +290,7 @@ const CanvasContainer = () => {
                   {" "}
                   Download JSON
                 </Button>
-                <Button variant="primary" className="jsonUpload">
+                <Button variant="primary" className="jsonUpload" onClick={algo}>
                   {" "}
                   Upload JSON
                 </Button>
@@ -192,10 +325,7 @@ const CanvasContainer = () => {
         show={showAlphabetModal}
         handleClose={handleCloseAlphabetModal}
       />
-      <DefaultAlphabetModal
-        
-        handleClose={handleCloseDefaultAlphabetModal}
-      />
+      <DefaultAlphabetModal handleClose={handleCloseDefaultAlphabetModal} />
       <Message />
     </>
   );

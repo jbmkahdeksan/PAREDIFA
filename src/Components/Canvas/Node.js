@@ -12,6 +12,8 @@ const Node = ({
   isNamingTr,
   addingTr,
   setMouseDown,
+  nodeRunningId,
+  running,
 }) => {
   const RADIUS = 20;
   const STAGE = {
@@ -44,6 +46,7 @@ const Node = ({
         type="nodo"
         id={nodeInfo.id}
         draggable={!isNamingState && !addingTr.state}
+        listening={!running}
         onMouseEnter={() => setColor("#7bed9f")}
         onMouseOut={() => setColor("#ffeaa7")}
         opacity={
@@ -64,19 +67,19 @@ const Node = ({
         }}
       >
         <Circle
-          scaleX={1}
-          scaleY={1}
           id={nodeInfo.id}
           {...nodeInfo}
           fill={
-            selected === nodeInfo.id && addingTr.state
+            nodeRunningId && nodeRunningId === nodeInfo.id
+              ? "#a29bfe"
+              : selected === nodeInfo.id && addingTr.state
               ? "#0097e6"
               : selected === nodeInfo.id
               ? "#e17055"
               : color
           }
         />
-        {nodeInfo.start && (
+        {(nodeInfo.start || (nodeRunningId && nodeRunningId === nodeInfo.id)) && (
           <Shape
             id={nodeInfo.id}
             sceneFunc={(ctx, shape) => {

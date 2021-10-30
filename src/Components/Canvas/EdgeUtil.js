@@ -47,7 +47,8 @@ export const drawTrText = (
   txt,
   id,
   selectedTr,
-  flag
+  flag,
+  running
 ) => {
   let text_pos = { x: 0, y: 0 };
   text_pos = {
@@ -74,25 +75,26 @@ export const drawTrText = (
   }
 
   //symbol
+
   ctx.font = "15px Georgia";
-  ctx.strokeStyle = ctx.fillStyle =
+  ctx.strokeStyle = ctx.fillStyle = running?'#6c5ce7':
     id === selectedTr ? "#e17055" : flag ? "green" : "#000000";
   ctx.fillText(txt, text_pos.x, text_pos.y);
 };
-export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag) => {
+export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag,running) => {
   if (src.id !== dst.id) {
     let vector2_ort = { x: src.y - dst.y, y: dst.x - src.x };
     vector2_ort = normalizeVector(vector2_ort);
     vector2_ort = multiplyVector(vector2_ort, 7.5);
     let aux_mlt =
       Math.sqrt(Math.pow(dst.x - src.x, 2) + Math.pow(dst.y - src.y, 2)) / 60;
-    drawTrText(ctx, src, dst, aux_mlt, vector2_ort, txt, id, selectedTr, flag);
+    drawTrText(ctx, src, dst, aux_mlt, vector2_ort, txt, id, selectedTr, flag,running);
   } else {
     let center = { x: src.x, y: dst.y };
     ctx.font = "15px Georgia";
     ctx.textAlign = "right";
     ctx.textBaseline = "top";
-    ctx.strokeStyle = ctx.fillStyle =
+    ctx.strokeStyle = ctx.fillStyle =running?'#6c5ce7':
       id === selectedTr ? "#e17055" : flag ? "green" : "#000000";
     ctx.fillText(
       txt,
