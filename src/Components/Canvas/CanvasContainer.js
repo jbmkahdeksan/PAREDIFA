@@ -62,7 +62,7 @@ const CanvasContainer = ({
   //runInfo
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   //stage info
-  const [stageInfo, setStageInfo] = useState(ThemeContextStage);
+  const {stageInfo, setStageInfo} = useContext(ThemeContextStage);
   const downloadURI = async (uri, name) => {
     const link = document.createElement("a");
     link.download = name;

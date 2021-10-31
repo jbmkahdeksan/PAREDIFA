@@ -41,7 +41,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   const [isFillingSymbol, setIsFillingSymbol] = useState(false);
   const [mouseIn, setMouseIn] = useState(false);
-  const [stageInfo, setStageInfo] = useState(ThemeContextStage);
+  const {stageInfo, setStageInfo} = useContext(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
   const findAnotherAlphabet = useCallback(
@@ -440,7 +440,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
 
   const handleWindowResize = (e)=>{
     const witdth = e.target.outerWidth * 0.653;
-    
+    console.log('stageInfo',stageInfo.w)
     setStageInfo( e => ({ ...stageInfo, w: witdth }));
   }
   useEffect(() => {
