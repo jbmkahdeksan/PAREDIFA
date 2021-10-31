@@ -14,6 +14,7 @@ const WipeDataModal = (props) => {
     setNodes([]);
     setEdge([]);
     setGeneralInfo({ ...generalInfo, wipeData: true });
+    console.log('hehhehe wipe data BITCH')
     setGeneralInfo({
       alphabet: [],
       useDefault: false,

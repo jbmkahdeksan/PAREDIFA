@@ -6,6 +6,7 @@ import ThemeContextTr from "./Components/Context/ContextTransitions";
 import ThemeContextMsgInfo from "./Components/Context/ContextMsg";
 import ThemeContextGeneral from "./Components/Context/GeneralInfo";
 import ThemeContextRunInfo from "./Components/Context/ContextRunInfo";
+import ThemeContextStage from "./Components/Context/StageInfo";
 import NavBar from "./Components/Navbar/NavBar";
 import Body from "./Components/Body";
 /*
@@ -32,8 +33,7 @@ function App() {
     wipeData: false,
     showAlphabetDefault: false,
     result: false,
-    stageWitdh:910
-  
+    stageWitdh: 910,
   });
   const [runInfo, setRunInfo] = useState({
     nowRunning: false,
@@ -41,9 +41,11 @@ function App() {
     stateID: null,
     input: null,
     currentChar: null,
-    finalState:'',
-    prevPressed:false
+    finalState: "",
+    prevPressed: false,
   });
+
+  const [stageInfo, setStageInfo] = useState({ w: 910, h: 510 });
   return (
     <BrowserRouter>
       <ThemeContextMsg.Provider value={{ msgShow, setMsgShow }}>
@@ -54,12 +56,16 @@ function App() {
                 value={{ generalInfo, setGeneralInfo }}
               >
                 <ThemeContextRunInfo.Provider value={{ runInfo, setRunInfo }}>
-                  <NavBar />
+                  <ThemeContextStage.Provider
+                    value={{ stageInfo, setStageInfo }}
+                  >
+                    <NavBar />
 
-                  <Switch>
-                    <Route exact path="/" component={Body} />
-                    <Redirect exact to="/" />
-                  </Switch>
+                    <Switch>
+                      <Route exact path="/" component={Body} />
+                      <Redirect exact to="/" />
+                    </Switch>
+                  </ThemeContextStage.Provider>
                 </ThemeContextRunInfo.Provider>
               </ThemeContextGeneral.Provider>
             </ThemeContext.Provider>

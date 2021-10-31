@@ -24,10 +24,10 @@
   margin-top:1%;
   margin-bottom:3%
 }
-#about,#instructions{
+#about,#instructions,#regexEditor{
   color:white
 }
-#about:hover,#instructions:hover{
+#about:hover,#instructions:hover,#regexEditor:hover{
   color:gold
 }
 
@@ -128,62 +128,6 @@
   overflow-y: scroll;
   
 }
-
-.tox{
-
-  width:400px;
-  margin-top: 75.5%;
-  margin-left:3%;
-  min-height: 100px;
-
-}
-
-
-@media only screen and (max-width: 1250px) { 
-
-  .screen1{
-     display: none; 
-   } 
-   .tox{
-     display:none;
-   }
- 
- }
-
-@media only screen and (max-width: 1150px) { 
-
- .FaResults{
-    display: none; 
-  } 
-  .divCanvitas{
-    margin-left:30%;
-  }
-
-}
-@media only screen and (max-width: 800px) { 
-
-
-   .divCanvitas{
-     margin-left:15%;
-   }
- 
- }
-  @media only screen and (max-width: 600px) { 
-
-    .FaResults{
-      display: none; 
-    }
-    .divCanvitas{
-      margin-left:0;
-    }
-  }
-  .divCanvitas{
-   
-    width: 44.33%;
-    min-height: 500px;
-  }
-
-
 
 
 

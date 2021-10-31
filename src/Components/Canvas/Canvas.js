@@ -5,6 +5,7 @@ import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import ThemeContextRunInfo from "../Context/ContextRunInfo";
+import ThemeContextStage from "../Context/StageInfo";
 import { Stage, Layer } from "react-konva";
 import TemporaryEdge from "./TemporaryEdge";
 import Node from "./Node";
@@ -40,7 +41,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   const [isFillingSymbol, setIsFillingSymbol] = useState(false);
   const [mouseIn, setMouseIn] = useState(false);
-  const [stageSize, setStageSize] = useState({ height: 510, width: 910 });
+  const [stageInfo, setStageInfo] = useState(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
   const findAnotherAlphabet = useCallback(
@@ -436,15 +437,11 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     ]);
   };
 
-  const handleWindowResize = useCallback(
-    (e) => {
-      const witdth = e.target.outerWidth * 0.653;
-      setStageSize({ ...stageSize, width: witdth });
-      setGeneralInfo({ ...generalInfo, stageWitdh: witdth });
-    },
-    [setStageSize, stageSize, generalInfo, setGeneralInfo]
-  );
 
+  const handleWindowResize = (e)=>{
+    const witdth = e.target.outerWidth * 0.653;
+    setStageInfo( e => ({ ...stageInfo, w: witdth }));
+  }
   useEffect(() => {
     window.addEventListener("resize", (e) => handleWindowResize(e));
    
@@ -459,12 +456,12 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         onMouseMove={(e) =>
           setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY })
         }
-        onChange={(e) => console.log(e, "fuck u motherfucker")}
+
         onMouseEnter={() => setMouseIn(true)}
         onMouseLeave={() => setMouseIn(false)}
         type="stage"
         onclick={(e) => handleSelection(e)}
-        width={stageSize.width}
+        width={stageInfo.w || 910}
         height={510}
       >
         <Layer>
@@ -498,7 +495,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
               setMouseDown={setMouseDown}
               nodeRunningId={runInfo.stateID}
               running={runInfo.nowRunning}
-              stageWidth={stageSize.width}
+              stageWidth={stageInfo.w}
             />
           ))}
         </Layer>

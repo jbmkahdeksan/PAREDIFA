@@ -13,7 +13,8 @@ import ThemeContextMsgInfo from "../Context/ContextMsg";
 import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import ThemeContextRunInfo from "../Context/ContextRunInfo";
-import Spinner from "react-bootstrap/Spinner";
+import Reactive from "../ReactLogo/Reactive";
+import ThemeContextStage from "../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../Engine/Engine";
 
 import d3 from "d3";
@@ -60,7 +61,8 @@ const CanvasContainer = ({
 
   //runInfo
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
-
+  //stage info
+  const [stageInfo, setStageInfo] = useState(ThemeContextStage);
   const downloadURI = async (uri, name) => {
     const link = document.createElement("a");
     link.download = name;
@@ -85,7 +87,7 @@ const CanvasContainer = ({
   };
 
   const algo = () => {
-    var w = generalInfo.stageWitdh;
+    var w = stageInfo.w;
     var h = 500;
 
     var dataset = {
@@ -275,7 +277,7 @@ const CanvasContainer = ({
                 <div className="automataRun">
                   <h3>Automata is running...</h3>
                   <div className="spinner">
-                    <Spinner animation="grow" variant="info" />
+                  <Reactive/>
                   </div>
                 </div>
               </>
