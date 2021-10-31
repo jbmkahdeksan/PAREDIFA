@@ -17,7 +17,7 @@ const Edge = ({
   isNamingState,
   running,
   isRunning,
-  currentChar
+  currentChar,
 }) => {
   const [flag, setFlag] = useState(false);
   const dx = node1.x - node2.x;
@@ -32,6 +32,16 @@ const Edge = ({
 
   const arrowCurve = curveArrow(angle, node1, node2);
 
+  const COLOR =
+    running && running === id
+      ? "#6c5ce7"
+      : type === "temporary"
+      ? "#8c7ae6"
+      : id === selectedTr
+      ? "#e17055"
+      : !flag
+      ? "#000"
+      : "green";
   return (
     <Group
       onclick={() => setFlag(true)}
@@ -55,28 +65,8 @@ const Edge = ({
             arrowEnd.x,
             arrowEnd.y,
           ]}
-          stroke={
-            running && running === id
-              ? "#6c5ce7"
-              : type === "temporary"
-              ? "#8c7ae6"
-              : id === selectedTr
-              ? "#e17055"
-              : !flag
-              ? "#000"
-              : "green"
-          }
-          fill={
-            running && running === id
-              ? "#6c5ce7"
-              : type === "temporary"
-              ? "#8c7ae6"
-              : id === selectedTr
-              ? "#e17055"
-              : !flag
-              ? "#000"
-              : "green"
-          }
+          stroke={COLOR}
+          fill={COLOR}
           strokeWidth={3}
           pointerWidth={5}
           pointerLength={5}
@@ -92,17 +82,7 @@ const Edge = ({
             innerRadius={17.5}
             outerRadius={17.5}
             strokeWidth={2.5}
-            stroke={
-              running && running === id
-                ? "#6c5ce7"
-                : type === "temporary"
-                ? "#8c7ae6"
-                : id === selectedTr
-                ? "#e17055"
-                : !flag
-                ? "#000"
-                : "green"
-            }
+            stroke={COLOR}
             angle={125}
             rotation={-20}
             clockwise={true}
@@ -113,28 +93,8 @@ const Edge = ({
             x={node1.x + 1}
             y={node1.y - radius - 4}
             rotation={70}
-            stroke={
-              running && running === id
-                ? "#6c5ce7"
-                : type === "temporary"
-                ? "#8c7ae6"
-                : id === selectedTr
-                ? "#e17055"
-                : !flag
-                ? "#000"
-                : "green"
-            }
-            fill={
-              running && running === id
-                ? "#6c5ce7"
-                : type === "temporary"
-                ? "#8c7ae6"
-                : id === selectedTr
-                ? "#e17055"
-                : !flag
-                ? "#000"
-                : "green"
-            }
+            stroke={COLOR}
+            fill={COLOR}
             strokeWidth={3}
             pointerWidth={5}
             pointerLength={5}

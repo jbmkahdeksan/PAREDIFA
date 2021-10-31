@@ -46,6 +46,7 @@ const AlphabetModal = (props) => {
         <Modal.Body>
           <Form.Control
             type="text"
+            id='alphabetInput'
             onChange={(e) => setAlphabet(e.target.value)}
             value={alphabet}
             placeholder="Alphabet"

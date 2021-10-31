@@ -100,8 +100,7 @@
 .konvajs-content{
   border-radius: 10px;
   border-style: solid;
-  width: 910px !important;
-  height: 510px !important;
+
 }
   .item{
       display:flex;
@@ -216,11 +215,15 @@
     width:70%
   }
 
+  #stepsDiv{
+    margin-top:10% !important;
+  }
+
   .errors,.accepted{
 
-   height:50%;
+    height: 350px;
     width:100%;
-    overflow:scroll;
+    overflow-y:auto;
     overflow-x: hidden;
 
   }

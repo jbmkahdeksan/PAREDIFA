@@ -115,6 +115,15 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
           )}
         </>
       )}
+      {nodes.length===0 && 
+            <>
+            <b>
+              ERROR - <i> NO STATES </i>
+            </b>
+            <br></br> no states have been added yet <br></br>
+            <br></br>
+          </>
+      }
       {!FINALSTATE && nodes.length>0 && (
         <>
           {createError(

@@ -81,7 +81,7 @@ const Body = () => {
         </>
       );
       setFinalResult(htmlResult);
-    
+      setInputString('')
     }
   };
 

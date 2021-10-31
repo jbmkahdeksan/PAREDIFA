@@ -25,7 +25,7 @@ import ResultShape from "./ResultShape";
  *   Schedule: 10am
  *
  */
-const Canvas = (props) => {
+const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   //const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   //const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
   const [mouseCoord, setMouseCoord] = useState({}); //HANDLE AFTER DELETEDAOSKDOASKD
@@ -39,7 +39,8 @@ const Canvas = (props) => {
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   const [isFillingSymbol, setIsFillingSymbol] = useState(false);
-  const [addingTr, setAddingTr] = useState({ state: false, tr: "-1" });
+  const [mouseIn, setMouseIn] = useState(false);
+  const [stageSize, setStageSize] = useState({ height: 510, width: 910 });
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
   const findAnotherAlphabet = useCallback(
@@ -86,6 +87,15 @@ const Canvas = (props) => {
   };
   const handleKeyDown = useCallback(
     (e) => {
+      console.log(e, "e");
+      if (runInfo.nowRunning) {
+        return;
+      }
+      console.log(mouseIn, "mouseIn");
+      if (!mouseIn && e.target.id === "testString") return;
+      if (!mouseIn && e.target.id === "jsonInput") return;
+      if (!mouseIn && e.target.id === "alphabetInput") return;
+      if (!mouseIn) return;
       if (selectedTr !== "-1") {
         if (e.key === "Enter") {
           if (addingTr.state) {
@@ -248,9 +258,19 @@ const Canvas = (props) => {
       setMsgInfo,
       setMsgShow,
       findAnotherAlphabet,
+      runInfo.nowRunning,
+      setAddingTr,
+      mouseIn,
     ]
   );
 
+  useEffect(() => {
+    if (runInfo.nowRunning) {
+      setSelected((e) => "-1");
+      setIsNamingState((e) => false);
+      setSelectedTr((e) => "-1");
+    }
+  }, [runInfo.nowRunning]);
   const modifyCoordNodo = (coords, id) => {
     setNodes([]);
     setNodes(
@@ -259,6 +279,8 @@ const Canvas = (props) => {
   };
 
   const handleSelection = (e) => {
+    if (runInfo.nowRunning) return;
+    console.log("bitch");
     if (namingState) {
       setIsNamingState(false);
       return;
@@ -375,7 +397,6 @@ const Canvas = (props) => {
 
   useEffect(() => {
     if (generalInfo.wipeData) {
-      setAddingTr((e) => ({ state: false, tr: "-1" }));
       setIsFillingSymbol((e) => false);
       setIsNamingState((e) => false);
       setSelectedTr((e) => "-1");
@@ -415,32 +436,51 @@ const Canvas = (props) => {
     ]);
   };
 
+  const handleWindowResize = useCallback(
+    (e) => {
+      const witdth = e.target.outerWidth * 0.653;
+      setStageSize({ ...stageSize, width: witdth });
+      setGeneralInfo({ ...generalInfo, stageWitdh: witdth });
+    },
+    [setStageSize, stageSize, generalInfo, setGeneralInfo]
+  );
+
   useEffect(() => {
-    console.log(runInfo, "runInfo");
-  }, [runInfo]);
+    window.addEventListener("resize", (e) => handleWindowResize(e));
+   
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, []);
   return (
     <>
       <Stage
         onDblClick={handleTmpTr}
-        ref={props.stageRef}
+        ref={stageRef}
         className="stageCanva"
-        onMouseMove={(e) => {
-          setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY });
-        }}
+        onMouseMove={(e) =>
+          setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY })
+        }
+        onChange={(e) => console.log(e, "fuck u motherfucker")}
+        onMouseEnter={() => setMouseIn(true)}
+        onMouseLeave={() => setMouseIn(false)}
         type="stage"
         onclick={(e) => handleSelection(e)}
-        width={900}
-        height={500}
+        width={stageSize.width}
+        height={510}
       >
         <Layer>
           {runInfo.nowRunning && (
             <ShapeRI input={runInfo.input} currentChar={runInfo.currentChar} />
           )}
-          {runInfo.finalState.length>0 && 
-          <ResultShape
-            ch={nodes.find(nod => nod.id===runInfo.finalState.split(":")[1])?.final?'\u{2705}':"\u{274C}"}
-          />
-          }
+          {runInfo.finalState.length > 0 && (
+            <ResultShape
+              ch={
+                nodes.find((nod) => nod.id === runInfo.finalState.split(":")[1])
+                  ?.final
+                  ? "\u{2705}"
+                  : "\u{274C}"
+              }
+            />
+          )}
           {nodes.map((node, index) => (
             <Node
               mouseCoord={mouseCoord}
@@ -458,7 +498,7 @@ const Canvas = (props) => {
               setMouseDown={setMouseDown}
               nodeRunningId={runInfo.stateID}
               running={runInfo.nowRunning}
-     
+              stageWidth={stageSize.width}
             />
           ))}
         </Layer>
@@ -501,7 +541,11 @@ const Canvas = (props) => {
                 isRunning={runInfo.nowRunning}
                 key={index}
                 currentChar={
-                  runInfo.input ? runInfo.input[runInfo.currentChar - 1] : ""
+                  runInfo.input
+                    ? runInfo.prevPressed
+                      ? runInfo.input[runInfo.currentChar]
+                      : runInfo.input[runInfo.currentChar - 1]
+                    : ""
                 }
                 node1={
                   edge.to.id === selected && mouseDown

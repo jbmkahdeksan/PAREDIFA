@@ -32,6 +32,7 @@ function App() {
     wipeData: false,
     showAlphabetDefault: false,
     result: false,
+    stageWitdh:910
   
   });
   const [runInfo, setRunInfo] = useState({
@@ -40,7 +41,8 @@ function App() {
     stateID: null,
     input: null,
     currentChar: null,
-    finalState:''
+    finalState:'',
+    prevPressed:false
   });
   return (
     <BrowserRouter>

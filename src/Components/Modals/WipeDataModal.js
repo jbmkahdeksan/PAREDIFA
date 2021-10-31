@@ -3,15 +3,33 @@ import Button from "react-bootstrap/Button";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
+import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import { useContext } from "react";
 const WipeDataModal = (props) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
-  const {generalInfo, setGeneralInfo}=useContext(ThemeContextGeneral);
+  const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   const wipeData = () => {
     setNodes([]);
     setEdge([]);
-    setGeneralInfo({...generalInfo, wipeData:true})
+    setGeneralInfo({ ...generalInfo, wipeData: true });
+    setGeneralInfo({
+      alphabet: [],
+      useDefault: false,
+      wipeData: false,
+      showAlphabetDefault: false,
+      result: false,
+    });
+    setRunInfo({
+      nowRunning: false,
+      transitionID: null,
+      stateID: null,
+      input: null,
+      currentChar: null,
+      finalState: "",
+      prevPressed: false,
+    });
     props.handleClose();
   };
   return (

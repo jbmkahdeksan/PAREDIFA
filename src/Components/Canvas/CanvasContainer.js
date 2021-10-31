@@ -1,5 +1,5 @@
 import Canvas from "./Canvas";
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InformationModal from "../Modals/InformationModal";
@@ -14,7 +14,7 @@ import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import Spinner from "react-bootstrap/Spinner";
-import { preProcessAutomata } from "../Engine/Engine";
+import { preProcessAutomata, runBySteps } from "../Engine/Engine";
 
 import d3 from "d3";
 const CanvasContainer = ({
@@ -44,6 +44,9 @@ const CanvasContainer = ({
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  const [addingTr, setAddingTr] = useState({ state: false, tr: "-1" });
+  const [isByStep, setIsByStep] = useState(false);
+  const [disablePrev, setDisablePrev] = useState(true);
   //
   //default alphabet modal
   const handleCloseDefaultAlphabetModal = () =>
@@ -82,7 +85,7 @@ const CanvasContainer = ({
   };
 
   const algo = () => {
-    var w = 900;
+    var w = generalInfo.stageWitdh;
     var h = 500;
 
     var dataset = {
@@ -114,6 +117,14 @@ const CanvasContainer = ({
         { source: 8, target: 9 },
       ],
     };
+    console.log(
+      dataset.nodes.map((node) => node.name).indexOf("Jerry"),
+      "jerry"
+    );
+    console.log(
+      dataset.nodes.findIndex((node) => node.name === "Adam"),
+      "Adam"
+    );
     const algo = {
       start: false,
       selected: false,
@@ -199,109 +210,180 @@ const CanvasContainer = ({
       });
     }
   };
-
+  useEffect(() => {
+    if (generalInfo.wipeData) {
+      setAddingTr((e) => ({ state: false, tr: "-1" }));
+      setIsByStep((e) => false);
+      setDisablePrev((e) => true);
+      setJsonInfo((e) => "");
+    }
+  }, [generalInfo.wipeData]);
   const handleInputChanges = (e) => {
     handleIncorrectSymbolChanges(e.target.value);
     setInputString(e.target.value);
   };
-  const handleContinuos = () => {
+  const handleInput = (type) => {
+    //just incase user is adding a tmp tr
+    const filteredEdge = edge.filter((ed) => ed.type === "fixed");
+    if (filteredEdge.length !== edge.length)
+      setAddingTr({ state: false, tr: "-1" });
+    setEdge(filteredEdge);
+    if (type === "step") {
+      setIsByStep(true);
+    }
+    if (type === "cont") {
+      if (isByStep) setIsByStep(false);
+    }
     preProcessAutomata(
       nodes,
-      setNodes,
-      edge,
+      filteredEdge,
       inputString,
-      setEdge,
       runInfo,
       setRunInfo,
-      cb
+      cb,
+      type
     );
+  };
+
+  const byStepCb = (runInfoObj) => {
+    setIsByStep(false);
+    setDisablePrev(true);
+    cb(runInfoObj);
   };
 
   return (
     <>
       <div className="canvasContainer">
-        {runInfo.nowRunning && (
-          <>
-            <div className="automataRun">
-              <h1>Automata is running...</h1>
-              <div className="spinner">
-                <Spinner animation="grow" variant="info" />
-              </div>
-            </div>
-          </>
-        )}
-        {!runInfo.nowRunning && (
-          <div className="canvasExtra">
-            <div className="alphabet">
-              <div className="btn-group-sm">
-                <Button
-                  onClick={() => setShowAlphabetModal(true)}
-                  variant="outline-info"
-                  id="setAlphabet"
-                  title="(e.g.: 1, 0)"
-                >
-                  Set Alphabet
-                </Button>
-              </div>
-            </div>
-            <div className="inputString">
-              <Form.Control
-                value={inputString}
-                onChange={(e) => handleInputChanges(e)}
-                type="text"
-                id="testString"
-                placeholder="Test string"
-              />
-              <div className="btn-group-sm">
-                <Button
-                  variant="primary"
-                  disabled={!ready}
-                  className="runByStep"
-                >
-                  {" "}
-                  Run by steps
-                </Button>
-                <Button
-                  disabled={!ready}
-                  variant="primary"
-                  className="runCont"
-                  onClick={handleContinuos}
-                >
-                  {" "}
-                  Run continuously
-                </Button>
-              </div>
-            </div>
-            <div className="jsonInput">
-              <Form.Control
-                type="text"
-                id="jsonInput"
-                value={jsonInfo}
-                onChange={(e) => setJsonInfo(e.target.value)}
-                placeholder="JSON"
-                onDoubleClick={handleCopyClipboard}
-              />
-              <div className="btn-group-sm json">
-                <Button
-                  variant="primary"
-                  onClick={downloadApplicationInfo}
-                  className="jsonDownload"
-                >
-                  {" "}
-                  Download JSON
-                </Button>
-                <Button variant="primary" className="jsonUpload" onClick={algo}>
-                  {" "}
-                  Upload JSON
-                </Button>
-              </div>
+        <div className="canvasExtra">
+          <div className="alphabet">
+            <div className="btn-group-sm">
+              <Button
+                onClick={() => setShowAlphabetModal(true)}
+                disabled={runInfo.nowRunning}
+                variant="outline-info"
+                id="setAlphabet"
+                title="(e.g.: 1, 0)"
+              >
+                Set Alphabet
+              </Button>
             </div>
           </div>
-        )}
+
+          <div className="inputString">
+            {runInfo.nowRunning && !isByStep && (
+              <>
+                <div className="automataRun">
+                  <h3>Automata is running...</h3>
+                  <div className="spinner">
+                    <Spinner animation="grow" variant="info" />
+                  </div>
+                </div>
+              </>
+            )}
+            {runInfo.nowRunning && isByStep && (
+              <div className="btn-group-sm m-auto text-center" id="stepsDiv">
+                <Button
+                  variant="danger"
+                  id="run-prev"
+                  disabled={disablePrev}
+                  onClick={() => runBySteps("run-prev", runInfo, setRunInfo)}
+                >
+                  ⏪ Prev step
+                </Button>
+                <Button
+                  variant="success"
+                  id="run-next"
+                  onClick={() =>
+                    runBySteps(
+                      "run-next",
+                      runInfo,
+                      setRunInfo,
+                      byStepCb,
+                      setDisablePrev
+                    )
+                  }
+                >
+                  Next step ⏩
+                </Button>
+              </div>
+            )}
+            {!runInfo.nowRunning && (
+              <>
+                <Form.Control
+                  value={inputString}
+                  onChange={(e) => handleInputChanges(e)}
+                  type="text"
+                  id="testString"
+                  placeholder="Test string"
+                />
+                <div className="btn-group-sm">
+                  <Button
+                    variant="primary"
+                    disabled={!ready}
+                    className="runByStep"
+                    onClick={() => handleInput("step")}
+                  >
+                    {" "}
+                    Run by steps
+                  </Button>
+                  <Button
+                    disabled={!ready}
+                    variant="primary"
+                    className="runCont"
+                    onClick={() => handleInput("cont")}
+                  >
+                    {" "}
+                    Run continuously
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="jsonInput">
+            <Form.Control
+              type="text"
+              id="jsonInput"
+              value={jsonInfo}
+              onChange={(e) => setJsonInfo(e.target.value)}
+              placeholder="JSON"
+              disabled={runInfo.nowRunning}
+              onDoubleClick={handleCopyClipboard}
+            />
+            <div className="btn-group-sm json">
+              <Button
+                variant="primary"
+                onClick={downloadApplicationInfo}
+                className="jsonDownload"
+                disabled={runInfo.nowRunning}
+              >
+                {" "}
+                Download JSON
+              </Button>
+              <Button
+                variant="primary"
+                disabled={runInfo.nowRunning}
+                className="jsonUpload"
+                onClick={algo}
+              >
+                {" "}
+                Upload JSON
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div className="canvas">
-          <Canvas stageRef={stageRef} />
+          <Canvas
+            stageRef={stageRef}
+            addingTr={addingTr}
+            setAddingTr={setAddingTr}
+          />
           <div className="buttonsCanvas">
-            <Button variant="warning" onClick={validateOpening}>
+            <Button
+              variant="warning"
+              disabled={runInfo.nowRunning}
+              onClick={validateOpening}
+            >
               Clear canvas
             </Button>
             <Button

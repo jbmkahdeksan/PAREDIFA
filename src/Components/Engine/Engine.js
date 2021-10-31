@@ -1,4 +1,9 @@
-import { newQueue } from "../Classes/Queue";
+import {
+  modifyIterator,
+  getIterator,
+  newQueue,
+  getQueue,
+} from "../Classes/Queue";
 import frameInfo from "../Classes/FrameInfo";
 import Transition from "../Classes/Transition";
 /**
@@ -10,13 +15,12 @@ import Transition from "../Classes/Transition";
  */
 export function preProcessAutomata(
   nodes,
-  setNodes,
   edge,
   inputString,
-  setEdge,
   runInfo,
   setRunInfo,
   cb,
+  type
 ) {
   const nodesMapped = nodes.map((nod) => ({
     coord: { x: nod.x, y: nod.y },
@@ -58,7 +62,14 @@ export function preProcessAutomata(
 
   queue.push(new frameInfo(currentState.id, null));
   setRunInfo({ ...objInfo, transitionID: null, stateID: null });
-  runAnimation(queue, objInfo, setRunInfo, cb);
+
+  if (type === "cont") {
+    runAnimation(queue, objInfo, setRunInfo, cb);
+  }
+  if (type === "step") {
+    modifyIterator(queue);
+    setRunInfo({ ...objInfo, nowRunning: true, currentChar: 0 });
+  }
 }
 
 /**
@@ -67,12 +78,7 @@ export function preProcessAutomata(
  * @param queue An instance of `class Queue` that contains the trail the
  * automata will follow to process the input string.
  */
-export const runAnimation = (
-  queue,
-  runInfo,
-  setRunInfo, 
-  cb
-) => {
+export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
   //modifyRunInfo({ ...getRunInfo(), nowRunning: true })
   let objInfoAux = { ...runInfo, nowRunning: true, currentChar: 0 };
   setRunInfo(objInfoAux);
@@ -102,83 +108,137 @@ export const runAnimation = (
     }, timeSkipAmount * timeSkipCount++);
   });
 
-  
   setTimeout(() => {
-
-    const obj ={
+    const obj = {
       nowRunning: false,
       transitionID: null,
       stateID: null,
       input: null,
       currentChar: null,
-      finalState:`${objInfoAux.input}:${queue.at(-1).stateID}`
-    }
+      finalState: `${objInfoAux.input}:${queue.at(-1).stateID}`,
+      prevPressed:false
+    };
     setRunInfo(obj);
     //let endingState = getStateByID(queue.at(-1).stateID)
-    cb(obj)
+    cb(obj);
 
     //logResult(endingState.name, endingState.end);
   }, timeSkipAmount * timeSkipCount++);
 
   setTimeout(() => {
-    const obj ={
+    const obj = {
       nowRunning: false,
       transitionID: null,
       stateID: null,
       input: null,
       currentChar: null,
-      finalState:``
-    }
-    console.log('fuck this')
+      finalState: ``,
+      prevPressed:false
+    };
+    console.log("fuck this");
     setRunInfo(obj);
-  },(timeSkipAmount * timeSkipCount++)+100)
+  }, timeSkipAmount * timeSkipCount++ + 100);
 };
 
 /**
- * This method is used when the users want to 
- * run the automata by steps. 
+ * This method is used when the users want to
+ * run the automata by steps.
  * It will take a step forward in the sequencen when
  * the correct button is click
  * and a step backwards when the users click
- * on the 'previous' button. 
+ * on the 'previous' button.
  * @returns void
- 
- export function runBySteps() {
-	if (this.id === "run-prev" && getIterator().index >= 0) {
-		let { value } = getIterator().prev()
-		if (value?.stateID) {
-			modifyRunInfo({ ...getRunInfo(), transitionID: null })
-			modifyRunInfo({ ...getRunInfo(), stateID: value?.stateID })
-		}
-		if (value?.transitionID || !getIterator().index && getRunInfo().currentChar > 0) {
-			modifyRunInfo({ ...getRunInfo(), transitionID: value?.transitionID })
-			modifyRunInfo({ ...getRunInfo(), stateID: null })
-			modifyRunInfo({ ...getRunInfo(), currentChar: getRunInfo().currentChar - 1 })
-		}
-	}
+ */
+export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
+  console.log(id, "id");
+  let runInfoObj = runInfo;
+  if (id === "run-prev" && getIterator().index >= 0) {
+    console.log("fuck u");
 
-	if (this.id === "run-next" && getIterator().index < getQueue().length) {
-		let { value, done } = getIterator().next()
+    let { value } = getIterator().prev();
+    if (value?.stateID) {
+      runInfoObj = {
+        ...runInfoObj,
+        transitionID: null,
+        stateID: value?.stateID,
+        prevPressed:true
+      };
+      setRunInfo(runInfoObj);
+    }
+    if (
+      value?.transitionID ||
+      (!getIterator().index && runInfoObj.currentChar > 0)
+    ) {
+      console.log(
+        runInfoObj.input[runInfoObj.currentChar - 1],
+        "current char transition"
+      );
+      runInfoObj = {
+        ...runInfoObj,
+        transitionID: value?.transitionID,
+        stateID: null,
+        currentChar: runInfoObj.currentChar - 1,
+        prevPressed:true
+      };
 
-		if (done || getIterator().index === getQueue().length) {
-			modifyRunInfo({ ...getRunInfo(), nowRunning: false })
-			let endingState = getStateByID(getQueue().at(-1).stateID)
-			document.getElementById("run-next").setAttribute("disabled", "disabled")
-			document.getElementById("run-prev").setAttribute("disabled", "disabled")
-			logResult(endingState.name, endingState.end)
-			return
-		} else {
-			document.getElementById("run-prev").removeAttribute("disabled")
-			if (value.stateID) {
-				modifyRunInfo({ ...getRunInfo(), transitionID: null })
-				modifyRunInfo({ ...getRunInfo(), stateID: value.stateID })
-			}
-			if (value.transitionID) {
-				modifyRunInfo({ ...getRunInfo(), transitionID: value.transitionID })
-				modifyRunInfo({ ...getRunInfo(), stateID: null })
-				modifyRunInfo({ ...getRunInfo(), currentChar: getRunInfo().currentChar + 1 })
-			}
-		}
-	}
+      setRunInfo(runInfoObj);
+    }
+  }
+
+  if (id === "run-next" && getIterator().index < getQueue().length) {
+    console.log("fuck u 2");
+
+    let { value, done } = getIterator().next();
+
+    if (done || getIterator().index === getQueue().length) {
+      runInfoObj = {
+        nowRunning: false,
+        transitionID: null,
+        stateID: null,
+        input: null,
+        currentChar: null,
+        finalState: `${runInfoObj.input}:${getQueue().at(-1).stateID}`,
+        prevPressed:false
+      };
+
+      setRunInfo(runInfoObj);
+      byStepCb(runInfoObj);
+      setTimeout(() => {
+        const obj = {
+          nowRunning: false,
+          transitionID: null,
+          stateID: null,
+          input: null,
+          currentChar: null,
+          finalState: ``,
+          prevPressed:false
+        };
+
+        setRunInfo(obj);
+      }, 600);
+
+      return;
+    } else {
+      setDisablePrev(false);
+      if (value.stateID) {
+        runInfoObj = {
+          ...runInfoObj,
+          transitionID: null,
+          stateID: value.stateID,
+          prevPressed:false
+        };
+        setRunInfo(runInfoObj);
+      }
+      if (value.transitionID) {
+        runInfoObj = {
+          ...runInfoObj,
+          transitionID: value.transitionID,
+          stateID: null,
+          currentChar: runInfoObj.currentChar + 1,
+          prevPressed:false
+        };
+        setRunInfo(runInfoObj);
+      }
+    }
+  }
 }
-*/
