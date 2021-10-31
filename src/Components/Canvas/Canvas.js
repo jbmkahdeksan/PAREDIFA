@@ -440,6 +440,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
 
   const handleWindowResize = (e)=>{
     const witdth = e.target.outerWidth * 0.653;
+    
     setStageInfo( e => ({ ...stageInfo, w: witdth }));
   }
   useEffect(() => {
@@ -495,7 +496,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
               setMouseDown={setMouseDown}
               nodeRunningId={runInfo.stateID}
               running={runInfo.nowRunning}
-              stageWidth={stageInfo.w}
+              stageWidth={stageInfo.w || 910}
             />
           ))}
         </Layer>

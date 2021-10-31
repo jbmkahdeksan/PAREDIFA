@@ -87,6 +87,7 @@ const CanvasContainer = ({
   };
 
   const algo = () => {
+    console.log(stageInfo.w,'w')
     var w = stageInfo.w;
     var h = 500;
 
