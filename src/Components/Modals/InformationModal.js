@@ -16,6 +16,7 @@ const InformationModal = ({ show, handleClose, cb, fetching, progress }) => {
     setLastName("");
     setId("");
     setTime("");
+  
   };
   return (
     <>  
