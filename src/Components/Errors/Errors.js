@@ -31,10 +31,10 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
 
       if (exitSymbols.length) {
         stored.push(
-          <p>
+          <>
             state # {state.name} has no exit transition containing the symbols{" "}
             {exitSymbols.toString()}.
-          </p>
+          </>
         );
       }
 
@@ -70,13 +70,13 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
       }, 0);
     }
     return (
-      <p>
+      <>
         <b>
           ERROR - <i> {type} </i>
         </b>
         <br></br> {msg} <br></br>
         <br></br>
-      </p>
+      </>
     );
   };
 
@@ -106,29 +106,29 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
       )}
 
       {!INITALSTATE && nodes.length>0 && (
-        <p>
+        <>
           {createError(
             "NO INITIAL STATE",
             `automata doesn't have an initial state`
           )}
-        </p>
+        </>
       )}
       {!nodes.length && 
-          <p>
+          <>
             <b>
               ERROR - <i> NO STATES </i>
             </b>
             <br></br> no states have been added yet <br></br>
             <br></br>
-          </p>
+          </>
       }
       {!FINALSTATE && nodes.length>0 && (
-        <p>
+        <>
           {createError(
             "NO FINAL STATE",
             `automata doesn't have a final state.`
           )}
-        </p>
+        </>
       )}
       {isAutomataComplete()[0]}
 
@@ -136,18 +136,18 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
         !isAutomataComplete().length &&
         FINALSTATE &&
         INITALSTATE && (
-          <p>
+          <>
             {createError(
               "INPUT MISSING",
               "enter an input string to test the automata."
             )}
-          </p>
+          </>
         )}
 
       {inputString.length > 0 &&  !errorsSymbols.length && 
         FINALSTATE &&
         INITALSTATE &&
-        !isAutomataComplete().length && <p>{automataReady()}</p>}
+        !isAutomataComplete().length && <>{automataReady()}</>}
     </div>
   );
 };
