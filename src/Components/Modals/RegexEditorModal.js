@@ -12,7 +12,7 @@ const RegexEditorModal = ({ show, handleClose}) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-custom-modal-styling-title">
-            RE editor
+            RegEx Mode
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className='txtContainer'>

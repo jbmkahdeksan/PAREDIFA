@@ -18,7 +18,7 @@ const Node = ({
 }) => {
   const RADIUS = 20;
   const STAGE = {
-    height: 500,
+    height: 450,
     width: stageWidth,
   };
   const [color, setColor] = useState("#ffeaa7");
@@ -33,8 +33,8 @@ const Node = ({
     //user is out of bounds
     if (coords.y < 19) coords.y = 23;
     if (coords.x < 19) coords.x = 23;
-    if (coords.y > STAGE.height) coords.y = 478;
-    if (coords.x > STAGE.width) coords.x = stageWidth-28;
+    if (coords.y > STAGE.height) coords.y = STAGE.height - 30;
+    if (coords.x > STAGE.width) coords.x = STAGE.width - 30;
 
     updateCoordNode(coords, nodeInfo.id);
     updateCoordEdges(coords, nodeInfo.id);
@@ -48,7 +48,7 @@ const Node = ({
         id={nodeInfo.id}
         draggable={!isNamingState && !addingTr.state}
         listening={!running}
-        onMouseEnter={() => setColor("#7bed9f")}
+        onMouseEnter={() => setColor("#95b6f0")}
         onMouseOut={() => setColor("#ffeaa7")}
         opacity={
           (isNamingState || isNamingTr !== "-1") && selected !== nodeInfo.id
@@ -84,11 +84,13 @@ const Node = ({
           <Shape
             id={nodeInfo.id}
             sceneFunc={(ctx, shape) => {
-              ctx.font = "20px Georgia";
+              ctx.font = "25px Georgia";
               ctx.textAlign = "right";
               ctx.textBaseline = "middle";
               ctx.fillStyle = "black";
-              ctx.fillText("\u{1F449}", nodeInfo.x - RADIUS, nodeInfo.y);
+              ctx.fillText( (nodeRunningId && nodeRunningId === nodeInfo.id) ? "\u{1F449}" 
+              : nodeInfo.start ? "\u{25B7}" :  "",
+              nodeInfo.x - RADIUS , nodeInfo.y);
               // (!) Konva specific method, it is very important
               ctx.fillStrokeShape(shape);
             }}
@@ -98,7 +100,7 @@ const Node = ({
         {nodeInfo.final && (
           <Shape
             type="nodo"
-            id={nodeInfo.id}
+            id={nodeInfo.id} qq
             sceneFunc={(ctx, shape) => {
               ctx.beginPath();
               ctx.arc(

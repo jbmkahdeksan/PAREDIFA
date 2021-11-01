@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
 
-const ThemeContextStage = createContext({w:910,h:510});
+const ThemeContextStage = createContext({w:900,h:450});
 
 
 export default ThemeContextStage;

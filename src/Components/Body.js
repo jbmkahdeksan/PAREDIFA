@@ -87,18 +87,16 @@ const Body = () => {
 
 
   return (
-    <>
-      <div className="item">
-        <div className="canvasFlex">
-          <CanvasContainer
+    <div className="container-fluid h-100">
+      <div className="row h-100">
+        <CanvasContainer
             handleIncorrectSymbolChanges={handleIncorrectSymbolChanges}
             inputString={inputString}
             setInputString={setInputString}
             cb={finalResult}
             ready={ready}
-          />
-        </div>
-        <div className="outPutsFlex">
+        />
+        <div className={"h-100 col-3 mx-auto border-start border-5 mt-4 ps-2"}>
           <div className="errors">
             {errors.incorrectSymbol}
             <Errors
@@ -108,13 +106,13 @@ const Body = () => {
               errorsSymbols={errors.incorrectSymbol}
         
             />
-          </div>
-          <div className="accepted">
-            {finalResultInfo}
+            <div className="accepted">
+              {finalResultInfo}
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>   
   );
 };
 

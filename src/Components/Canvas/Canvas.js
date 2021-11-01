@@ -27,8 +27,6 @@ import ResultShape from "./ResultShape";
  *
  */
 const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
-  //const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  //const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
   const [mouseCoord, setMouseCoord] = useState({}); //HANDLE AFTER DELETEDAOSKDOASKD
   const [mouseDown, setMouseDown] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
@@ -41,7 +39,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   const [isFillingSymbol, setIsFillingSymbol] = useState(false);
   const [mouseIn, setMouseIn] = useState(false);
-  const {stageInfo, setStageInfo} = useContext(ThemeContextStage);
+  const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
   const findAnotherAlphabet = useCallback(
@@ -52,7 +50,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
             current.from.id === id &&
             current.symbol?.split(",").indexOf(key) !== -1
           ) {
-            console.log(current.symbol?.split(","), "symbols");
             stored++;
           }
           return stored;
@@ -66,33 +63,31 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       edge.map((arrow) => {
         return arrow.from.id === id && arrow.to.id === id
           ? {
-              ...arrow,
-              from: { ...arrow.from, ...coord },
-              to: { ...arrow.to, ...coord },
-            }
+            ...arrow,
+            from: { ...arrow.from, ...coord },
+            to: { ...arrow.to, ...coord },
+          }
           : arrow.from.id === id
-          ? {
+            ? {
               ...arrow,
               from: { ...arrow.from, ...coord },
               to: { ...arrow.to },
             }
-          : arrow.to.id === id
-          ? {
-              ...arrow,
-              from: { ...arrow.from },
-              to: { ...arrow.to, ...coord },
-            }
-          : arrow;
+            : arrow.to.id === id
+              ? {
+                ...arrow,
+                from: { ...arrow.from },
+                to: { ...arrow.to, ...coord },
+              }
+              : arrow;
       })
     );
   };
   const handleKeyDown = useCallback(
     (e) => {
-      console.log(e, "e");
       if (runInfo.nowRunning) {
         return;
       }
-      console.log(mouseIn, "mouseIn");
       if (!mouseIn && e.target.id === "testString") return;
       if (!mouseIn && e.target.id === "jsonInput") return;
       if (!mouseIn && e.target.id === "alphabetInput") return;
@@ -130,16 +125,16 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
             edge.map((ed) =>
               ed.id === selectedTr
                 ? {
-                    ...ed,
-                    symbol:
-                      ed.symbol.length === 0 &&
+                  ...ed,
+                  symbol:
+                    ed.symbol.length === 0 &&
                       !findAnotherAlphabet(ed.from.id, e.key)
-                        ? e.key
-                        : [...ed.symbol].indexOf(e.key) === -1 &&
-                          !findAnotherAlphabet(ed.from.id, e.key)
+                      ? e.key
+                      : [...ed.symbol].indexOf(e.key) === -1 &&
+                        !findAnotherAlphabet(ed.from.id, e.key)
                         ? ed.symbol + "," + e.key
                         : ed.symbol,
-                  }
+                }
                 : ed
             )
           );
@@ -164,12 +159,12 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
             nodes.map((node) =>
               node.id === selected
                 ? {
-                    ...node,
-                    name:
-                      node.name.length === 1
-                        ? node.name
-                        : node.name.slice(0, node.name.length - 1),
-                  }
+                  ...node,
+                  name:
+                    node.name.length === 1
+                      ? node.name
+                      : node.name.slice(0, node.name.length - 1),
+                }
                 : node
             )
           );
@@ -272,6 +267,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       setSelectedTr((e) => "-1");
     }
   }, [runInfo.nowRunning]);
+  
   const modifyCoordNodo = (coords, id) => {
     setNodes([]);
     setNodes(
@@ -281,7 +277,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
 
   const handleSelection = (e) => {
     if (runInfo.nowRunning) return;
-    console.log("bitch");
     if (namingState) {
       setIsNamingState(false);
       return;
@@ -306,7 +301,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
               stored++;
             }
           }
-          console.log(selected, selectedNode.id);
           if (selected !== selectedNode.id) {
             if (current.from.id !== current.to.id) {
               if (
@@ -323,7 +317,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         if (edgeTo) {
           setMsgShow(true);
           setMsgInfo({
-            bg: "info",
+            bg: "light",
             header: "Repeated transition",
             body: "You already have a transition going to this node!",
           });
@@ -339,19 +333,17 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
           edge.map((ed) =>
             ed.id === addingTr.tr
               ? {
-                  ...ed,
-                  type: "fixed",
-                  to: {
-                    id: selectedNode.id,
-                    x: selectedNode.coord.x,
-                    y: selectedNode.coord.y,
-                  },
-                }
+                ...ed,
+                type: "fixed",
+                to: {
+                  id: selectedNode.id,
+                  x: selectedNode.coord.x,
+                  y: selectedNode.coord.y,
+                },
+              }
               : ed
           )
         );
-        console.log(edge);
-        console.log("wtf");
         setSelectedTr(addingTr.tr);
         setAddingTr({ state: false, tr: "-1" });
         setSelected("-1");
@@ -438,128 +430,125 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   };
 
 
-  const handleWindowResize = (e)=>{
+  const handleWindowResize = (e) => {
     const witdth = e.target.outerWidth * 0.653;
-    console.log('stageInfo',stageInfo.w)
-    setStageInfo( e => ({ ...stageInfo, w: witdth }));
+    setStageInfo(e => ({ ...stageInfo, w: witdth }));
   }
   useEffect(() => {
     window.addEventListener("resize", (e) => handleWindowResize(e));
-   
+
     return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
   return (
-    <>
-      <Stage
-        onDblClick={handleTmpTr}
-        ref={stageRef}
-        className="stageCanva"
-        onMouseMove={(e) =>
-          setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY })
-        }
+    <Stage
+      className="mx-auto"
+      onDblClick={handleTmpTr}
+      ref={stageRef}
+      onMouseMove={(e) =>
+        setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY })
+      }
+      onMouseEnter={() => setMouseIn(true)}
+      onMouseLeave={() => setMouseIn(false)}
+      type="stage"
+      onclick={(e) => handleSelection(e)}
+      //proporcion de 1h:2w
+      width={stageInfo.w || 900}
+      height={450}>
+      <Layer>
+        {runInfo.nowRunning && (
+          <ShapeRI input={runInfo.input} currentChar={runInfo.currentChar} />
+        )}
+        {runInfo.finalState.length > 0 && (
+          <ResultShape
+            ch={
+              nodes.find((nod) => nod.id === runInfo.finalState.split(":")[1])
+                ?.final
+                ? "\u{2705}"
+                : "\u{274C}"
+            }
+          />
+        )}
+        {nodes.map((node, index) => (
+          <Node
+            mouseCoord={mouseCoord}
+            listaNodos={nodes}
+            setSelected={setSelected}
+            selected={selected}
+            key={index}
+            nodeInfo={node}
+            updateCoordNode={modifyCoordNodo}
+            isNamingState={namingState}
+            setMouseCoord={setMouseCoord}
+            updateCoordEdges={updateCoordEdges}
+            isNamingTr={selectedTr}
+            addingTr={addingTr}
+            setMouseDown={setMouseDown}
+            nodeRunningId={runInfo.stateID}
+            running={runInfo.nowRunning}
+            stageWidth={stageInfo.w || 900}
+          />
+        ))}
+      </Layer>
 
-        onMouseEnter={() => setMouseIn(true)}
-        onMouseLeave={() => setMouseIn(false)}
-        type="stage"
-        onclick={(e) => handleSelection(e)}
-        width={stageInfo.w || 910}
-        height={510}
-      >
-        <Layer>
-          {runInfo.nowRunning && (
-            <ShapeRI input={runInfo.input} currentChar={runInfo.currentChar} />
-          )}
-          {runInfo.finalState.length > 0 && (
-            <ResultShape
-              ch={
-                nodes.find((nod) => nod.id === runInfo.finalState.split(":")[1])
-                  ?.final
-                  ? "\u{2705}"
-                  : "\u{274C}"
-              }
-            />
-          )}
-          {nodes.map((node, index) => (
-            <Node
-              mouseCoord={mouseCoord}
-              listaNodos={nodes}
-              setSelected={setSelected}
-              selected={selected}
-              key={index}
-              nodeInfo={node}
-              updateCoordNode={modifyCoordNodo}
-              isNamingState={namingState}
-              setMouseCoord={setMouseCoord}
-              updateCoordEdges={updateCoordEdges}
-              isNamingTr={selectedTr}
-              addingTr={addingTr}
-              setMouseDown={setMouseDown}
-              nodeRunningId={runInfo.stateID}
-              running={runInfo.nowRunning}
-              stageWidth={stageInfo.w || 910}
-            />
-          ))}
-        </Layer>
-        <Layer>
-          {addingTr.state &&
-            edge
-              .filter((edge) => edge.type === "temporary")
-              .map((edge, index) => (
-                <TemporaryEdge
-                  mouseCoord={mouseCoord}
-                  id={edge.id}
-                  x={edge.to.x}
-                  y={edge.to.y}
-                  key={index}
-                  node2={
-                    edge.to.id === selected && edge.id === addingTr.tr
-                      ? { ...edge.to, ...mouseCoord }
-                      : edge.to
-                  }
-                  node1={
-                    edge.from.id === selected && edge.id === addingTr.tr
-                      ? { ...edge.from, ...mouseCoord }
-                      : edge.from
-                  }
-                />
-              ))}
-          {edge
-            .filter((edge) => edge.type === "fixed")
+      <Layer>
+        {addingTr.state &&
+          edge
+            .filter((edge) => edge.type === "temporary")
             .map((edge, index) => (
-              <Edge
-                addingTr={addingTr}
+              <TemporaryEdge
                 mouseCoord={mouseCoord}
-                selectedTr={selectedTr}
-                type={edge.type}
                 id={edge.id}
-                symbol={edge.symbol}
-                isNamingState={namingState}
-                isNamingTr={selectedTr}
-                running={runInfo.transitionID}
-                isRunning={runInfo.nowRunning}
+                x={edge.to.x}
+                y={edge.to.y}
                 key={index}
-                currentChar={
-                  runInfo.input
-                    ? runInfo.prevPressed
-                      ? runInfo.input[runInfo.currentChar]
-                      : runInfo.input[runInfo.currentChar - 1]
-                    : ""
-                }
-                node1={
-                  edge.to.id === selected && mouseDown
+                node2={
+                  edge.to.id === selected && edge.id === addingTr.tr
                     ? { ...edge.to, ...mouseCoord }
                     : edge.to
                 }
-                node2={
-                  edge.from.id === selected && mouseDown
+                node1={
+                  edge.from.id === selected && edge.id === addingTr.tr
                     ? { ...edge.from, ...mouseCoord }
                     : edge.from
                 }
               />
             ))}
-        </Layer>
-      </Stage>
-    </>
+        {edge
+          .filter((edge) => edge.type === "fixed")
+          .map((edge, index) => (
+            <Edge
+              addingTr={addingTr}
+              mouseCoord={mouseCoord}
+              selectedTr={selectedTr}
+              type={edge.type}
+              id={edge.id}
+              symbol={edge.symbol}
+              isNamingState={namingState}
+              isNamingTr={selectedTr}
+              running={runInfo.transitionID}
+              isRunning={runInfo.nowRunning}
+              key={index}
+              currentChar={
+                runInfo.input
+                  ? runInfo.prevPressed
+                    ? runInfo.input[runInfo.currentChar]
+                    : runInfo.input[runInfo.currentChar - 1]
+                  : ""
+              }
+              node1={
+                edge.to.id === selected && mouseDown
+                  ? { ...edge.to, ...mouseCoord }
+                  : edge.to
+              }
+              node2={
+                edge.from.id === selected && mouseDown
+                  ? { ...edge.from, ...mouseCoord }
+                  : edge.from
+              }
+            />
+          ))}
+      </Layer>
+    </Stage>
   );
 };
 

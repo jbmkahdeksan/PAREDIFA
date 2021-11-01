@@ -10,7 +10,7 @@ import "./temp.scss";
  *   David Zarate Marin, ID: 116770797
  *   Group: 01
  *   Schedule: 10am
- *   Example taked from: https://www.decolore.net/react-animation-examples/
+ *   Example taken from: https://www.decolore.net/react-animation-examples/
  */
 const Reactive = () => {
   return (

@@ -5,9 +5,7 @@ import { useContext } from "react";
 const DefaultAlphabetModal = (props) => {
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
   const setDefaultAlphabet = () =>{
-    setGeneralInfo({ ...generalInfo, alphabet: ["1", "0"], useDefault: true, showAlphabetDefault:false });
-    console.log("welcome")
-    
+    setGeneralInfo({ ...generalInfo, alphabet: ["1", "0"], useDefault: true, showAlphabetDefault:false });    
   }
   return (
     <>

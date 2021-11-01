@@ -83,7 +83,6 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
   let objInfoAux = { ...runInfo, nowRunning: true, currentChar: 0 };
   setRunInfo(objInfoAux);
   //modifyRunInfo({ ...getRunInfo(), currentChar: 0 })
-  console.log(runInfo, "runinfo");
   const timeSkipAmount = 800;
   let timeSkipCount = 0;
   queue.forEach((item) => {
@@ -135,7 +134,6 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
       finalState: ``,
       prevPressed:false
     };
-    console.log("fuck this");
     setRunInfo(obj);
   }, timeSkipAmount * timeSkipCount++ + 100);
 };
@@ -150,12 +148,11 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
  * @returns void
  */
 export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
-  console.log(id, "id");
   let runInfoObj = runInfo;
+  
   if (id === "run-prev" && getIterator().index >= 0) {
-    console.log("fuck u");
-
     let { value } = getIterator().prev();
+    console.log("PREV ->", value)
     if (value?.stateID) {
       runInfoObj = {
         ...runInfoObj,
@@ -169,10 +166,7 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
       value?.transitionID ||
       (!getIterator().index && runInfoObj.currentChar > 0)
     ) {
-      console.log(
-        runInfoObj.input[runInfoObj.currentChar - 1],
-        "current char transition"
-      );
+      
       runInfoObj = {
         ...runInfoObj,
         transitionID: value?.transitionID,
@@ -186,10 +180,9 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
   }
 
   if (id === "run-next" && getIterator().index < getQueue().length) {
-    console.log("fuck u 2");
 
-    let { value, done } = getIterator().next();
-
+    let { value, done } = getIterator().next();    
+    console.log("NEXT ->", value)
     if (done || getIterator().index === getQueue().length) {
       runInfoObj = {
         nowRunning: false,

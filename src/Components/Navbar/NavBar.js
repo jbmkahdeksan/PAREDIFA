@@ -36,14 +36,16 @@ const NavBar = () => {
 
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link
+              className="text-light"
               eventKey={2}
               onClick={handleShowEditor}
               id="regexEditor"
-              title="RE EDITOR"
+              title="RegEx Mode"
             >
-              RE Editor{" "}
+              RegEx Mode{" "}
             </Nav.Link>
             <Nav.Link
+              className="text-light"
               eventKey={2}
               onClick={handleShowIns}
               id="instructions"
@@ -52,6 +54,7 @@ const NavBar = () => {
               Instructions
             </Nav.Link>
             <Nav.Link
+              className="text-light"
               eventKey={2}
               onClick={handleShow}
               id="about"

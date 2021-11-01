@@ -1,7 +1,7 @@
 import { Shape } from "react-konva";
 const ResultShape = ({ch}) => {
 
-    console.log(ch,'ch')
+ 
   return (
     <>
       <Shape

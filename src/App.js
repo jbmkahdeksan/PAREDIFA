@@ -33,7 +33,7 @@ function App() {
     wipeData: false,
     showAlphabetDefault: false,
     result: false,
-    stageWitdh: 910,
+    stageWitdh: 900,
   });
   const [runInfo, setRunInfo] = useState({
     nowRunning: false,
@@ -45,7 +45,7 @@ function App() {
     prevPressed: false,
   });
 
-  const [stageInfo, setStageInfo] = useState({ w: 910, h: 510 });
+  const [stageInfo, setStageInfo] = useState({ w: 900, h: 450 });
   return (
     <BrowserRouter>
       <ThemeContextMsg.Provider value={{ msgShow, setMsgShow }}>
@@ -53,14 +53,11 @@ function App() {
           <ThemeContextTr.Provider value={{ edge, setEdge }}>
             <ThemeContext.Provider value={{ nodes, setNodes }}>
               <ThemeContextGeneral.Provider
-                value={{ generalInfo, setGeneralInfo }}
-              >
+                value={{ generalInfo, setGeneralInfo }}>
                 <ThemeContextRunInfo.Provider value={{ runInfo, setRunInfo }}>
                   <ThemeContextStage.Provider
-                    value={{ stageInfo, setStageInfo }}
-                  >
+                    value={{ stageInfo, setStageInfo }}>
                     <NavBar />
-
                     <Switch>
                       <Route exact path="/" component={Body} />
                       <Redirect exact to="/" />

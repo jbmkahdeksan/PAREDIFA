@@ -4,7 +4,6 @@ import {useContext} from 'react'
 const ShapeRI = ({input,currentChar}) => {
 
     const { runInfo, setRunInfo}= useContext(ThemeContextRunInfo);
-    console.log('input',input)
   return (
     <>
 

@@ -1,193 +1,101 @@
-.aboutUs,.email,.saveFa,.todos,.downloadFa,.infoDowloadFa{
+.aboutUs,
+.email,
+.saveFa,
+.todos,
+.downloadFa,
+.infoDowloadFa {
     cursor: pointer;
-  }
+}
 
-  body{
-
-    overflow:scroll;
+body {
+    overflow: scroll;
     overflow-x: hidden;
     margin-bottom: 2%;
-    
-  }
-
-  #teamInfo{
-    margin:auto;
-    text-align:center;
 }
 
-.spinner{
-  text-align:center;
+#teamInfo {
+    margin: auto;
+    text-align: center;
+} 
+
+.spinner {
+    text-align: center;
 }
-.automataRun{
-  margin-right:auto;
-  margin-left:auto;
-  margin-top:1%;
-  margin-bottom:3%
-}
-#about,#instructions,#regexEditor{
-  color:white
-}
-#about:hover,#instructions:hover,#regexEditor:hover{
-  color:gold
+
+.automataRun {
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 1%;
+    margin-bottom: 3%
 }
 
 
-.canvas,.canvasExtra{
-  height:50%
-}
-
-.inputString{
-  height: 120px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  text-align: center!important;
-  border-right: 1px solid #dee2e6!important;
-  width: 41.66666667%;
-  flex: 0 0 auto;
-  border-width: 2px!important;
-
-}
-.json{
-  text-align: center!important;
-}
-.jsonInput{
-  width: 41.66666667%;
- 
-}
-
-.runByStep,.runCont,.jsonDownload,.jsonUpload{
-  margin-top:2%;
-  
-}
-.runByStep,.jsonDownload{
-  margin-right:1%
-}
-#testString{
-  margin-top:5%;
-  margin-left:13%;
-  width:75%
-}
-
-#jsonInput{
-  margin-top:7%;
-  margin-left:13%;
-  width:75%;
-  text-align: center!important;
-}
-
-#setAlphabet{
-  margin-top:20%;
-  margin-left:13%;
-}
-.alphabet{
-  width: 16.66666667%;
-  height: 120px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  margin-left:2%;  
-  border-right:1px solid #dee2e6!important;
-  border-left:1px solid #dee2e6!important;
-  border-width: 2px!important;
-}
-.canvasExtra{
-  display:flex;
-}
-.canvas{
-  margin-left: 2%;
-
-}
-
-.konvajs-content{
-  border-radius: 10px;
-  border-style: solid;
-
-}
-  .item{
-      display:flex;
-    
-      height: 100%;
-      width: 100%;
-   
-      
-  }
-
-  
-  #canvitas{
-    position: relative;
-   
-    width:505px;
-    height:505px;
-    border-style: solid;
-    border-radius: 5px;
-   
-  }
-
-.FaResults{
-  height:500px;
-  margin-top: 2.5%;
-  overflow-y: scroll;
-  
-}
-
-
-
-  .guide{
-      margin-top:1%;
-      margin-bottom: 1%;
-  
-      cursor:pointer;
-      
-  }
-
-  .accepted{
-    overflow-y:scroll
-  }
-
-  .downloadFa{
-    margin-right:20%;
-  }
-
-  .outPutsFlex{
-    
-    width:30%;
-    display:flex;
+.alphabet {
+    width: 16.66666667%;
+    height: 120px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 2%;
+    border-right: 1px solid #dee2e6!important;
     border-left: 1px solid #dee2e6!important;
-    border-width: 4px!important;
-    flex-direction:column !important;
-  }
-  .canvasFlex{
-    width:70%
-  }
+    border-width: 2px!important;
+}
 
-  #stepsDiv{
-    margin-top:10% !important;
-  }
+.canvasExtra {
+    display: flex;
+}
 
-  .errors,.accepted{
+.canvas {
+    margin-left: 2%;
+}
 
+.konvajs-content {
+    border-radius: 10px;
+    border-style: solid;
+}
+
+.item {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.FaResults {
+    height: 500px;
+    margin-top: 2.5%;
+    overflow-y: scroll;
+}
+
+.guide {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    cursor: pointer;
+}
+
+.accepted {
+    overflow-y: scroll
+}
+
+#stepsDiv {
+    margin-top: 10% !important;
+}
+
+.errors,
+.accepted {
     height: 350px;
-    width:100%;
-    overflow-y:auto;
+    width: 100%;
+    overflow-y: auto;
     overflow-x: hidden;
+}
 
-  }
-.canvasContainer, .canvas{
-  display:flex;
-  flex-direction: column;
-}
-.buttonsCanvas{
-  margin-right:5%;
-  margin-top: 0.5%;
-  gap:10px;
-  display:flex;
-  justify-content: flex-end;
-  
-}
-  .tostada{
-    position:fixed;
-    display:block;
+
+
+
+
+.tostada {
+    position: fixed;
+    display: block;
     left: auto;
-    top:0 ;
+    top: 0;
     z-index: 11;
-
-  }
+}
