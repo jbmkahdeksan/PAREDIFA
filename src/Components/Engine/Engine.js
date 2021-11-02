@@ -149,15 +149,14 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
  */
 export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
   let runInfoObj = runInfo;
-  
-  if (id === "run-prev" && getIterator().index >= 0) {
-    let { value } = getIterator().prev();
-    console.log("PREV ->", value)
+  if (id === "run-prev") {
+    let { value,  done } = getIterator().prev();
     if (value?.stateID) {
       runInfoObj = {
         ...runInfoObj,
         transitionID: null,
         stateID: value?.stateID,
+        currentChar: runInfoObj.currentChar - 1,
         prevPressed:true
       };
       setRunInfo(runInfoObj);
@@ -166,24 +165,20 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
       value?.transitionID ||
       (!getIterator().index && runInfoObj.currentChar > 0)
     ) {
-      
       runInfoObj = {
         ...runInfoObj,
         transitionID: value?.transitionID,
-        stateID: null,
-        currentChar: runInfoObj.currentChar - 1,
+        stateID: null,        
         prevPressed:true
       };
-
       setRunInfo(runInfoObj);
     }
   }
+  
 
   if (id === "run-next" && getIterator().index < getQueue().length) {
-
-    let { value, done } = getIterator().next();    
-    console.log("NEXT ->", value)
-    if (done || getIterator().index === getQueue().length) {
+    let { value, done} = getIterator().next();        
+    if (done) {
       runInfoObj = {
         nowRunning: false,
         transitionID: null,
@@ -206,14 +201,13 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
           finalState: ``,
           prevPressed:false
         };
-
         setRunInfo(obj);
       }, 600);
-
       return;
+
     } else {
       setDisablePrev(false);
-      if (value.stateID) {
+      if (value?.stateID) {
         runInfoObj = {
           ...runInfoObj,
           transitionID: null,
@@ -222,7 +216,8 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
         };
         setRunInfo(runInfoObj);
       }
-      if (value.transitionID) {
+
+      if (value?.transitionID) {
         runInfoObj = {
           ...runInfoObj,
           transitionID: value.transitionID,
