@@ -42,9 +42,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
-  const findAnotherAlphabet = useCallback(
+  const findKeyRepeat = useCallback(
     (id, key) => {
-      return (
+      const letterRepeat =
         edge.reduce((stored, current) => {
           if (
             current.from.id === id &&
@@ -53,8 +53,17 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
             stored++;
           }
           return stored;
-        }, 0) >= 1
-      );
+        }, 0) >= 1;
+
+      if (letterRepeat) {
+        setMsgShow(true);
+        setMsgInfo({
+          bg: "warning",
+          header: "Repeated letter",
+          body: `This state already has an exit transition with the letter \u{279C} '${key}' `,
+        });
+      }
+      return letterRepeat;
     },
     [edge]
   );
@@ -63,23 +72,23 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       edge.map((arrow) => {
         return arrow.from.id === id && arrow.to.id === id
           ? {
-            ...arrow,
-            from: { ...arrow.from, ...coord },
-            to: { ...arrow.to, ...coord },
-          }
+              ...arrow,
+              from: { ...arrow.from, ...coord },
+              to: { ...arrow.to, ...coord },
+            }
           : arrow.from.id === id
-            ? {
+          ? {
               ...arrow,
               from: { ...arrow.from, ...coord },
               to: { ...arrow.to },
             }
-            : arrow.to.id === id
-              ? {
-                ...arrow,
-                from: { ...arrow.from },
-                to: { ...arrow.to, ...coord },
-              }
-              : arrow;
+          : arrow.to.id === id
+          ? {
+              ...arrow,
+              from: { ...arrow.from },
+              to: { ...arrow.to, ...coord },
+            }
+          : arrow;
       })
     );
   };
@@ -122,21 +131,18 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
           }
 
           setEdge(
-            edge.map((ed) =>
-              ed.id === selectedTr
-                ? {
+            edge.map((ed) => {
+              if (ed.id === selectedTr) {
+                const charAlreadyFound = findKeyRepeat(ed.from.id, e.key);
+                if (charAlreadyFound) return ed;
+                return {
                   ...ed,
                   symbol:
-                    ed.symbol.length === 0 &&
-                      !findAnotherAlphabet(ed.from.id, e.key)
-                      ? e.key
-                      : [...ed.symbol].indexOf(e.key) === -1 &&
-                        !findAnotherAlphabet(ed.from.id, e.key)
-                        ? ed.symbol + "," + e.key
-                        : ed.symbol,
-                }
-                : ed
-            )
+                    ed.symbol.length === 0 ? e.key : ed.symbol + "," + e.key,
+                };
+              }
+              return ed;
+            })
           );
         }
 
@@ -159,12 +165,12 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
             nodes.map((node) =>
               node.id === selected
                 ? {
-                  ...node,
-                  name:
-                    node.name.length === 1
-                      ? node.name
-                      : node.name.slice(0, node.name.length - 1),
-                }
+                    ...node,
+                    name:
+                      node.name.length === 1
+                        ? node.name
+                        : node.name.slice(0, node.name.length - 1),
+                  }
                 : node
             )
           );
@@ -201,8 +207,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
             shadowBlur: 10,
             shadowOpacity: 0.6,
             name: `S${nodes.length}`,
-            scaleX: 1,
-            scaleY: 1,
             running: false,
           },
         ]);
@@ -253,10 +257,12 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       setGeneralInfo,
       setMsgInfo,
       setMsgShow,
-      findAnotherAlphabet,
+      findKeyRepeat,
       runInfo.nowRunning,
       setAddingTr,
       mouseIn,
+      setMsgInfo,
+      setMsgShow,
     ]
   );
 
@@ -267,7 +273,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       setSelectedTr((e) => "-1");
     }
   }, [runInfo.nowRunning]);
-  
+
   const modifyCoordNodo = (coords, id) => {
     setNodes([]);
     setNodes(
@@ -317,9 +323,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         if (edgeTo) {
           setMsgShow(true);
           setMsgInfo({
-            bg: "light",
+            bg: "warning",
             header: "Repeated transition",
-            body: "You already have a transition going to this node!",
+            body: "You already have a transition going to this node, remember you can edit any transition by just clicking it!",
           });
 
           setEdge(edge.filter((ed) => ed.type !== "temporary"));
@@ -333,14 +339,14 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
           edge.map((ed) =>
             ed.id === addingTr.tr
               ? {
-                ...ed,
-                type: "fixed",
-                to: {
-                  id: selectedNode.id,
-                  x: selectedNode.coord.x,
-                  y: selectedNode.coord.y,
-                },
-              }
+                  ...ed,
+                  type: "fixed",
+                  to: {
+                    id: selectedNode.id,
+                    x: selectedNode.coord.x,
+                    y: selectedNode.coord.y,
+                  },
+                }
               : ed
           )
         );
@@ -429,11 +435,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     ]);
   };
 
-
   const handleWindowResize = (e) => {
     const witdth = e.target.outerWidth * 0.653;
-    setStageInfo(e => ({ ...stageInfo, w: witdth }));
-  }
+    setStageInfo((e) => ({ ...stageInfo, w: witdth }));
+  };
   useEffect(() => {
     window.addEventListener("resize", (e) => handleWindowResize(e));
 
@@ -444,16 +449,15 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       className="mx-auto"
       onDblClick={handleTmpTr}
       ref={stageRef}
-      onMouseMove={(e) =>
-        setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY })
-      }
+      onMouseMove={(e) => setMouseCoord({ x: e.evt.offsetX, y: e.evt.offsetY })}
       onMouseEnter={() => setMouseIn(true)}
       onMouseLeave={() => setMouseIn(false)}
       type="stage"
       onclick={(e) => handleSelection(e)}
       //proporcion de 1h:2w
       width={stageInfo.w || 900}
-      height={450}>
+      height={450}
+    >
       <Layer id="1">
         {runInfo.nowRunning && (
           <ShapeRI input={runInfo.input} currentChar={runInfo.currentChar} />
@@ -501,6 +505,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
                 x={edge.to.x}
                 y={edge.to.y}
                 key={index}
+                w={stageInfo.w || 900}
                 node2={
                   edge.to.id === selected && edge.id === addingTr.tr
                     ? { ...edge.to, ...mouseCoord }
@@ -527,6 +532,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
               isNamingTr={selectedTr}
               running={runInfo.transitionID}
               isRunning={runInfo.nowRunning}
+              w={stageInfo.w || 900}
               key={index}
               currentChar={
                 runInfo.input

@@ -16,8 +16,8 @@ import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import Reactive from "../ReactLogo/Reactive";
 import ThemeContextStage from "../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../Engine/Engine";
+import d3 from 'd3'
 import axios from "axios";
-import d3 from "d3";
 const CanvasContainer = ({
   handleIncorrectSymbolChanges,
   inputString,
@@ -127,16 +127,16 @@ const CanvasContainer = ({
 
     var dataset = {
       nodes: [
-        { name: "Adam" },
-        { name: "Bob" },
-        { name: "Carrie" },
-        { name: "Donovan" },
-        { name: "Edward" },
-        { name: "Felicity" },
-        { name: "George" },
-        { name: "Hannah" },
-        { name: "Iris" },
-        { name: "Jerry" },
+        { name: 0 },
+        { name: 1 },
+        { name: 2 },
+        { name: 3 },
+        { name: 4 },
+        { name: 5 },
+        { name: 6 },
+        { name: 7 },
+        { name: 8 },
+        { name: 9 },
       ],
       edges: [
         { source: 0, target: 0, symbol: "Z" },
@@ -215,6 +215,9 @@ const CanvasContainer = ({
       setNodes(array);
       setEdge(arrayEdge);
     });
+
+
+
   };
 
   const handleCopyClipboard = () => {

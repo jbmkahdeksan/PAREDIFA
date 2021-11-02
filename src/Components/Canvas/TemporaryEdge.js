@@ -13,7 +13,8 @@ const TemporaryEdge = ({
   node2,
   mouseCoord,
   x,
-  y
+  y,
+  w
 }) => {
 
   const dx = node1.x - node2.x;
@@ -26,7 +27,7 @@ const TemporaryEdge = ({
 
   const arrowEnd = endArrow(node1, angle);
 
-  const arrowCurve = curveArrow(angle, node1, node2);
+  const arrowCurve = curveArrow(angle, node1, node2, w);
   return (
     <>
       <Group>
@@ -48,6 +49,10 @@ const TemporaryEdge = ({
             strokeWidth={3}
             pointerWidth={5}
               pointerLength={5}
+              shadowBlur={5}
+              shadowOpacity= {0.3}
+           
+              shadowOffsetY={15}
           />
         )}
         {isMouseOverState(node2, mouseCoord) && (

@@ -14,7 +14,7 @@ const Node = ({
   setMouseDown,
   nodeRunningId,
   running,
-  stageWidth
+  stageWidth,
 }) => {
   const RADIUS = 20;
   const STAGE = {
@@ -70,6 +70,8 @@ const Node = ({
         <Circle
           id={nodeInfo.id}
           {...nodeInfo}
+          shadowOffsetX={selected === nodeInfo.id ? 10 : 5}
+          shadowOffsetY={selected === nodeInfo.id ? 10 : 5}
           fill={
             nodeRunningId && nodeRunningId === nodeInfo.id
               ? "#a29bfe"
@@ -80,7 +82,8 @@ const Node = ({
               : color
           }
         />
-        {(nodeInfo.start  || (nodeRunningId && nodeRunningId === nodeInfo.id)) && (
+        {(nodeInfo.start ||
+          (nodeRunningId && nodeRunningId === nodeInfo.id)) && (
           <Shape
             id={nodeInfo.id}
             sceneFunc={(ctx, shape) => {
@@ -88,9 +91,15 @@ const Node = ({
               ctx.textAlign = "right";
               ctx.textBaseline = "middle";
               ctx.fillStyle = "black";
-              ctx.fillText( (nodeRunningId && nodeRunningId === nodeInfo.id) ? "\u{1F449}" 
-              : nodeInfo.start ? "\u{25B7}" :  "",
-              nodeInfo.x - RADIUS , nodeInfo.y);
+              ctx.fillText(
+                nodeRunningId && nodeRunningId === nodeInfo.id
+                  ? "\u{1F449}"
+                  : nodeInfo.start
+                  ? "\u{25B7}"
+                  : "",
+                nodeInfo.x - RADIUS,
+                nodeInfo.y
+              );
               // (!) Konva specific method, it is very important
               ctx.fillStrokeShape(shape);
             }}
@@ -100,7 +109,8 @@ const Node = ({
         {nodeInfo.final && (
           <Shape
             type="nodo"
-            id={nodeInfo.id} qq
+            id={nodeInfo.id}
+            qq
             sceneFunc={(ctx, shape) => {
               ctx.beginPath();
               ctx.arc(
@@ -126,7 +136,20 @@ const Node = ({
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillStyle = "rgb(6, 11, 16)";
-            ctx.fillText(nodeInfo.name, nodeInfo.x, nodeInfo.y);
+            ctx.fillText(
+              addingTr.state &&
+                selected === nodeInfo.id &&
+                addingTr.state &&
+                color === "#95b6f0"
+                ? "\u{1f6a9}\u{1F3C1}"
+                : addingTr.state && selected === nodeInfo.id
+                ? "\u{1f6a9}"
+                : addingTr.state && color === "#95b6f0"
+                ? "\u{1F3C1}"
+                : nodeInfo.name,
+              nodeInfo.x,
+              nodeInfo.y
+            );
             // (!) Konva specific method, it is very important
             ctx.fillStrokeShape(shape);
           }}

@@ -13,10 +13,10 @@ export const arrowEnd = (node1, angle) => ({
   y: node1.y + radius * Math.sin(angle),
 });
 
-export const arrowCurve = (angle, node1, node2) => {
+export const arrowCurve = (angle, node1, node2, witdh) => {
   let proximity_coeficient =
     Math.sqrt(Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)) /
-    1273;
+    witdh;
   const curvePower = 100 * proximity_coeficient;
 
   const arrowStarts = arrowStart(node2, angle);

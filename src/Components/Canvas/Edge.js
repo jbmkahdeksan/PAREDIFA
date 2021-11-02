@@ -18,6 +18,7 @@ const Edge = ({
   running,
   isRunning,
   currentChar,
+  w
 }) => {
   const [flag, setFlag] = useState(false);
   const dx = node1.x - node2.x;
@@ -30,7 +31,7 @@ const Edge = ({
 
   const arrowEnd = endArrow(node1, angle);
 
-  const arrowCurve = curveArrow(angle, node1, node2);
+  const arrowCurve = curveArrow(angle, node1, node2, w);
 
   const COLOR =
     running && running === id
