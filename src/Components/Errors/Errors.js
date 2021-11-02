@@ -144,7 +144,7 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
           </>
         )}
 
-      {inputString.length > 0 &&  !errorsSymbols.length && 
+      {inputString.length > 0 &&  errorsSymbols.length===0 && 
         FINALSTATE &&
         INITALSTATE &&
         !isAutomataComplete().length && <>{automataReady()}</>}
