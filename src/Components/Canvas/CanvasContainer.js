@@ -152,6 +152,7 @@ const CanvasContainer = ({
         { source: 6, target: 7 },
         { source: 7, target: 8 },
         { source: 8, target: 9 },
+        { source: 9, target: 1 },
       ],
     };
 
@@ -170,8 +171,8 @@ const CanvasContainer = ({
       .force()
       .nodes(dataset.nodes)
       .links(dataset.edges)
-      .size([w, h])
-      .linkDistance(100)
+      .size([w, 450])
+      .linkDistance(50)
       .charge(-900)
       .gravity(0.1)
       .theta(0.8)

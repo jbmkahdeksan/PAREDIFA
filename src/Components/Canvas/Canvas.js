@@ -454,7 +454,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       //proporcion de 1h:2w
       width={stageInfo.w || 900}
       height={450}>
-      <Layer>
+      <Layer id="1">
         {runInfo.nowRunning && (
           <ShapeRI input={runInfo.input} currentChar={runInfo.currentChar} />
         )}
