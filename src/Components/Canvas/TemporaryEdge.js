@@ -7,16 +7,7 @@ import {
   isMouseOverState,
 } from "./EdgeUtil";
 
-const TemporaryEdge = ({
-  id,
-  node1,
-  node2,
-  mouseCoord,
-  x,
-  y,
-  w
-}) => {
-
+const TemporaryEdge = ({ id, node1, node2, mouseCoord, x, y, w }) => {
   const dx = node1.x - node2.x;
   const dy = node1.y - node2.y;
   let angle = Math.atan2(-dy, dx);
@@ -48,11 +39,10 @@ const TemporaryEdge = ({
             fill={"#8c7ae6"}
             strokeWidth={3}
             pointerWidth={5}
-              pointerLength={5}
-              shadowBlur={5}
-              shadowOpacity= {0.3}
-           
-              shadowOffsetY={15}
+            pointerLength={5}
+            shadowBlur={5}
+            shadowOpacity={0.1}
+            shadowOffsetY={15}
           />
         )}
         {isMouseOverState(node2, mouseCoord) && (
@@ -60,7 +50,7 @@ const TemporaryEdge = ({
             <Arc
               id={id}
               type="arrow"
-              x={x - radius * (Math.PI / 4)-3}
+              x={x - radius * (Math.PI / 4) - 3}
               y={y - radius * (Math.PI / 4) - 6}
               innerRadius={17.5}
               outerRadius={17.5}

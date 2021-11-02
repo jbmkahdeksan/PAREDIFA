@@ -70,8 +70,8 @@ const Node = ({
         <Circle
           id={nodeInfo.id}
           {...nodeInfo}
-          shadowOffsetX={selected === nodeInfo.id ? 10 : 5}
-          shadowOffsetY={selected === nodeInfo.id ? 10 : 5}
+          shadowOffsetX={nodeInfo.final ? 0 : selected === nodeInfo.id ? 10 : 5}
+          shadowOffsetY={nodeInfo.final ? 0 : selected === nodeInfo.id ? 10 : 5}
           fill={
             nodeRunningId && nodeRunningId === nodeInfo.id
               ? "#a29bfe"
