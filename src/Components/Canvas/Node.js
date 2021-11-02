@@ -97,7 +97,7 @@ const Node = ({
                   : nodeInfo.start
                   ? "\u{25B7}"
                   : "",
-                nodeInfo.x - RADIUS,
+                nodeInfo.final ? nodeInfo.x - RADIUS - 5 : nodeInfo.x - RADIUS,
                 nodeInfo.y
               );
               // (!) Konva specific method, it is very important
