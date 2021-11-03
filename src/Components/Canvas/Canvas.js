@@ -65,7 +65,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       }
       return letterRepeat;
     },
-    [edge]
+    [edge, setMsgShow, setMsgInfo]
   );
   const updateCoordEdges = (coord, id) => {
     setEdge(
@@ -261,8 +261,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       runInfo.nowRunning,
       setAddingTr,
       mouseIn,
-      setMsgInfo,
-      setMsgShow,
     ]
   );
 

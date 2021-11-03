@@ -98,7 +98,7 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
     );
     return obj;
   };
-
+  const automataComplete = isAutomataComplete();
   return (
     <div className={""}>
       {generalInfo.alphabet.length === 0 && (
@@ -130,10 +130,10 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
           )}
         </>
       )}
-      {isAutomataComplete()[0]}
+      {automataComplete[0]}
 
       {!inputString.length &&
-        !isAutomataComplete().length &&
+        !automataComplete.length &&
         FINALSTATE &&
         INITALSTATE && (
           <>
@@ -147,7 +147,7 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
       {inputString.length > 0 &&  errorsSymbols.length===0 && 
         FINALSTATE &&
         INITALSTATE &&
-        !isAutomataComplete().length && <>{automataReady()}</>}
+        !automataComplete.length && <>{automataReady()}</>}
     </div>
   );
 };

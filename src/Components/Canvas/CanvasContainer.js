@@ -16,7 +16,7 @@ import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import Reactive from "../ReactLogo/Reactive";
 import ThemeContextStage from "../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../Engine/Engine";
-import d3 from 'd3'
+import d3 from "d3";
 import axios from "axios";
 const CanvasContainer = ({
   handleIncorrectSymbolChanges,
@@ -88,7 +88,6 @@ const CanvasContainer = ({
       
 `;
 
- 
     try {
       await axios.post("http://localhost:3001/gql", { query: queryTodo });
       setProgress(100);
@@ -104,11 +103,10 @@ const CanvasContainer = ({
       setMsgInfo({
         bg: "warning",
         header: "Warning!",
-        body: `There was an error while sending the image:  ${e.message}`   ,
+        body: `There was an error while sending the image:  ${e.message}`,
       });
-    }
-    finally{
-      handleCloseInformation()
+    } finally {
+      handleCloseInformation();
     }
   };
   const handleImage = (firstName, lastName, id, time) => {
@@ -174,7 +172,7 @@ const CanvasContainer = ({
       .size([w, 450])
       .linkDistance(50)
       .charge(-900)
-      .gravity(0.1)
+      .gravity(0.2)
       .theta(0.8)
       .alpha(0.1)
       .start();
@@ -215,8 +213,6 @@ const CanvasContainer = ({
       setNodes(array);
       setEdge(arrayEdge);
     });
-
-
 
   };
 
@@ -286,177 +282,181 @@ const CanvasContainer = ({
   };
 
   return (
-    <div className="h-100 col-9">
-      <div className="d-flex justify-content-center my-4">
-        <div className="d-grid col-2 mx-0 text-center border-start border-2">
-          <Button
-            className="m-auto"
-            onClick={() => setShowAlphabetModal(true)}
-            disabled={runInfo.nowRunning}
-            variant="outline-primary"
-            size="sm"
-            id="setAlphabet"
-            title="(e.g.: 1, 0)"
-          >
-            Set Alphabet
-          </Button>
-        </div>
+      <div className="h-100 col-9">
+        <div className="d-flex justify-content-center my-4">
+          <div className="d-grid col-2 mx-0 text-center border-start border-2">
+            <Button
+              className="m-auto"
+              onClick={() => setShowAlphabetModal(true)}
+              disabled={runInfo.nowRunning}
+              variant="outline-primary"
+              size="sm"
+              id="setAlphabet"
+              title="(e.g.: 1, 0)"
+            >
+              Set Alphabet
+            </Button>
+          </div>
 
-        <div className="d-grid col-5 mx-0 text-center border-start border-2">
-          {runInfo.nowRunning && !isByStep && (
-            <div className="automataRun m-auto">
-              <h4>Automata is running...</h4>
-              <div className="spinner">
-                <Reactive />
+          <div className="d-grid col-5 mx-0 text-center border-start border-2">
+            {runInfo.nowRunning && !isByStep && (
+              <div className="automataRun m-auto">
+                <h4>Automata is running...</h4>
+                <div className="spinner">
+                  <Reactive />
+                </div>
               </div>
-            </div>
-          )}
-          {runInfo.nowRunning && isByStep && (
-            <div className="btn-group-sm m-auto text-center" id="stepsDiv">
-              <Button
-                variant="danger"
-                id="run-prev"
-                disabled={disablePrev}
-                onClick={() => runBySteps("run-prev", runInfo, setRunInfo)}
-              >
-                ⏪ Prev step
-              </Button>
-              <Button
-                variant="success"
-                id="run-next"
-                onClick={() =>
-                  runBySteps(
-                    "run-next",
-                    runInfo,
-                    setRunInfo,
-                    byStepCb,
-                    setDisablePrev
-                  )
-                }
-              >
-                Next step ⏩
-              </Button>
-            </div>
-          )}
-          {!runInfo.nowRunning && (
+            )}
+            {runInfo.nowRunning && isByStep && (
+              <div className="btn-group-sm m-auto text-center" id="stepsDiv">
+                <Button
+                  variant="danger"
+                  id="run-prev"
+                  disabled={disablePrev}
+                  onClick={() => runBySteps("run-prev", runInfo, setRunInfo)}
+                >
+                  ⏪ Prev step
+                </Button>
+                <Button
+                  variant="success"
+                  id="run-next"
+                  onClick={() =>
+                    runBySteps(
+                      "run-next",
+                      runInfo,
+                      setRunInfo,
+                      byStepCb,
+                      setDisablePrev
+                    )
+                  }
+                >
+                  Next step ⏩
+                </Button>
+              </div>
+            )}
+            {!runInfo.nowRunning && (
+              <div>
+                <Form.Control
+                  className="m-auto w-75"
+                  value={inputString}
+                  onChange={(e) => handleInputChanges(e)}
+                  type="text"
+                  id="testString"
+                  placeholder="Test string"
+                />
+                <div className="btn-group-sm my-2">
+                  <Button
+                    variant="primary"
+                    disabled={!ready}
+                    id="runByStep"
+                    className="mx-1"
+                    onClick={() => handleInput("step")}
+                  >
+                    Run by steps
+                  </Button>
+                  <Button
+                    disabled={!ready}
+                    variant="primary"
+                    id="runCont"
+                    className="mx-1"
+                    onClick={() => handleInput("cont")}
+                  >
+                    Run continuously
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="d-grid col-5 mx-0 text-center border-start border-2">
             <div>
               <Form.Control
                 className="m-auto w-75"
-                value={inputString}
-                onChange={(e) => handleInputChanges(e)}
+                value={jsonInfo}
+                onChange={(e) => setJsonInfo(e.target.value)}
                 type="text"
-                id="testString"
-                placeholder="Test string"
+                id="jsonInput"
+                placeholder="JSON"
+                disabled={runInfo.nowRunning}
+                onDoubleClick={handleCopyClipboard}
               />
               <div className="btn-group-sm my-2">
                 <Button
                   variant="primary"
-                  disabled={!ready}
-                  id="runByStep"
+                  onClick={downloadApplicationInfo}
+                  id="jsonDownload"
                   className="mx-1"
-                  onClick={() => handleInput("step")}
+                  disabled={runInfo.nowRunning}
                 >
-                  Run by steps
+                  {" "}
+                  Download JSON
                 </Button>
                 <Button
-                  disabled={!ready}
                   variant="primary"
-                  id="runCont"
+                  disabled={runInfo.nowRunning}
                   className="mx-1"
-                  onClick={() => handleInput("cont")}
+                  id="jsonUpload"
+                  onClick={algo}
                 >
-                  Run continuously
+                  {" "}
+                  Upload JSON
                 </Button>
               </div>
             </div>
-          )}
+          </div>
         </div>
 
-        <div className="d-grid col-5 mx-0 text-center border-start border-2">
-          <div>
-            <Form.Control
-              className="m-auto w-75"
-              value={jsonInfo}
-              onChange={(e) => setJsonInfo(e.target.value)}
-              type="text"
-              id="jsonInput"
-              placeholder="JSON"
-              disabled={runInfo.nowRunning}
-              onDoubleClick={handleCopyClipboard}
+        <div>
+          <div className="d-flex text-center">
+            <Canvas
+              stageRef={stageRef}
+              addingTr={addingTr}
+              setAddingTr={setAddingTr}
             />
-            <div className="btn-group-sm my-2">
+          </div>
+          <div className="row my-2">
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
               <Button
-                variant="primary"
-                onClick={downloadApplicationInfo}
-                id="jsonDownload"
-                className="mx-1"
+                className="me-md-1"
+                variant="warning"
                 disabled={runInfo.nowRunning}
+                onClick={validateOpening}
               >
-                {" "}
-                Download JSON
+                Clear canvas
               </Button>
               <Button
-                variant="primary"
-                disabled={runInfo.nowRunning}
-                className="mx-1"
-                id="jsonUpload"
-                onClick={algo}
+                className="me-5"
+                variant="secondary"
+                onClick={() => setShowInformationModal(true)}
               >
-                {" "}
-                Upload JSON
+                Save as PNG
               </Button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div>
-        <div className="d-flex text-center">
-          <Canvas
-            stageRef={stageRef}
-            addingTr={addingTr}
-            setAddingTr={setAddingTr}
+        <div>
+          <InformationModal
+            cb={handleImage}
+            show={showInformationModal}
+            handleClose={handleCloseInformation}
+            fetching={fetching}
+            progress={progress}
           />
-        </div>
-        <div className="row my-2">
-          <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-            <Button
-              className="me-md-1"
-              variant="warning"
-              disabled={runInfo.nowRunning}
-              onClick={validateOpening}
-            >
-              Clear canvas
-            </Button>
-            <Button
-              className="me-5"
-              variant="secondary"
-              onClick={() => setShowInformationModal(true)}
-            >
-              Save as PNG
-            </Button>
-          </div>
+          <WipeDataModal
+            show={showWipeModal}
+            handleClose={handleCloseWipeData}
+          />
+
+          <AlphabetModal
+            show={showAlphabetModal}
+            handleClose={handleCloseAlphabetModal}
+          />
+          <DefaultAlphabetModal handleClose={handleCloseDefaultAlphabetModal} />
+          <Message />
         </div>
       </div>
-
-      <div>
-        <InformationModal
-          cb={handleImage}
-          show={showInformationModal}
-          handleClose={handleCloseInformation}
-          fetching={fetching}
-          progress={progress}
-        />
-        <WipeDataModal show={showWipeModal} handleClose={handleCloseWipeData} />
-
-        <AlphabetModal
-          show={showAlphabetModal}
-          handleClose={handleCloseAlphabetModal}
-        />
-        <DefaultAlphabetModal handleClose={handleCloseDefaultAlphabetModal} />
-        <Message />
-      </div>
-    </div>
+   
   );
 };
 
