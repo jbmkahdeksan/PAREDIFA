@@ -17,7 +17,7 @@ const TodosModal = (props) => {
             {props.FaM && (
               <BsInfoCircle
                 className="infoDowloadFa"
-                title="Double click to download FA"
+                title="Names on DFA stored in the database are displayed here, DOUBLE click to download "
               />
             )}
           </Modal.Title>

@@ -19,7 +19,7 @@ import ThemeContextMsgInfo from '../Context/ContextMsg'
  */
 const FAmodal = (props) => {
     const handleDoubleClick=()=>{
-        props.handleShowFA();
+        props.handleClose();
         setMsgShow(true)
         setMsgInfo({bg:'info',header:'Success!',body:'Well it works!'});
     }
@@ -30,8 +30,8 @@ const FAmodal = (props) => {
         <>
         
             <TodosModal  
-                handleShow={props.handleShowFA}  
-                show={props.viewFA} 
+                handleShow={props.handleClose}  
+                show={props.show} 
                 FaM={true}
                 handleDoubleClick={handleDoubleClick}
                 title='DFA stored in the DB'

@@ -7,6 +7,21 @@
     cursor: pointer;
 }
 
+#bottomCanvas{
+    padding-left:10%;
+    padding-right: 8%;
+
+}
+
+.bottomCanvasStyle{
+    display:flex;
+    flex-direction: row;
+
+}
+
+.dataBaseActions,.canvasActions{
+    width:50%;
+}
 body {
     overflow: scroll;
     overflow-x: hidden;

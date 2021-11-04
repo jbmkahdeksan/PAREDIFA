@@ -28,18 +28,19 @@ const FaSaveModal = (props) => {
         <>
       <Modal show={props.show} onHide={() => { setLoading(false); props.handleClose() }}>
             <Modal.Header closeButton>
-            <Modal.Title>Save FA</Modal.Title>
+            <Modal.Title>Save DFA</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Label>Name of FA</Form.Label>
+                        <Form.Label>Name of DFA</Form.Label>
                         <Form.Control 
                             type="text" 
-                            placeholder="Enter FA name" 
+                            placeholder="Enter DFA name" 
                             value={faName} 
                             onChange={ (e) => setFaName(e.target.value) } 
-                            disabled={ loading ? true : false} 
+                            disabled={ loading } 
+                           
                         />
                         <Form.Text className="text-muted">
                             This will be stored in our databases with the given name
@@ -48,11 +49,11 @@ const FaSaveModal = (props) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={() => { setLoading(false); props.handleClose() }}>
+            <Button variant="secondary" disabled={loading} onClick={() => { setLoading(false); props.handleClose() }}>
                 Close
             </Button>
             {!loading &&
-                <Button variant="primary" onClick={()=> setLoading(!loading)}>
+                <Button variant="primary" onClick={()=> setLoading(true)}>
                     Save 
                 </Button>
             }
