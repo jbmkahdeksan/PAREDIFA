@@ -4,7 +4,7 @@ import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import ThemeContextRunInfo from "../Context/ContextRunInfo";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 const WipeDataModal = (props) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
@@ -13,15 +13,16 @@ const WipeDataModal = (props) => {
   const wipeData = () => {
     setNodes([]);
     setEdge([]);
-    setGeneralInfo({ ...generalInfo, wipeData: true });
-    console.log('hehhehe wipe data BITCH')
-    setGeneralInfo({
+   
+    const obj = {
       alphabet: [],
       useDefault: false,
-      wipeData: false,
+      wipeData: true,
       showAlphabetDefault: false,
       result: false,
-    });
+    };
+    setGeneralInfo(obj);
+
     setRunInfo({
       nowRunning: false,
       transitionID: null,
@@ -33,6 +34,18 @@ const WipeDataModal = (props) => {
     });
     props.handleClose();
   };
+
+  useEffect(() => {
+    if (generalInfo.wipeData) {
+      setGeneralInfo((e) => ({
+        alphabet: [],
+        useDefault: false,
+        wipeData: false,
+        showAlphabetDefault: false,
+        result: false,
+      }));
+    }
+  }, [generalInfo.wipeData]);
   return (
     <>
       <Modal

@@ -323,7 +323,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
           setMsgInfo({
             bg: "warning",
             header: "Repeated transition",
-            body: "You already have a transition going to this node, remember you can edit any transition by just clicking it!",
+            body: "You already have a transition going to this node, remember you can edit any transition by just CLICKING it!",
           });
 
           setEdge(edge.filter((ed) => ed.type !== "temporary"));
@@ -399,6 +399,8 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       setSelectedTr((e) => "-1");
       setSelected((e) => "-1");
       setMouseDown((e) => false);
+      console.log('borrado tr')
+   
     }
   }, [generalInfo.wipeData]);
 
