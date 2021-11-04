@@ -37,14 +37,11 @@ const WipeDataModal = (props) => {
 
   useEffect(() => {
     if (generalInfo.wipeData) {
-      setGeneralInfo((e) => ({
-        alphabet: [],
-        useDefault: false,
-        wipeData: false,
-        showAlphabetDefault: false,
-        result: false,
-      }));
+      setGeneralInfo((e) => ({...generalInfo, wipeData:true}))
+
+
     }
+ 
   }, [generalInfo.wipeData]);
   return (
     <>

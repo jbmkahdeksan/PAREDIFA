@@ -399,7 +399,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       setSelectedTr((e) => "-1");
       setSelected((e) => "-1");
       setMouseDown((e) => false);
-      console.log('borrado tr')
+      
    
     }
   }, [generalInfo.wipeData]);

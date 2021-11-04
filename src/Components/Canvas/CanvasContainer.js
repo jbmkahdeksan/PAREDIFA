@@ -246,6 +246,7 @@ const CanvasContainer = ({
       setIsByStep((e) => false);
       setDisablePrev((e) => true);
       setJsonInfo((e) => "");
+      
     }
   }, [generalInfo.wipeData]);
   const handleInputChanges = (e) => {

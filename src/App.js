@@ -33,7 +33,6 @@ function App() {
     wipeData: false,
     showAlphabetDefault: false,
     result: false,
-    stageWitdh: 900,
   });
   const [runInfo, setRunInfo] = useState({
     nowRunning: false,
