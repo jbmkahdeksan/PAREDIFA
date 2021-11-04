@@ -16,7 +16,7 @@ import ResultShape from "./ResultShape";
 /*
  *
  * Description:
- *
+ *  Main component for painting canvas
  * Authors:
  *   Andres Alvarez Duran, ID: 117520958
  *   Joaquin Barrientos Monge, ID: 117440348
@@ -42,6 +42,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
+  /**  Makes sure automata stays as DFA
+   * @param id the state were looking for
+   * @param key the current character user entered
+   */
   const findKeyRepeat = useCallback(
     (id, key) => {
       const letterRepeat =
@@ -67,6 +71,11 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     },
     [edge, setMsgShow, setMsgInfo]
   );
+
+  /** Updates the state coords of an edge
+   * @param coord coords -> {x,y}
+   * @param id id of the state where the state coord should be updated
+   */
   const updateCoordEdges = (coord, id) => {
     setEdge(
       edge.map((arrow) => {
@@ -92,6 +101,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       })
     );
   };
+
+  /** Handles key down and does logic based in the e.key
+   * @param e  e the event of the key down
+   */
   const handleKeyDown = useCallback(
     (e) => {
       if (runInfo.nowRunning) {
@@ -264,6 +277,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     ]
   );
 
+  /** Wipes some data that are not needed during the evalutiation of the automata
+   *
+   */
   useEffect(() => {
     if (runInfo.nowRunning) {
       setSelected((e) => "-1");
@@ -272,6 +288,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     }
   }, [runInfo.nowRunning]);
 
+  /** Updates the coord of the node currently selected and that is moving
+   *@param id id of the node selected 
+   /*@param coord coord of the node that should be updated 
+   */
   const modifyCoordNodo = (coords, id) => {
     setNodes([]);
     setNodes(
@@ -279,6 +299,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     );
   };
 
+   /** Handles selection of any component of the canvas, such as: Edge, Node...
+   *@param e e, the event
+   */
   const handleSelection = (e) => {
     if (runInfo.nowRunning) return;
     if (namingState) {
@@ -386,12 +409,15 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       }
     }
   };
-
+ /** Adds an event listener to the window on window opening
+   */
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+   /** Wipes data when user presses ' Clear Canvas' 
+   */
   useEffect(() => {
     if (generalInfo.wipeData) {
       setIsFillingSymbol((e) => false);
@@ -399,11 +425,12 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       setSelectedTr((e) => "-1");
       setSelected((e) => "-1");
       setMouseDown((e) => false);
-      
-   
     }
   }, [generalInfo.wipeData]);
 
+   /** Handles temporary transition, meaning user is adding a transition
+   *@param e e, the event
+   */
   const handleTmpTr = (e) => {
     if (e.target.attrs.type !== "nodo") return;
     if (selectedTr !== "-1") return;
@@ -434,11 +461,16 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       },
     ]);
   };
-
+ /** Handles canvas resizing
+  * @param e e,the event
+   */
   const handleWindowResize = (e) => {
     const witdth = e.target.outerWidth * 0.653;
     setStageInfo((e) => ({ ...stageInfo, w: witdth }));
   };
+
+   /** Adds an event listener -> On windows resize
+   */
   useEffect(() => {
     window.addEventListener("resize", (e) => handleWindowResize(e));
 

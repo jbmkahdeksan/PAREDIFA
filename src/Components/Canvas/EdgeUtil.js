@@ -1,18 +1,42 @@
+/*
+ *
+ * Description:
+ *  Some mathematical functions
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
+
+//the radius of the node
 const radius = 20;
-//const CANVAS={
- // width:900,
- // height:500
-//}
+
+  /**  Where should the arrow start
+   * @param node2 node2 where the arrow begings
+   * @param angle the angle of the arrow
+   */
 export const arrowStart = (node2, angle) => ({
   x: node2.x + -radius * Math.cos(angle + Math.PI),
   y: node2.y + radius * Math.sin(angle + Math.PI),
 });
 
+  /**  Where should the arrow end
+   * @param node1 node1 where the arrow ends
+   * @param angle the angle of the arrow
+   */
 export const arrowEnd = (node1, angle) => ({
   x: node1.x + -radius * Math.cos(angle),
   y: node1.y + radius * Math.sin(angle),
 });
 
+  /** Handles the arrow curve
+   * @param node2 node2 where the arrow is pointing to
+   * @param angle the angle of the arrow
+   */
 export const arrowCurve = (angle, node1, node2, witdh) => {
   let proximity_coeficient =
     Math.sqrt(Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)) /
@@ -31,13 +55,43 @@ export const arrowCurve = (angle, node1, node2, witdh) => {
   };
 };
 
+
+/**
+ * This method is used to make adjustments
+ * to the coordenates
+ * @param vec a coordenate instance
+ * @param value a value to multiply the components of 
+ * the given coordenate
+ * @returns a coordinate
+ */
 const multiplyVector = (vec, value) => ({ x: vec.x * value, y: vec.y * value });
 
+
+/**
+ * This method is used to make adjustments
+ * to the coordenates by applying a 
+ * some trigonometry to the given coordenate
+ * @param vec a coordenate instance
+ * @returns a coordinate
+ */
 const normalizeVector = (vec) => {
   let aux = Math.sqrt(Math.pow(vec.x, 2) + Math.pow(vec.y, 2));
   return { x: vec.x / aux, y: vec.y / aux };
 };
 
+/**
+ * This method is to draw the text on the edge
+ * @param ctx the canvas context
+ * @param src node src
+ *  @param dst node dst
+ *  @param aux_mlt a trigonometric parameter
+ *  @param vector2_ort a vector
+ *  @param txt symbol of the edge being added
+ *  @param id the id of the transition
+ *  @param selectedTr the id of the selected  transition
+ *   @param flag is the mouse currently on the transition 
+ *  @param running if the automata being evaluated 
+ * */
 export const drawTrText = (
   ctx,
   src,
@@ -104,6 +158,12 @@ export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag,running) => {
   }
 };
 
+/**
+ * This method is to check whether the current mouse coord is on the node
+ * @param state the state currently being point to
+ * @param mouseCoord current coordinates of the mouse 
+ *  @returns boolean
+ * */
 export const isMouseOverState = (state, mouseCoord) =>
   Math.sqrt(
     Math.pow(mouseCoord.x - state.x, 2) + Math.pow(mouseCoord.y - state.y, 2)

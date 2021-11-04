@@ -2,7 +2,19 @@ import { useContext } from "react";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
-
+/*
+ *
+ * Description:
+ * Main component for showing errors on the right left of the screen 
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
@@ -11,6 +23,10 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
   const INITALSTATE = nodes.find((node) => node.start) ?? false;
   const FINALSTATE = nodes.find((node) => node.final) ?? false;
 
+/**
+ * This method is to check whether automata is ready to go
+ * @returns html code
+ * */
   const isAutomataComplete = () => {
     const state_symbols = nodes.reduce((stored, current) => {
       stored.push(
@@ -63,6 +79,10 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
         ];
   };
 
+  /**
+ * This method is to create an error 
+ * @returns html code
+ * */
   const createError = (type, msg) => {
     if (ready) {
       setTimeout(() => {
@@ -80,6 +100,10 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
     );
   };
 
+    /**
+ * This method is to display on the screen that the automata is ready to go 
+ * @returns html code
+ * */
   const automataReady = () => {
     if (!ready) {
       setTimeout(() => {

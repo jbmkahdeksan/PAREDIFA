@@ -4,6 +4,20 @@ import FormControl from "react-bootstrap/FormControl";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import ProgressBar from 'react-bootstrap/ProgressBar'
+
+/*
+ *
+ * Description:
+ * Student infomation modal
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const InformationModal = ({ show, handleClose, cb, fetching, progress }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

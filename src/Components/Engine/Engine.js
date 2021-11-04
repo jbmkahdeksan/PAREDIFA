@@ -6,13 +6,26 @@ import {
 } from "../Classes/Queue";
 import frameInfo from "../Classes/FrameInfo";
 import Transition from "../Classes/Transition";
-/**
+
+/*
+ *
+ * Description:
  * This method generates the sequence
  * the automata follows when testing the
  * the input and stores it in `queue` which
  * then will become an animation.
  * `This replaces the run for vgarcia.v0`
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
  */
+
+
 export function preProcessAutomata(
   nodes,
   edge,

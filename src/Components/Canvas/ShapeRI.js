@@ -1,9 +1,20 @@
 import { Shape } from "react-konva";
-import ThemeContextRunInfo from "../Context/ContextRunInfo";
-import {useContext} from 'react'
+
+/*
+ *
+ * Description:
+ *  Component for results, paints the input to evaluate
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const ShapeRI = ({input,currentChar}) => {
 
-    const { runInfo, setRunInfo}= useContext(ThemeContextRunInfo);
   return (
     <>
 

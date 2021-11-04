@@ -5,11 +5,31 @@ import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import { useContext, useEffect } from "react";
+
+/*
+ *
+ * Description:
+ * Wipe data modal
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const WipeDataModal = (props) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
+
+  /*
+ *
+ * This method wipes data application information
+ *
+ */
   const wipeData = () => {
     setNodes([]);
     setEdge([]);

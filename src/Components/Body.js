@@ -4,7 +4,19 @@ import ThemeContext from "../Components/Context/ContextStates";
 
 import ThemeContextGeneral from "../Components/Context/GeneralInfo";
 import Errors from "../Components/Errors/Errors";
-
+/*
+ *
+ * Description:
+ * Body components has the canvas container and errors
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const Body = () => {
   const [errors, setErrors] = useState({
     incorrectSymbol: "",
@@ -15,6 +27,10 @@ const Body = () => {
   const [ready, setReady] = useState(false);
   const [finalResultInfo, setFinalResult] = useState("");
   
+
+ /**  This method checks if string to test is valid
+   * @param inputString the input the user entered
+   */
   const handleIncorrectSymbolChanges = (inputString) => {
     if (inputString.length >= 0 && generalInfo.alphabet.length > 0) {
       const input = [...inputString];
@@ -50,6 +66,9 @@ const Body = () => {
     }
   };
 
+   /**  This method show the final result of the DFA evaluation
+   * @param runInfo run information
+   */
   const finalResult = (runInfo) => {
     if (runInfo.finalState.length && nodes.length) {
       const infoFinal = runInfo.finalState.split(":");

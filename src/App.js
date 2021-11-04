@@ -12,7 +12,7 @@ import Body from "./Components/Body";
 /*
  *
  * Description:
- *   Handles routing
+ *   Handles routing && context information
  * Authors:
  *   Andres Alvarez Duran, ID: 117520958
  *   Joaquin Barrientos Monge, ID: 117440348

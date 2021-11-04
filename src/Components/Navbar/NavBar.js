@@ -6,6 +6,19 @@ import logo from "../../Images/neg_favicon.png";
 import About from "../Modals/About";
 import GuideModal from "../Modals/GuideModal";
 import RegexEditorModal from '../Modals/RegexEditorModal';
+/*
+ *
+ * Description:
+ * Navbar component
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const NavBar = () => {
   const [showAbout, setShowAbout] = useState(false);
   const handleShowIns = () => setLgShow(!lgShow);

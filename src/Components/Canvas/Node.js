@@ -1,6 +1,18 @@
 import { Circle, Group, Shape } from "react-konva";
 import { useState } from "react";
-
+/*
+ *
+ * Description:
+ *  Node component
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const Node = ({
   nodeInfo,
   updateCoordNode,
@@ -16,13 +28,20 @@ const Node = ({
   running,
   stageWidth,
 }) => {
+  //the radius of the node
   const RADIUS = 20;
+  //stage information
   const STAGE = {
     height: 450,
     width: stageWidth,
   };
-  const [color, setColor] = useState("#ffeaa7");
 
+  const [color, setColor] = useState("#ffeaa7");
+/**
+ * This method is to update node/edge coord on dragEnd
+ * Makes sure to check if the node is outside of canvas bounds
+ * @param e the event
+ * */
   const handleDragEnd = (e) => {
     setMouseDown(false);
     const coords = {

@@ -7,7 +7,7 @@ import App from './App';
 /*
 * 
 * Description:
-*   
+*   Main component of app
 * Authors:
 *   Andres Alvarez Duran, ID: 117520958
 *   Joaquin Barrientos Monge, ID: 117440348
