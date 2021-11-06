@@ -1,5 +1,5 @@
 import Canvas from "./Canvas";
-import { useRef, useState, useContext, useEffect } from "react";
+import { useRef, useState, useContext, useEffect,useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InformationModal from "../Modals/InformationModal";
@@ -74,7 +74,7 @@ const CanvasContainer = ({
 
   //Dfa download
   const [showDfaDownload, setShowDfaDownload] = useState(false);
-  const handleCloseDfaDownload = () => setShowDfaDownload(false);
+  const handleCloseDfaDownload = useCallback(() => setShowDfaDownload(false),[]);
 
   const downloadURI = async (uri, firstName, lastName, id, time) => {
     const link = document.createElement("a");
@@ -442,6 +442,7 @@ const CanvasContainer = ({
                   className="saveFa"
                   size={23}
                 />
+            
               </div>
               <div className="canvasActions">
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -468,21 +469,39 @@ const CanvasContainer = ({
       </div>
 
       <div>
-        <FAmodal show={showDfaDownload} handleClose={handleCloseDfaDownload} />
-        <FaSaveModal show={showSaveModal} handleClose={handleCloseSaveModal} />
-        <InformationModal
-          cb={handleImage}
-          show={showInformationModal}
-          handleClose={handleCloseInformation}
-          fetching={fetching}
-          progress={progress}
-        />
-        <WipeDataModal show={showWipeModal} handleClose={handleCloseWipeData} />
-
-        <AlphabetModal
-          show={showAlphabetModal}
-          handleClose={handleCloseAlphabetModal}
-        />
+        
+          <FAmodal
+            show={showDfaDownload}
+            handleClose={handleCloseDfaDownload}
+          />
+        
+        {showSaveModal && (
+          <FaSaveModal
+            show={showSaveModal}
+            handleClose={handleCloseSaveModal}
+          />
+        )}
+        {showInformationModal && (
+          <InformationModal
+            cb={handleImage}
+            show={showInformationModal}
+            handleClose={handleCloseInformation}
+            fetching={fetching}
+            progress={progress}
+          />
+        )}
+      
+          <WipeDataModal
+            show={showWipeModal}
+            handleClose={handleCloseWipeData}
+          />
+        
+        {showAlphabetModal && (
+          <AlphabetModal
+            show={showAlphabetModal}
+            handleClose={handleCloseAlphabetModal}
+          />
+        )}
         <DefaultAlphabetModal handleClose={handleCloseDefaultAlphabetModal} />
         <Message />
       </div>

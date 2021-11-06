@@ -3,7 +3,8 @@
 .saveFa,
 .todos,
 .downloadFa,
-.infoDowloadFa {
+.downloadFaSpecific,
+.infoDowloadFa,.displayFa {
     cursor: pointer;
 }
 
@@ -13,7 +14,25 @@
 
 }
 
-.bottomCanvasStyle{
+.displayDFA{
+    margin-left:8%
+}
+
+.downloadFaSpecific{
+    margin-right: 4%;
+}
+
+.dfaData{
+    text-align:center;
+}
+
+
+.aboutFetching{
+    text-align: center;
+    margin-top:10%;
+}
+
+.bottomCanvasStyle,.dfaStored{
     display:flex;
     flex-direction: row;
 

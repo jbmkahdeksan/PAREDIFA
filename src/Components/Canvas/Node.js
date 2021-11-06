@@ -27,6 +27,7 @@ const Node = ({
   nodeRunningId,
   running,
   stageWidth,
+  displaying=false
 }) => {
   //the radius of the node
   const RADIUS = 20;
@@ -65,8 +66,8 @@ const Node = ({
       <Group
         type="nodo"
         id={nodeInfo.id}
-        draggable={!isNamingState && !addingTr.state}
-        listening={!running}
+        draggable={!displaying && !isNamingState && !addingTr.state}
+        listening={!running || !displaying}
         onMouseEnter={() => setColor("#95b6f0")}
         onMouseOut={() => setColor("#ffeaa7")}
         opacity={

@@ -57,7 +57,7 @@ const WipeDataModal = (props) => {
 
   useEffect(() => {
     if (generalInfo.wipeData) {
-      setGeneralInfo((e) => ({...generalInfo, wipeData:true}))
+      setGeneralInfo((e) => ({...generalInfo, wipeData:false}))
 
 
     }

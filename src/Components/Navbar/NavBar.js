@@ -78,7 +78,7 @@ const NavBar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <About show={showAbout} handleShow={handleShow} />
+       <About show={showAbout} handleShow={handleShow} />
       <GuideModal handleShow={handleShowIns} lgShow={lgShow} />
       <RegexEditorModal show={showEditor} handleClose={handleShowEditor}/>
     </>
