@@ -7,6 +7,8 @@ import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import axios from "axios";
+import ThemeContextMsgInfo from "../Context/ContextMsg";
+import ThemeContextMsg from "../Context/ContextMessage";
 
 /*
  *
@@ -27,6 +29,8 @@ const FaSaveModal = (props) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
+  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
   const saveAutomata = async () => {
     try {
       const nodosMapped = nodes.map(
@@ -61,11 +65,23 @@ const FaSaveModal = (props) => {
       await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryMutation,
       });
+      setMsgShow(true);
+      setMsgInfo({
+        bg: "success",
+        header: "Succesfull upload",
+        body: "Automata was uploaded successfully to the server",
+      });
     
     } catch (e) {
-      console.log(e.message, "message");
+      setMsgShow(true);
+      setMsgInfo({
+        bg: "warning",
+        header: "Error",
+        body: `Oops! Looks lke there was an issue while uploading the data to the server: ${e.message}`,
+      });
     } finally {
       setLoading(false);
+      props.handleClose()
     }
   };
 
