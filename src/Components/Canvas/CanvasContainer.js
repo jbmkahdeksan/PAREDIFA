@@ -1,5 +1,5 @@
 import Canvas from "./Canvas";
-import { useRef, useState, useContext, useEffect,useCallback } from "react";
+import { useRef, useState, useContext, useEffect, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InformationModal from "../Modals/InformationModal";
@@ -74,7 +74,10 @@ const CanvasContainer = ({
 
   //Dfa download
   const [showDfaDownload, setShowDfaDownload] = useState(false);
-  const handleCloseDfaDownload = useCallback(() => setShowDfaDownload(false),[]);
+  const handleCloseDfaDownload = useCallback(
+    () => setShowDfaDownload(false),
+    []
+  );
 
   const downloadURI = async (uri, firstName, lastName, id, time) => {
     const link = document.createElement("a");
@@ -430,19 +433,22 @@ const CanvasContainer = ({
           <div id="bottomCanvas">
             <div className="bottomCanvasStyle">
               <div className="dataBaseActions d-grid gap-2 d-md-flex justify-content-md-start">
-                <BsCloudArrowDown
-                  onClick={() => setShowDfaDownload(true)}
-                  title="Click here to download a DFA from the database"
-                  className="downloadFa"
-                  size={23}
-                />
-                <BsCloudArrowUp
-                  onClick={() => setShowSaveModal(true)}
-                  title="Click here to save this DFA to the database"
-                  className="saveFa"
-                  size={23}
-                />
-            
+                {!runInfo.nowRunning && (
+                  <>
+                    <BsCloudArrowDown
+                      onClick={() => setShowDfaDownload(true)}
+                      title="Click here to download a DFA from the database"
+                      className="downloadFa"
+                      size={23}
+                    />
+                    <BsCloudArrowUp
+                      onClick={() => setShowSaveModal(true)}
+                      title="Click here to save this DFA to the database"
+                      className="saveFa"
+                      size={23}
+                    />
+                  </>
+                )}
               </div>
               <div className="canvasActions">
                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -469,12 +475,8 @@ const CanvasContainer = ({
       </div>
 
       <div>
-        
-          <FAmodal
-            show={showDfaDownload}
-            handleClose={handleCloseDfaDownload}
-          />
-        
+        <FAmodal show={showDfaDownload} handleClose={handleCloseDfaDownload} />
+
         {showSaveModal && (
           <FaSaveModal
             show={showSaveModal}
@@ -490,12 +492,9 @@ const CanvasContainer = ({
             progress={progress}
           />
         )}
-      
-          <WipeDataModal
-            show={showWipeModal}
-            handleClose={handleCloseWipeData}
-          />
-        
+
+        <WipeDataModal show={showWipeModal} handleClose={handleCloseWipeData} />
+
         {showAlphabetModal && (
           <AlphabetModal
             show={showAlphabetModal}

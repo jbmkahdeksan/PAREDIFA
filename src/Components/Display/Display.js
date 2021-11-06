@@ -2,7 +2,19 @@ import { Stage, Layer } from "react-konva";
 import Modal from "react-bootstrap/Modal";
 import Node from "../Canvas/Node";
 import Edge from '../Canvas/Edge'
-
+/*
+ *
+ * Description:
+ *  Component to allow user to peek the DFA stored
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const Display = ({ show, handleClose, nodes, edges }) => {
 
   return (

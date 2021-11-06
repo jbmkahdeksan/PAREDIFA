@@ -67,7 +67,7 @@ const Node = ({
         type="nodo"
         id={nodeInfo.id}
         draggable={!displaying && !isNamingState && !addingTr.state}
-        listening={!running || !displaying}
+        listening={!running}
         onMouseEnter={() => setColor("#95b6f0")}
         onMouseOut={() => setColor("#ffeaa7")}
         opacity={
