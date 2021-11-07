@@ -4,7 +4,7 @@
 .todos,
 .downloadFa,
 .downloadFaSpecific,
-.infoDowloadFa,.displayFa {
+.infoDowloadFa,.displayFa,.deleteFASpecific,.downloadAllDfa{
     cursor: pointer;
 }
 
@@ -18,7 +18,7 @@
     margin-left:8%
 }
 
-.downloadFaSpecific{
+.downloadFaSpecific,.deleteFASpecific{
     margin-right: 4%;
 }
 
@@ -32,22 +32,23 @@
     margin-top:10%;
 }
 
-.bottomCanvasStyle,.dfaStored{
-    display:flex;
-    flex-direction: row;
+.bottomCanvasStyle,.dfaStored,.optionsStoredDfa{
+    display:flex !important;
+    flex-direction: row  !important;
 
 }
 
 .dataBaseActions,.canvasActions{
     width:50%;
 }
+
 body {
     overflow: scroll;
     overflow-x: hidden;
     margin-bottom: 2%;
 }
 
-#teamInfo {
+#teamInfo,.emptyDb,.savingDFA {
     margin: auto;
     text-align: center;
 } 

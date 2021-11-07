@@ -7,11 +7,11 @@ import ThemeContextGeneral from "../Context/GeneralInfo";
 import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import ThemeContextStage from "../Context/StageInfo";
 import { Stage, Layer } from "react-konva";
-import TemporaryEdge from "./TemporaryEdge";
-import Node from "./Node";
-import Edge from "./Edge";
-import ShapeRI from "./ShapeRI";
-import ResultShape from "./ResultShape";
+import TemporaryEdge from "../CanvasElements/Edge/TemporaryEdge";
+import Node from "../CanvasElements/Node/Node";
+import Edge from "../CanvasElements/Edge/Edge";
+import ShapeRI from "../CanvasElements/Shapes/ShapeRI";
+import ResultShape from "../CanvasElements/Shapes/ResultShape";
 
 /*
  *
@@ -299,7 +299,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     );
   };
 
-   /** Handles selection of any component of the canvas, such as: Edge, Node...
+  /** Handles selection of any component of the canvas, such as: Edge, Node...
    *@param e e, the event
    */
   const handleSelection = (e) => {
@@ -409,14 +409,14 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       }
     }
   };
- /** Adds an event listener to the window on window opening
+  /** Adds an event listener to the window on window opening
    */
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-   /** Wipes data when user presses ' Clear Canvas' 
+  /** Wipes data when user presses ' Clear Canvas'
    */
   useEffect(() => {
     if (generalInfo.wipeData) {
@@ -428,7 +428,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     }
   }, [generalInfo.wipeData]);
 
-   /** Handles temporary transition, meaning user is adding a transition
+  /** Handles temporary transition, meaning user is adding a transition
    *@param e e, the event
    */
   const handleTmpTr = (e) => {
@@ -461,15 +461,15 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       },
     ]);
   };
- /** Handles canvas resizing
-  * @param e e,the event
+  /** Handles canvas resizing
+   * @param e e,the event
    */
   const handleWindowResize = (e) => {
     const witdth = e.target.outerWidth * 0.653;
     setStageInfo((e) => ({ ...stageInfo, w: witdth }));
   };
 
-   /** Adds an event listener -> On windows resize
+  /** Adds an event listener -> On windows resize
    */
   useEffect(() => {
     window.addEventListener("resize", (e) => handleWindowResize(e));

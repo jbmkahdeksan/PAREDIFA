@@ -25,8 +25,6 @@ const About = ({ show, handleShow, ...props }) => {
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
 
-
-
   const fetchDataAbout = useCallback(async () => {
     try {
       const queryTodo = `{
@@ -57,11 +55,10 @@ const About = ({ show, handleShow, ...props }) => {
       const res = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryTodo,
       });
-   
+
       const data = res.data.data.about;
       console.log(data, "databout");
       setDataAbout((e) => data);
-    
     } catch (e) {
       setMsgShow((e) => true);
       setMsgInfo((f) => ({
@@ -70,9 +67,9 @@ const About = ({ show, handleShow, ...props }) => {
         body: `Oops! Looks like we got an error while fetching data: ${e.message}`,
       }));
     } finally {
-      setFetching(e=>false);
+      setFetching((e) => false);
     }
-    console.log('duro papio')
+    console.log("duro papio");
   }, [setMsgInfo, setMsgShow]);
 
   useEffect(() => {
@@ -99,7 +96,7 @@ const About = ({ show, handleShow, ...props }) => {
               </div>
             </div>
           )}
-          {(!fetching && dataAbout) &&  (
+          {!fetching && dataAbout && (
             <>
               <div>
                 <strong>

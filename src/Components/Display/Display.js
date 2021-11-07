@@ -1,7 +1,7 @@
 import { Stage, Layer } from "react-konva";
 import Modal from "react-bootstrap/Modal";
-import Node from "../Canvas/Node";
-import Edge from '../Canvas/Edge'
+import Node from "../CanvasElements/Node/Node";
+import Edge from '../CanvasElements/Edge/Edge'
 /*
  *
  * Description:

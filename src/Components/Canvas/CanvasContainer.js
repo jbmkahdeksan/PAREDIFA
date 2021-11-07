@@ -70,7 +70,7 @@ const CanvasContainer = ({
 
   //DFA save modals
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const handleCloseSaveModal = () => setShowSaveModal(false);
+  const handleCloseSaveModal = useCallback(() => setShowSaveModal(false), []);
 
   //Dfa download
   const [showDfaDownload, setShowDfaDownload] = useState(false);
@@ -132,7 +132,27 @@ const CanvasContainer = ({
   };
 
   const downloadApplicationInfo = () => {
-    if (nodes.length > 0) setJsonInfo(JSON.stringify(edge));
+    if (nodes.length > 0) {
+      setJsonInfo(
+        JSON.stringify({
+          alphabet: generalInfo.alphabet,
+          states: nodes.map((node) => ({
+            name: node.name,
+            id: node.id,
+            x: node.x,
+            y: node.y,
+            start: node.start,
+            final: node.final,
+          })),
+          transitions: edge.map((tr) => ({
+            id: tr.id,
+            state_src: tr.from,
+            state_dst: tr.to,
+            symbol: tr.symbol.split(","),
+          })),
+        })
+      );
+    }
   };
 
   const algo = () => {
@@ -231,15 +251,22 @@ const CanvasContainer = ({
     });
   };
 
+  const displayMessage = (bg, header, body) => {
+    setMsgShow(true);
+    setMsgInfo({
+      bg: bg,
+      header: header,
+      body: body,
+    });
+  };
   const handleCopyClipboard = () => {
     if (jsonInfo.length > 0) {
       navigator.clipboard.writeText(jsonInfo);
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "light",
-        header: "Copied text to clipboard",
-        body: "The text in this input field was copied into clipboard for your use",
-      });
+      displayMessage(
+        "light",
+        "Copied text to clipboard",
+        "The text in this input field was copied into clipboard for your use"
+      );
     }
   };
 
@@ -247,12 +274,11 @@ const CanvasContainer = ({
     if (nodes.length > 0) {
       setShowWipeModal(true);
     } else {
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "light",
-        header: "No data detected",
-        body: "You haven't drawn anything!",
-      });
+      displayMessage(
+        "light",
+        "No data detected",
+        "You haven't drawn anything!"
+      );
     }
   };
   useEffect(() => {
@@ -475,7 +501,12 @@ const CanvasContainer = ({
       </div>
 
       <div>
-        <FAmodal show={showDfaDownload} handleClose={handleCloseDfaDownload} />
+        {showDfaDownload && (
+          <FAmodal
+            show={showDfaDownload}
+            handleClose={handleCloseDfaDownload}
+          />
+        )}
 
         {showSaveModal && (
           <FaSaveModal

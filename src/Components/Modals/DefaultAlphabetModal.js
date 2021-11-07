@@ -19,11 +19,16 @@ import { useContext } from "react";
 const DefaultAlphabetModal = (props) => {
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
-    /**  This method sets the default alphabet
+  /**  This method sets the default alphabet
    */
-  const setDefaultAlphabet = () =>{
-    setGeneralInfo({ ...generalInfo, alphabet: ["1", "0"], useDefault: true, showAlphabetDefault:false });    
-  }
+  const setDefaultAlphabet = () => {
+    setGeneralInfo({
+      ...generalInfo,
+      alphabet: ["1", "0"],
+      useDefault: true,
+      showAlphabetDefault: false,
+    });
+  };
   return (
     <>
       <Modal

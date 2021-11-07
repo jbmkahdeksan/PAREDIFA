@@ -5,7 +5,8 @@ import Container from "react-bootstrap/Container";
 import logo from "../../Images/neg_favicon.png";
 import About from "../Modals/About";
 import GuideModal from "../Modals/GuideModal";
-import RegexEditorModal from '../Modals/RegexEditorModal';
+import RegexEditorModal from "../Modals/RegexEditorModal";
+import React from "react";
 /*
  *
  * Description:
@@ -26,6 +27,7 @@ const NavBar = () => {
   const handleShow = () => setShowAbout(!showAbout);
   const [showEditor, setShowEditor] = useState(false);
   const handleShowEditor = () => setShowEditor(!showEditor);
+
   return (
     <>
       <Navbar bg="secondary" variant="dark">
@@ -78,9 +80,9 @@ const NavBar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-       <About show={showAbout} handleShow={handleShow} />
+      {showAbout && <About show={showAbout} handleShow={handleShow} />}
       <GuideModal handleShow={handleShowIns} lgShow={lgShow} />
-      <RegexEditorModal show={showEditor} handleClose={handleShowEditor}/>
+      <RegexEditorModal show={showEditor} handleClose={handleShowEditor} />
     </>
   );
 };

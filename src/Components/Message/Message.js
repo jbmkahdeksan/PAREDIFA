@@ -4,11 +4,22 @@ import Toast from "react-bootstrap/Toast";
 import { useContext } from "react";
 import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
+/*
+ *
+ * Description:
+ *  A lovely toast for showing information to the user
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const Message = () => {
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
-
-
 
   return (
     <>

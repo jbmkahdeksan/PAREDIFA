@@ -1,8 +1,6 @@
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
@@ -23,15 +21,26 @@ import ThemeContextMsg from "../Context/ContextMessage";
  *   Schedule: 10am
  *
  */
-const FaSaveModal = (props) => {
+const FaSaveModal = ({ handleClose, show }) => {
   const [loading, setLoading] = useState(false);
-  const [faName, setFaName] = useState("");
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
-  const saveAutomata = async () => {
+
+  const displayMessage = useCallback(
+    (bg, header, body) => {
+      setMsgShow((e) => true);
+      setMsgInfo((e) => ({
+        bg: bg,
+        header: header,
+        body: body,
+      }));
+    },
+    [setMsgShow, setMsgInfo]
+  );
+  const saveAutomata = useCallback(async () => {
     try {
       const nodosMapped = nodes.map(
         (node) => `{
@@ -53,81 +62,69 @@ const FaSaveModal = (props) => {
       );
       console.log("wtf");
       const queryMutation = `mutation{
-            saveAutomata(id:"${Date.now()}",name:"${faName}",alphabet:${JSON.stringify(
+            saveAutomata(id:"${Date.now()}",name:"NONE",alphabet:${JSON.stringify(
         generalInfo.alphabet
       )},states:[${nodosMapped}],transitions:[${edgesMapped}]){
               id
             }
           }`;
 
-      setLoading(true);
+      setLoading((e) => true);
 
-      await axios.post(process.env.REACT_APP_BACK_END, {
+      const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryMutation,
       });
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "success",
-        header: "Succesfull upload",
-        body: "Automata was uploaded successfully to the server",
-      });
-    
-    } catch (e) {
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "warning",
-        header: "Error",
-        body: `Oops! Looks lke there was an issue while uploading the data to the server: ${e.message}`,
-      });
-    } finally {
-      setLoading(false);
-      props.handleClose()
-    }
-  };
 
+      navigator.clipboard.writeText(data.data.data.saveAutomata.id);
+      displayMessage(
+        "success",
+        "Succesfull upload",
+        "Automata was uploaded successfully to the server,  copied the automata ID to your clipboard"
+      );
+    } catch (e) {
+      displayMessage(
+        "warning",
+        "Error",
+        `Oops! Looks lke there was an issue while uploading the data to the server: ${e.message}`
+      );
+    } finally {
+      //limpiar datos application
+      setNodes((e) => []);
+      setEdge((e) => []);
+      setGeneralInfo((e) => ({
+        alphabet: [],
+        useDefault: false,
+        wipeData: true,
+        showAlphabetDefault: false,
+        result: false,
+      }));
+      //
+      setLoading((e) => false);
+      handleClose();
+    }
+  }, [
+    edge,
+    nodes,
+    setEdge,
+    setNodes,
+    handleClose,
+    generalInfo.alphabet,
+    setGeneralInfo,
+    displayMessage,
+  ]);
+
+  useEffect(() => {
+    saveAutomata();
+  }, []);
   return (
     <>
-      <Modal show={props.show} onHide={props.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Save DFA</Modal.Title>
-        </Modal.Header>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicName">
-              <Form.Label>Name of DFA</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter DFA name"
-                value={faName}
-                onChange={(e) => setFaName(e.target.value)}
-                disabled={loading}
-              />
-              <Form.Text className="text-muted">
-                This will be stored in our databases with the given name
-              </Form.Text>
-            </Form.Group>
-          </Form>
+          <div className="savingDFA">
+            <h1>Saving DFA....</h1>
+            <Spinner animation="border" variant="primary" />
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            disabled={loading}
-            onClick={props.handleClose}
-          >
-            Close
-          </Button>
-          {!loading && (
-            <Button variant="primary" onClick={saveAutomata}>
-              Save
-            </Button>
-          )}
-          {loading && (
-            <Button variant="primary" disabled>
-              <Spinner animation="border" variant="dark" size="sm" />
-              Loading...
-            </Button>
-          )}
-        </Modal.Footer>
       </Modal>
     </>
   );

@@ -28,7 +28,7 @@ const AlphabetModal = (props) => {
    */
   const modifyAlphabet = () => {
     
-    const regex = /[A-Za-z0-9]/g;
+    const regex = /[a-z0-9]/g;
     const filteredAlphabet = [...new Set(alphabet.match(regex))];
 
     if (filteredAlphabet.length === 0) {

@@ -5,7 +5,7 @@ import ThemeContextGeneral from "../Context/GeneralInfo";
 /*
  *
  * Description:
- * Main component for showing errors on the right left of the screen 
+ * Main component for showing errors on the right left of the screen
  * Authors:
  *   Andres Alvarez Duran, ID: 117520958
  *   Joaquin Barrientos Monge, ID: 117440348
@@ -15,7 +15,7 @@ import ThemeContextGeneral from "../Context/GeneralInfo";
  *   Schedule: 10am
  *
  */
-const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
+const Errors = ({ inputString, setReady, ready, errorsSymbols }) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
@@ -23,10 +23,10 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
   const INITALSTATE = nodes.find((node) => node.start) ?? false;
   const FINALSTATE = nodes.find((node) => node.final) ?? false;
 
-/**
- * This method is to check whether automata is ready to go
- * @returns html code
- * */
+  /**
+   * This method is to check whether automata is ready to go
+   * @returns html code
+   * */
   const isAutomataComplete = () => {
     const state_symbols = nodes.reduce((stored, current) => {
       stored.push(
@@ -80,9 +80,9 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
   };
 
   /**
- * This method is to create an error 
- * @returns html code
- * */
+   * This method is to create an error
+   * @returns html code
+   * */
   const createError = (type, msg) => {
     if (ready) {
       setTimeout(() => {
@@ -100,10 +100,10 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
     );
   };
 
-    /**
- * This method is to display on the screen that the automata is ready to go 
- * @returns html code
- * */
+  /**
+   * This method is to display on the screen that the automata is ready to go
+   * @returns html code
+   * */
   const automataReady = () => {
     if (!ready) {
       setTimeout(() => {
@@ -129,7 +129,7 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
         <p>{createError("NO ALPHABET", "alphabet has not been set")}</p>
       )}
 
-      {!INITALSTATE && nodes.length>0 && (
+      {!INITALSTATE && nodes.length > 0 && (
         <>
           {createError(
             "NO INITIAL STATE",
@@ -137,16 +137,16 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
           )}
         </>
       )}
-      {!nodes.length && 
-          <>
-            <b>
-              ERROR - <i> NO STATES </i>
-            </b>
-            <br></br> no states have been added yet <br></br>
-            <br></br>
-          </>
-      }
-      {!FINALSTATE && nodes.length>0 && (
+      {!nodes.length && (
+        <>
+          <b>
+            ERROR - <i> NO STATES </i>
+          </b>
+          <br></br> no states have been added yet <br></br>
+          <br></br>
+        </>
+      )}
+      {!FINALSTATE && nodes.length > 0 && (
         <>
           {createError(
             "NO FINAL STATE",
@@ -168,7 +168,8 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols}) => {
           </>
         )}
 
-      {inputString.length > 0 &&  errorsSymbols.length===0 && 
+      {inputString.length > 0 &&
+        errorsSymbols.length === 0 &&
         FINALSTATE &&
         INITALSTATE &&
         !automataComplete.length && <>{automataReady()}</>}

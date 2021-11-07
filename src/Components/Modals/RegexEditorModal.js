@@ -1,7 +1,7 @@
 import TxtEditor from "../RegexEditor/TxtEditor";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-
+import { useState } from "react";
 
 /*
  *
@@ -16,7 +16,13 @@ import Button from "react-bootstrap/Button";
  *   Schedule: 10am
  *
  */
-const RegexEditorModal = ({ show, handleClose}) => {
+const RegexEditorModal = ({ show, handleClose }) => {
+  const [manualName, setManualName] = useState(false);
+  const [automatico, setAutomatico] = useState(false);
+  const [re, setRe] = useState("");
+  const [dfaName, setDfaName] = useState("");
+  const [simplifyRe, setSimplifyRe] = useState(false);
+  const [checkSintax, setCheckSintax] = useState(false);
   return (
     <>
       <Modal
@@ -30,16 +36,27 @@ const RegexEditorModal = ({ show, handleClose}) => {
             RegEx Mode
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className='txtContainer'>
-         <TxtEditor/>
+        <Modal.Body className="txtContainer">
+          <TxtEditor
+            manualName={manualName}
+            setManualName={setManualName}
+            automatico={automatico}
+            setAutomatico={setAutomatico}
+            setCheckSintax={setCheckSintax}
+            checkSintax={checkSintax}
+            setSimplifyRe={setSimplifyRe}
+            simplifyRe={simplifyRe}
+            dfaName={dfaName}
+            setDfaName={setDfaName}
+            re={re}
+            setRe={setRe}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" >
-            Send
-          </Button>
+          <Button variant="primary">Send</Button>
         </Modal.Footer>
       </Modal>
     </>
