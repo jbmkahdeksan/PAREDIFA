@@ -13,7 +13,7 @@ const TxtEditor = ({
   dfaName,
   setDfaName,
   re,
-  setRe
+  setRe,
 }) => {
   return (
     <>

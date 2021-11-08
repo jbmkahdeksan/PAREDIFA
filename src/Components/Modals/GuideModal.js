@@ -33,9 +33,11 @@ const GuideModal = (props) => {
           <br></br>
           <b>MOVE STATE:</b> Hold left-click on a state and move the cursor.
           <br></br>
-          <b>CREATE TRANSITION (Double right click):</b> DOUBLE CLICK on the desired state,
-          this will be where the transition <strong>BEGINS</strong>, CLICK another state
-          where you want the transition to <strong>END.</strong><br></br>
+          <b>CREATE TRANSITION (Double right click):</b> DOUBLE CLICK on the
+          desired state, this will be where the transition{" "}
+          <strong>BEGINS</strong>, CLICK another state where you want the
+          transition to <strong>END.</strong>
+          <br></br>
           <b>REMOVE TRANSITION / STATE (DEL key):</b> Once a state or transition
           is selected, press <b>DEL</b> to remove it.<br></br>
           <b>RENAME STATE (R key):</b> Once a state is selected, press <b>R</b>{" "}

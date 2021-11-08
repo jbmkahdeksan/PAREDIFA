@@ -41,17 +41,16 @@ const RegexEditorModal = ({ show, handleClose }) => {
   };
 
   const wipeDataAutomata = () => {
-    setNodes([])
-    setEdge([])
+    setNodes([]);
+    setEdge([]);
     setGeneralInfo({
       alphabet: [],
       useDefault: false,
       wipeData: true,
       showAlphabetDefault: false,
       result: false,
-    })
-    handleShowDeleteAutomata()
-
+    });
+    handleShowDeleteAutomata();
   };
   return (
     <>

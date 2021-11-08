@@ -1,7 +1,7 @@
 import { Stage, Layer } from "react-konva";
 import Modal from "react-bootstrap/Modal";
 import Node from "../CanvasElements/Node/Node";
-import Edge from '../CanvasElements/Edge/Edge'
+import Edge from "../CanvasElements/Edge/Edge";
 /*
  *
  * Description:
@@ -16,8 +16,6 @@ import Edge from '../CanvasElements/Edge/Edge'
  *
  */
 const Display = ({ show, handleClose, nodes, edges }) => {
-
-
   return (
     <>
       <Modal
@@ -28,8 +26,7 @@ const Display = ({ show, handleClose, nodes, edges }) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-sm">
-            Displaying DFA{ " " }
-            *View only mode*
+            Displaying DFA *View only mode*
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -55,28 +52,23 @@ const Display = ({ show, handleClose, nodes, edges }) => {
                     displaying={true}
                   />
                 ))}
-                {edges
-                  .map((edge, index) => (
-                    <Edge
-                      selectedTr='-1'
-                      type='fixed'
-                      id={edge.id}
-                      symbol={edge.symbol}
-                      isNamingState={false}
-                      isNamingTr='-1'
-                      running={false}
-                      isRunning={false}
-                      w={900}
-                      key={index}
-                      currentChar=""
-                      node1={
-                        edge.to
-                      }
-                      node2={
-                       edge.from
-                      }
-                    />
-                  ))}
+                {edges.map((edge, index) => (
+                  <Edge
+                    selectedTr="-1"
+                    type="fixed"
+                    id={edge.id}
+                    symbol={edge.symbol}
+                    isNamingState={false}
+                    isNamingTr="-1"
+                    running={false}
+                    isRunning={false}
+                    w={900}
+                    key={index}
+                    currentChar=""
+                    node1={edge.to}
+                    node2={edge.from}
+                  />
+                ))}
               </Layer>
             </Stage>
           </div>

@@ -25,7 +25,6 @@ import Transition from "../Classes/Transition";
  *
  */
 
-
 export function preProcessAutomata(
   nodes,
   edge,
@@ -128,7 +127,7 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
       input: null,
       currentChar: null,
       finalState: `${objInfoAux.input}:${queue.at(-1).stateID}`,
-      prevPressed:false
+      prevPressed: false,
     };
     setRunInfo(obj);
     //let endingState = getStateByID(queue.at(-1).stateID)
@@ -145,7 +144,7 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
       input: null,
       currentChar: null,
       finalState: ``,
-      prevPressed:false
+      prevPressed: false,
     };
     setRunInfo(obj);
   }, timeSkipAmount * timeSkipCount++ + 100);
@@ -163,14 +162,14 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
 export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
   let runInfoObj = runInfo;
   if (id === "run-prev") {
-    let { value,  done } = getIterator().prev();
+    let { value, done } = getIterator().prev();
     if (value?.stateID) {
       runInfoObj = {
         ...runInfoObj,
         transitionID: null,
         stateID: value?.stateID,
         currentChar: runInfoObj.currentChar - 1,
-        prevPressed:true
+        prevPressed: true,
       };
       setRunInfo(runInfoObj);
     }
@@ -181,16 +180,15 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
       runInfoObj = {
         ...runInfoObj,
         transitionID: value?.transitionID,
-        stateID: null,        
-        prevPressed:true
+        stateID: null,
+        prevPressed: true,
       };
       setRunInfo(runInfoObj);
     }
   }
-  
 
   if (id === "run-next" && getIterator().index < getQueue().length) {
-    let { value, done} = getIterator().next();        
+    let { value, done } = getIterator().next();
     if (done) {
       runInfoObj = {
         nowRunning: false,
@@ -199,7 +197,7 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
         input: null,
         currentChar: null,
         finalState: `${runInfoObj.input}:${getQueue().at(-1).stateID}`,
-        prevPressed:false
+        prevPressed: false,
       };
 
       setRunInfo(runInfoObj);
@@ -212,12 +210,11 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
           input: null,
           currentChar: null,
           finalState: ``,
-          prevPressed:false
+          prevPressed: false,
         };
         setRunInfo(obj);
       }, 600);
       return;
-
     } else {
       setDisablePrev(false);
       if (value?.stateID) {
@@ -225,7 +222,7 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
           ...runInfoObj,
           transitionID: null,
           stateID: value.stateID,
-          prevPressed:false
+          prevPressed: false,
         };
         setRunInfo(runInfoObj);
       }
@@ -236,7 +233,7 @@ export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
           transitionID: value.transitionID,
           stateID: null,
           currentChar: runInfoObj.currentChar + 1,
-          prevPressed:false
+          prevPressed: false,
         };
         setRunInfo(runInfoObj);
       }

@@ -52,10 +52,12 @@ function App() {
           <ThemeContextTr.Provider value={{ edge, setEdge }}>
             <ThemeContext.Provider value={{ nodes, setNodes }}>
               <ThemeContextGeneral.Provider
-                value={{ generalInfo, setGeneralInfo }}>
+                value={{ generalInfo, setGeneralInfo }}
+              >
                 <ThemeContextRunInfo.Provider value={{ runInfo, setRunInfo }}>
                   <ThemeContextStage.Provider
-                    value={{ stageInfo, setStageInfo }}>
+                    value={{ stageInfo, setStageInfo }}
+                  >
                     <NavBar />
                     <Switch>
                       <Route exact path="/" component={Body} />

@@ -26,14 +26,14 @@ const WipeDataModal = (props) => {
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
 
   /*
- *
- * This method wipes data application information
- *
- */
+   *
+   * This method wipes data application information
+   *
+   */
   const wipeData = () => {
     setNodes([]);
     setEdge([]);
-   
+
     const obj = {
       alphabet: [],
       useDefault: false,
@@ -57,11 +57,8 @@ const WipeDataModal = (props) => {
 
   useEffect(() => {
     if (generalInfo.wipeData) {
-      setGeneralInfo((e) => ({...generalInfo, wipeData:false}))
-
-
+      setGeneralInfo((e) => ({ ...generalInfo, wipeData: false }));
     }
- 
   }, [generalInfo.wipeData]);
   return (
     <>

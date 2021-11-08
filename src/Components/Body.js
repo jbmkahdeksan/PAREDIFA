@@ -26,9 +26,8 @@ const Body = () => {
   const [inputString, setInputString] = useState("");
   const [ready, setReady] = useState(false);
   const [finalResultInfo, setFinalResult] = useState("");
-  
 
- /**  This method checks if string to test is valid
+  /**  This method checks if string to test is valid
    * @param inputString the input the user entered
    */
   const handleIncorrectSymbolChanges = (inputString) => {
@@ -55,18 +54,17 @@ const Body = () => {
             </>
           ),
         }));
-        if(ready)setReady(false)
+        if (ready) setReady(false);
 
         // result = false; <---------------------------------------------
       }
       if (incorrect_symbols.length === 0) {
         setErrors((e) => ({ ...errors, incorrectSymbol: "" }));
-
       }
     }
   };
 
-   /**  This method show the final result of the DFA evaluation
+  /**  This method show the final result of the DFA evaluation
    * @param runInfo run information
    */
   const finalResult = (runInfo) => {
@@ -100,20 +98,19 @@ const Body = () => {
         </>
       );
       setFinalResult(htmlResult);
-      setInputString('')
+      setInputString("");
     }
   };
-
 
   return (
     <div className="container-fluid h-100">
       <div className="row h-100">
         <CanvasContainer
-            handleIncorrectSymbolChanges={handleIncorrectSymbolChanges}
-            inputString={inputString}
-            setInputString={setInputString}
-            cb={finalResult}
-            ready={ready}
+          handleIncorrectSymbolChanges={handleIncorrectSymbolChanges}
+          inputString={inputString}
+          setInputString={setInputString}
+          cb={finalResult}
+          ready={ready}
         />
         <div className={"h-100 col-3 mx-auto border-start border-5 mt-4 ps-2"}>
           <div className="errors">
@@ -121,17 +118,14 @@ const Body = () => {
             <Errors
               inputString={inputString}
               ready={ready}
-              setReady={setReady} 
+              setReady={setReady}
               errorsSymbols={errors.incorrectSymbol}
-        
             />
-            <div className="accepted">
-              {finalResultInfo}
-            </div>
+            <div className="accepted">{finalResultInfo}</div>
           </div>
         </div>
       </div>
-    </div>   
+    </div>
   );
 };
 
