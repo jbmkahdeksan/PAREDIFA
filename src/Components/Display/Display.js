@@ -17,6 +17,7 @@ import Edge from '../CanvasElements/Edge/Edge'
  */
 const Display = ({ show, handleClose, nodes, edges }) => {
 
+
   return (
     <>
       <Modal

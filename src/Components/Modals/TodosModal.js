@@ -338,7 +338,7 @@ const TodosModal = ({ title, handleShow, FaM, show }) => {
                     >
                       <div className="ms-2 me-auto">
                         <div className="fw-bold">{data.id}</div>
-                        {data.name}
+                        {data.name === 'NONE' ? "Unnamed" : data.name}
                       </div>
                       <BsTrash
                         size={23}

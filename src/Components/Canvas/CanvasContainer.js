@@ -99,13 +99,14 @@ const CanvasContainer = ({
     const queryTodo = `
     
       {
-        sendAutomata(binaryInfo:"${link.href}",studentName:"${firstName} ${lastName}",  studentId:"${id}", studentSchedule:"${time}")
+        sendAutomata(mailAddres:"skagro87@gmail.com",binaryInfo:"${link.href}",studentName:"${firstName} ${lastName}",  studentId:"${id}", studentSchedule:"${time}")
       }
       
 `;
 
     try {
-      await axios.post("http://localhost:3001/gql", { query: queryTodo });
+      const data = await axios.post("http://localhost:3001/gql", { query: queryTodo });
+      console.log(data,'email')
       setProgress(100);
       setFeching(false);
       setMsgShow(true);

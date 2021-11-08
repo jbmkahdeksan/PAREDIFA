@@ -1,8 +1,11 @@
 import TxtEditor from "../RegexEditor/TxtEditor";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import ThemeContext from "../Context/ContextStates";
+import DeleteAutomataModal from "./DeleteAutomataModal";
+import ThemeContextGeneral from "../Context/GeneralInfo";
+import ThemeContextTr from "../Context/ContextTransitions";
 /*
  *
  * Description:
@@ -23,6 +26,33 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const [dfaName, setDfaName] = useState("");
   const [simplifyRe, setSimplifyRe] = useState(false);
   const [checkSintax, setCheckSintax] = useState(false);
+  const { nodes, setNodes } = useContext(ThemeContext);
+  const { edge, setEdge } = useContext(ThemeContextTr);
+  const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  //delete modal if theres data
+  const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
+  const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);
+  const sendReToCompile = async () => {
+    if (re.length !== 0) {
+      if (nodes.length > 0) {
+        setShowDeleteAutomata(true);
+      }
+    }
+  };
+
+  const wipeDataAutomata = () => {
+    setNodes([])
+    setEdge([])
+    setGeneralInfo({
+      alphabet: [],
+      useDefault: false,
+      wipeData: true,
+      showAlphabetDefault: false,
+      result: false,
+    })
+    handleShowDeleteAutomata()
+
+  };
   return (
     <>
       <Modal
@@ -56,9 +86,17 @@ const RegexEditorModal = ({ show, handleClose }) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Send</Button>
+          <Button onClick={sendReToCompile} variant="primary">
+            Send
+          </Button>
         </Modal.Footer>
       </Modal>
+      <DeleteAutomataModal
+        title="Are you sure you want to procede to send the RE? Your progess will be lost! "
+        show={showDeleteAutomata}
+        handleClose={handleShowDeleteAutomata}
+        cbDelete={wipeDataAutomata}
+      />
     </>
   );
 };
