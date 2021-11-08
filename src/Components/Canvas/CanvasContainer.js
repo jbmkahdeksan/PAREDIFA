@@ -468,7 +468,15 @@ const CanvasContainer = ({
                       size={23}
                     />
                     <BsCloudArrowUp
-                      onClick={() => setShowSaveModal(true)}
+                      onClick={() =>
+                        nodes.length === 0
+                          ? displayMessage(
+                              "light",
+                              "No data",
+                              "Theres nothing to be saved!"
+                            )
+                          : setShowSaveModal(true)
+                      }
                       title="Click here to save this DFA to the database"
                       className="saveFa"
                       size={23}
