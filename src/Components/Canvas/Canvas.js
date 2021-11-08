@@ -42,6 +42,17 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
+  const displayMessage = useCallback(
+    (bg, header, body) => {
+      setMsgShow(true);
+      setMsgInfo({
+        bg: bg,
+        header: header,
+        body: body,
+      });
+    },
+    [setMsgInfo, setMsgShow]
+  );
   /**  Makes sure automata stays as DFA
    * @param id the state were looking for
    * @param key the current character user entered
@@ -60,16 +71,15 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         }, 0) >= 1;
 
       if (letterRepeat) {
-        setMsgShow(true);
-        setMsgInfo({
-          bg: "warning",
-          header: "Repeated letter",
-          body: `This state already has an exit transition with the letter \u{279C} '${key}' `,
-        });
+        displayMessage(
+          "warning",
+          "Repeated letter",
+          `This state already has an exit transition with the letter \u{279C} '${key}' `
+        );
       }
       return letterRepeat;
     },
-    [edge, setMsgShow, setMsgInfo]
+    [edge, displayMessage]
   );
 
   /** Updates the state coords of an edge
@@ -102,104 +112,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     );
   };
 
-  /** Handles key down and does logic based in the e.key
-   * @param e  e the event of the key down
-   */
-  const handleKeyDown = useCallback(
+  const handleKeyDownStates = useCallback(
     (e) => {
-      if (runInfo.nowRunning) {
-        return;
-      }
-      if (!mouseIn && e.target.id === "testString") return;
-      if (!mouseIn && e.target.id === "jsonInput") return;
-      if (!mouseIn && e.target.id === "alphabetInput") return;
-      if (!mouseIn) return;
-      if (selectedTr !== "-1") {
-        if (e.key === "Enter") {
-          if (addingTr.state) {
-            setAddingTr({ state: false, id: "-1" });
-          }
-          setIsFillingSymbol(false);
-          setEdge(edge.filter((ed) => ed.symbol.length > 0));
-          setSelectedTr("-1");
-        }
-        if (e.key === "Backspace") {
-          setEdge(
-            edge.map((ed) =>
-              ed.id === selectedTr
-                ? { ...ed, symbol: ed.symbol.slice(0, ed.symbol.length - 2) }
-                : ed
-            )
-          );
-        }
-        if (e.key.length === 1) {
-          if (generalInfo.alphabet.indexOf(e.key) === -1) {
-            setMsgShow(true);
-            setMsgInfo({
-              bg: "light",
-              header: "Information message",
-              body: "The letter you are trying to add to the transition is not defined in the alphabet.",
-            });
-            return;
-          }
-
-          setEdge(
-            edge.map((ed) => {
-              if (ed.id === selectedTr) {
-                const charAlreadyFound = findKeyRepeat(ed.from.id, e.key);
-                if (charAlreadyFound) return ed;
-                return {
-                  ...ed,
-                  symbol:
-                    ed.symbol.length === 0 ? e.key : ed.symbol + "," + e.key,
-                };
-              }
-              return ed;
-            })
-          );
-        }
-
-        if (e.key === "Delete") {
-          setEdge(edge.filter((ed) => ed.id !== selectedTr));
-          setSelectedTr("-1");
-          if (isFillingSymbol) setIsFillingSymbol(false);
-        }
-
-        return;
-      }
-
-      if (namingState) {
-        if (e.key === "Enter") {
-          setIsNamingState(false);
-          return;
-        }
-        if (e.key === "Backspace") {
-          setNodes(
-            nodes.map((node) =>
-              node.id === selected
-                ? {
-                    ...node,
-                    name:
-                      node.name.length === 1
-                        ? node.name
-                        : node.name.slice(0, node.name.length - 1),
-                  }
-                : node
-            )
-          );
-        }
-        if (e.key.length === 1) {
-          setNodes(
-            nodes.map((node) =>
-              node.id === selected && node.name.length < 4
-                ? { ...node, name: node.name + e.key }
-                : node
-            )
-          );
-        }
-        return;
-      }
-      if (e.key === "q") {
+      console.log("handingKeyDown states");
+      if (e.keyCode === 81) {
         if (generalInfo.alphabet.length === 0) {
           setGeneralInfo({ ...generalInfo, showAlphabetDefault: true });
           return;
@@ -226,7 +142,8 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       }
       if (selected === "-1") return;
 
-      if (e.key === "Delete" && !addingTr.state) {
+      //DELETE
+      if (e.keyCode === 46 && !addingTr.state) {
         setSelected("-1");
         setNodes([]);
         setNodes(nodes.filter((node) => node.id !== selected));
@@ -235,14 +152,16 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         );
       }
 
-      if (e.key === "f") {
+      //F
+      if (e.keyCode === 70) {
         setNodes(
           nodes.map((node) =>
             node.id === selected ? { ...node, final: !node.final } : node
           )
         );
       }
-      if (e.key === "s") {
+      //S
+      if (e.keyCode === 83) {
         setNodes(
           nodes.map((node) =>
             node.id === selected
@@ -251,29 +170,162 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
           )
         );
       }
-      if (e.key === "r") {
+
+      //R
+      if (e.keyCode === 82) {
         setIsNamingState(true);
       }
     },
     [
+      addingTr.state,
+      edge,
+      generalInfo,
       nodes,
+      selected,
+      setEdge,
+      setGeneralInfo,
       setNodes,
       mouseCoord,
-      selected,
-      namingState,
-      edge,
-      setEdge,
-      selectedTr,
+    ]
+  );
+
+  const handleNamingState = useCallback(
+    (e) => {
+      console.log("ahndingNaming");
+      //ENTER
+      if (e.keyCode === 13) {
+        setIsNamingState(false);
+        return;
+      }
+      //BACKSPACE
+      if (e.keyCode === 8) {
+        setNodes(
+          nodes.map((node) =>
+            node.id === selected
+              ? {
+                  ...node,
+                  name:
+                    node.name.length === 1
+                      ? node.name
+                      : node.name.slice(0, node.name.length - 1),
+                }
+              : node
+          )
+        );
+      }
+      if (e.key.length === 1) {
+        setNodes(
+          nodes.map((node) =>
+            node.id === selected && node.name.length < 4
+              ? { ...node, name: node.name + e.key }
+              : node
+          )
+        );
+      }
+    },
+    [nodes, selected, setNodes]
+  );
+  const handleKeyDownEdges = useCallback(
+    (e) => {
+      //ENTER
+      if (e.keyCode === 13) {
+        if (addingTr.state) {
+          setAddingTr({ state: false, id: "-1" });
+        }
+        setIsFillingSymbol(false);
+        setEdge(edge.filter((ed) => ed.symbol.length > 0));
+        setSelectedTr("-1");
+      }
+      //BACKSPACE
+      if (e.keyCode === 8) {
+        setEdge(
+          edge.map((ed) =>
+            ed.id === selectedTr
+              ? { ...ed, symbol: ed.symbol.slice(0, ed.symbol.length - 2) }
+              : ed
+          )
+        );
+      }
+      if (e.key.length === 1) {
+        if (generalInfo.alphabet.indexOf(e.key) === -1) {
+          displayMessage(
+            "light",
+            "Information message",
+            "The letter you are trying to add to the transition is not defined in the alphabet."
+          );
+
+          return;
+        }
+
+        setEdge(
+          edge.map((ed) => {
+            if (ed.id === selectedTr) {
+              const charAlreadyFound = findKeyRepeat(ed.from.id, e.key);
+              if (charAlreadyFound) return ed;
+              return {
+                ...ed,
+                symbol:
+                  ed.symbol.length === 0 ? e.key : ed.symbol + "," + e.key,
+              };
+            }
+            return ed;
+          })
+        );
+      }
+
+      //DELETE
+      if (e.keyCode === 46) {
+        setEdge(edge.filter((ed) => ed.id !== selectedTr));
+        setSelectedTr("-1");
+        if (isFillingSymbol) setIsFillingSymbol(false);
+      }
+    },
+    [
       addingTr.state,
-      isFillingSymbol,
-      generalInfo,
-      setGeneralInfo,
-      setMsgInfo,
-      setMsgShow,
+      displayMessage,
+      edge,
       findKeyRepeat,
-      runInfo.nowRunning,
+      generalInfo.alphabet,
+      isFillingSymbol,
+      selectedTr,
       setAddingTr,
+      setEdge,
+    ]
+  );
+  /** Handles key down and does logic based in the e.key
+   * @param e  e the event of the key down
+   */
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (runInfo.nowRunning) return;
+      const idTarget = e.target.id;
+      if (
+        !mouseIn &&
+        (idTarget === "testString" ||
+          idTarget === "jsonInput" ||
+          idTarget === "alphabetInput")
+      )
+        return;
+      if (!mouseIn) return;
+      if (selectedTr !== "-1") {
+        handleKeyDownEdges(e);
+        return;
+      }
+      console.log("HANDING CB GENERAL 1");
+      if (namingState) {
+        handleNamingState(e);
+        return;
+      }
+      handleKeyDownStates(e);
+    },
+    [
+      namingState,
+      selectedTr,
+      runInfo.nowRunning,
       mouseIn,
+      handleKeyDownEdges,
+      handleNamingState,
+      handleKeyDownStates,
     ]
   );
 
@@ -342,12 +394,11 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         }, 0);
 
         if (edgeTo) {
-          setMsgShow(true);
-          setMsgInfo({
-            bg: "warning",
-            header: "Repeated transition",
-            body: "You already have a transition going to this node, remember you can edit any transition by just CLICKING it!",
-          });
+          displayMessage(
+            "warning",
+            "Repeated transition",
+            "You already have a transition going to this node, remember you can edit any transition by just CLICKING it!"
+          );
 
           setEdge(edge.filter((ed) => ed.type !== "temporary"));
           setAddingTr({ state: false, tr: "-1" });
@@ -394,7 +445,8 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         setAddingTr({ state: false, id: "-1" });
         setEdge(edge.filter((ed) => ed.id !== addingTr.tr));
       }
-      setNodes(nodes.map((node) => ({ ...node, selected: false })));
+      if (selected !== "-1")
+        setNodes(nodes.map((node) => ({ ...node, selected: false })));
     }
 
     if (e.target.attrs.type === "arrow") {
