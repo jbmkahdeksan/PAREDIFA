@@ -15,28 +15,28 @@
 //the radius of the node
 const radius = 20;
 
-  /**  Where should the arrow start
-   * @param node2 node2 where the arrow begings
-   * @param angle the angle of the arrow
-   */
+/**  Where should the arrow start
+ * @param node2 node2 where the arrow begings
+ * @param angle the angle of the arrow
+ */
 export const arrowStart = (node2, angle) => ({
   x: node2.x + -radius * Math.cos(angle + Math.PI),
   y: node2.y + radius * Math.sin(angle + Math.PI),
 });
 
-  /**  Where should the arrow end
-   * @param node1 node1 where the arrow ends
-   * @param angle the angle of the arrow
-   */
+/**  Where should the arrow end
+ * @param node1 node1 where the arrow ends
+ * @param angle the angle of the arrow
+ */
 export const arrowEnd = (node1, angle) => ({
   x: node1.x + -radius * Math.cos(angle),
   y: node1.y + radius * Math.sin(angle),
 });
 
-  /** Handles the arrow curve
-   * @param node2 node2 where the arrow is pointing to
-   * @param angle the angle of the arrow
-   */
+/** Handles the arrow curve
+ * @param node2 node2 where the arrow is pointing to
+ * @param angle the angle of the arrow
+ */
 export const arrowCurve = (angle, node1, node2, witdh) => {
   let proximity_coeficient =
     Math.sqrt(Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)) /
@@ -55,21 +55,19 @@ export const arrowCurve = (angle, node1, node2, witdh) => {
   };
 };
 
-
 /**
  * This method is used to make adjustments
  * to the coordenates
  * @param vec a coordenate instance
- * @param value a value to multiply the components of 
+ * @param value a value to multiply the components of
  * the given coordenate
  * @returns a coordinate
  */
 const multiplyVector = (vec, value) => ({ x: vec.x * value, y: vec.y * value });
 
-
 /**
  * This method is used to make adjustments
- * to the coordenates by applying a 
+ * to the coordenates by applying a
  * some trigonometry to the given coordenate
  * @param vec a coordenate instance
  * @returns a coordinate
@@ -89,8 +87,8 @@ const normalizeVector = (vec) => {
  *  @param txt symbol of the edge being added
  *  @param id the id of the transition
  *  @param selectedTr the id of the selected  transition
- *   @param flag is the mouse currently on the transition 
- *  @param running if the automata being evaluated 
+ *   @param flag is the mouse currently on the transition
+ *  @param running if the automata being evaluated
  * */
 export const drawTrText = (
   ctx,
@@ -131,25 +129,46 @@ export const drawTrText = (
   //symbol
 
   ctx.font = "15px Georgia";
-  ctx.strokeStyle = ctx.fillStyle = running?'#6c5ce7':
-    id === selectedTr ? "#e17055" : flag ? "green" : "#000000";
+  ctx.strokeStyle = ctx.fillStyle = running
+    ? "#6c5ce7"
+    : id === selectedTr
+    ? "#e17055"
+    : flag
+    ? "green"
+    : "#000000";
   ctx.fillText(txt, text_pos.x, text_pos.y);
 };
-export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag,running) => {
+export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag, running) => {
   if (src.id !== dst.id) {
     let vector2_ort = { x: src.y - dst.y, y: dst.x - src.x };
     vector2_ort = normalizeVector(vector2_ort);
     vector2_ort = multiplyVector(vector2_ort, 7.5);
     let aux_mlt =
       Math.sqrt(Math.pow(dst.x - src.x, 2) + Math.pow(dst.y - src.y, 2)) / 60;
-    drawTrText(ctx, src, dst, aux_mlt, vector2_ort, txt, id, selectedTr, flag,running);
+    drawTrText(
+      ctx,
+      src,
+      dst,
+      aux_mlt,
+      vector2_ort,
+      txt,
+      id,
+      selectedTr,
+      flag,
+      running
+    );
   } else {
     let center = { x: src.x, y: dst.y };
     ctx.font = "15px Georgia";
     ctx.textAlign = "right";
     ctx.textBaseline = "top";
-    ctx.strokeStyle = ctx.fillStyle =running?'#6c5ce7':
-      id === selectedTr ? "#e17055" : flag ? "green" : "#000000";
+    ctx.strokeStyle = ctx.fillStyle = running
+      ? "#6c5ce7"
+      : id === selectedTr
+      ? "#e17055"
+      : flag
+      ? "green"
+      : "#000000";
     ctx.fillText(
       txt,
       center.x - 20 + txt.length * 3,
@@ -161,7 +180,7 @@ export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag,running) => {
 /**
  * This method is to check whether the current mouse coord is on the node
  * @param state the state currently being point to
- * @param mouseCoord current coordinates of the mouse 
+ * @param mouseCoord current coordinates of the mouse
  *  @returns boolean
  * */
 export const isMouseOverState = (state, mouseCoord) =>

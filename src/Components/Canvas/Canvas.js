@@ -445,8 +445,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         setAddingTr({ state: false, id: "-1" });
         setEdge(edge.filter((ed) => ed.id !== addingTr.tr));
       }
-      if (selected !== "-1")
-        setNodes(nodes.map((node) => ({ ...node, selected: false })));
+     
     }
 
     if (e.target.attrs.type === "arrow") {

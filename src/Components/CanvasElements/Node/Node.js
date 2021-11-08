@@ -27,7 +27,7 @@ const Node = ({
   nodeRunningId,
   running,
   stageWidth,
-  displaying=false
+  displaying = false,
 }) => {
   //the radius of the node
   const RADIUS = 20;
@@ -38,11 +38,11 @@ const Node = ({
   };
 
   const [color, setColor] = useState("#ffeaa7");
-/**
- * This method is to update node/edge coord on dragEnd
- * Makes sure to check if the node is outside of canvas bounds
- * @param e the event
- * */
+  /**
+   * This method is to update node/edge coord on dragEnd
+   * Makes sure to check if the node is outside of canvas bounds
+   * @param e the event
+   * */
   const handleDragEnd = (e) => {
     setMouseDown(false);
     const coords = {

@@ -9,7 +9,7 @@ import {
 /*
  *
  * Description:
- *  This component is only used when the ser is adding a new transition
+ *  This component is only used when the user is adding a new transition
  * Authors:
  *   Andres Alvarez Duran, ID: 117520958
  *   Joaquin Barrientos Monge, ID: 117440348

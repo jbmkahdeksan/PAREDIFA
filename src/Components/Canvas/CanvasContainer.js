@@ -105,23 +105,20 @@ const CanvasContainer = ({
 `;
 
     try {
-      const data = await axios.post("http://localhost:3001/gql", { query: queryTodo });
-      console.log(data,'email')
+      const data = await axios.post("http://localhost:3001/gql", {
+        query: queryTodo,
+      });
+      console.log(data, "email");
       setProgress(100);
       setFeching(false);
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "success",
-        header: "Success!",
-        body: "The image was sent successfully!",
-      });
+
+      displayMessage("success", "Success!", "The image was sent successfully!");
     } catch (e) {
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "warning",
-        header: "Warning!",
-        body: `There was an error while sending the image:  ${e.message}`,
-      });
+      displayMessage(
+        "warning",
+        "Warning!",
+        `There was an error while sending the image:  ${e.message}`
+      );
     } finally {
       handleCloseInformation();
     }
