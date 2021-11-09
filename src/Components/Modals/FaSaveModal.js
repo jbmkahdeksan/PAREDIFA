@@ -1,12 +1,14 @@
 import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
-import { useState, useContext, useEffect, useCallback } from "react";
+import { useState, useContext, useCallback } from "react";
+import Button from "react-bootstrap/Button";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import axios from "axios";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
 import ThemeContextMsg from "../Context/ContextMessage";
+import Form from "react-bootstrap/Form";
 
 /*
  *
@@ -28,7 +30,8 @@ const FaSaveModal = ({ handleClose, show }) => {
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
   const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
-
+  const [addingID, setAddingID] = useState(false);
+  const [dfaID, setDfaID] = useState("");
   const displayMessage = useCallback(
     (bg, header, body) => {
       setMsgShow((e) => true);
@@ -40,7 +43,9 @@ const FaSaveModal = ({ handleClose, show }) => {
     },
     [setMsgShow, setMsgInfo]
   );
-  const saveAutomata = useCallback(async () => {
+  const automaticSaveAutomata = async (automataId = null) => {
+    console.log(addingID, automataId , automataId.length === 0,'aumata adding')
+    if (addingID && automataId.length === 0) return;
     try {
       const nodosMapped = nodes.map(
         (node) => `{
@@ -60,9 +65,11 @@ const FaSaveModal = ({ handleClose, show }) => {
         coordTemp:{x:${ed.from.x},y:${ed.from.y}}
       }`
       );
-      console.log("wtf");
+
       const queryMutation = `mutation{
-            saveAutomata(id:"${Date.now()}",name:"NONE",alphabet:${JSON.stringify(
+            saveAutomata(id:"${
+              automataId || Date.now()
+            }",name:"NONE",alphabet:${JSON.stringify(
         generalInfo.alphabet
       )},states:[${nodosMapped}],transitions:[${edgesMapped}]){
               id
@@ -99,32 +106,75 @@ const FaSaveModal = ({ handleClose, show }) => {
         result: false,
       }));
       //
+      if (addingID) {
+        setDfaID("");
+        setAddingID(false);
+      }
       setLoading((e) => false);
       handleClose();
     }
-  }, [
-    edge,
-    nodes,
-    setEdge,
-    setNodes,
-    handleClose,
-    generalInfo.alphabet,
-    setGeneralInfo,
-    displayMessage,
-  ]);
+  };
 
-  useEffect(() => {
-    saveAutomata();
-  }, []);
   return (
     <>
       <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">DFA ID</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           <div className="savingDFA">
-            <h1>Saving DFA....</h1>
-            <Spinner animation="border" variant="primary" />
+            {addingID && !loading && (
+              <Form.Control
+                value={dfaID}
+                onChange={(e) => setDfaID(e.target.value)}
+                type="text"
+                placeholder="DFA Id"
+              />
+            )}
+            {!loading && !addingID && (
+              <h4>Would you like to add your own id to the DFA?</h4>
+            )}
+            {loading && (
+              <>
+                <h1>Saving DFA....</h1>
+                <Spinner animation="border" variant="primary" />
+              </>
+            )}
           </div>
         </Modal.Body>
+        <Modal.Footer>
+          {!addingID && (
+            <>
+              <Button
+                variant="secondary"
+                disabled={loading}
+                onClick={() => automaticSaveAutomata()}
+              >
+                NO
+              </Button>
+              <Button disabled={loading} onClick={() => setAddingID(true)}>
+                YES
+              </Button>
+            </>
+          )}
+          {addingID && (
+            <>
+              <Button
+                variant="secondary"
+                disabled={loading}
+                onClick={() => setAddingID(false)}
+              >
+                Go back
+              </Button>
+              <Button
+                disabled={loading}
+                onClick={() => automaticSaveAutomata(dfaID)}
+              >
+                Send
+              </Button>
+            </>
+          )}
+        </Modal.Footer>
       </Modal>
     </>
   );

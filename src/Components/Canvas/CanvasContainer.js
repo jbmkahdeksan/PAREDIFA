@@ -495,7 +495,15 @@ const CanvasContainer = ({
                   <Button
                     className="me-5"
                     variant="secondary"
-                    onClick={() => setShowInformationModal(true)}
+                    onClick={() =>
+                      nodes.length === 0
+                        ? displayMessage(
+                            "light",
+                            "No data detected",
+                            "You haven't drawn anything!"
+                          )
+                        : setShowInformationModal(true)
+                    }
                   >
                     Save as PNG
                   </Button>
