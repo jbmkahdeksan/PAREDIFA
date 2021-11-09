@@ -18,10 +18,12 @@ import ThemeContextStage from "../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../Engine/Engine";
 import d3 from "d3";
 import axios from "axios";
-import { BsCloudArrowDown } from "react-icons/bs";
-import { BsCloudArrowUp } from "react-icons/bs";
+import { BsCloudArrowDown, BsCloudArrowUp } from "react-icons/bs";
+import { FcProcess, FcEmptyTrash } from "react-icons/fc";
 import FaSaveModal from "../Modals/FaSaveModal";
 import FAmodal from "../Modals/FAmodal";
+import DeleteAutomataModal from "../Modals/DeleteAutomataModal";
+import useFetch from '../UseFetch/useFetch';
 const CanvasContainer = ({
   handleIncorrectSymbolChanges,
   inputString,
@@ -72,6 +74,11 @@ const CanvasContainer = ({
   const [showSaveModal, setShowSaveModal] = useState(false);
   const handleCloseSaveModal = useCallback(() => setShowSaveModal(false), []);
 
+  //current dfa downloaded
+  const [currentDfa, setCurrentDfa] = useState({ id: null });
+  //to delete the current dfa downloaded from the DB
+  const [showDeleteCurrentDfa, setShowDeleteCurrentDfa] = useState(false);
+  const handleShowDeleteCurrentDfa = () => setShowDeleteCurrentDfa(false);
   //Dfa download
   const [showDfaDownload, setShowDfaDownload] = useState(false);
   const handleCloseDfaDownload = useCallback(
@@ -79,6 +86,78 @@ const CanvasContainer = ({
     []
   );
 
+  const handleCurrentDfaUpdate = async () => {
+    const nodosMapped = nodes.map(
+      (node) => `{
+      id: "${node.id}",
+      name: "${node.name}",
+      coord: { x: ${node.x}, y: ${node.y} },
+      end: ${node.final},
+      start: ${node.start},
+    }`
+    );
+    const edgesMapped = edge.map(
+      (ed) => `{
+      id: "${ed.id}",
+      state_src_id: {id:"${ed.from.id}",x:${ed.from.x},y:${ed.from.y}},
+      state_dst_id: {id:"${ed.to.id}",x:${ed.to.x},y:${ed.to.y}},
+      symbols: ${JSON.stringify(ed.symbol.split(","))},
+      coordTemp:{x:${ed.from.x},y:${ed.from.y}}
+    }`
+    );
+    const queryMutationUpdate = `mutation{
+      replaceAutomata(id:"${currentDfa.id}",name:"davd",alphabet:${JSON.stringify(
+        generalInfo.alphabet
+      )},states:[${nodosMapped}],transitions:[${edgesMapped}])
+    }`
+
+    try{
+      await axios.post(process.env.REACT_APP_BACK_END,{
+        query:queryMutationUpdate
+      })
+      
+    }catch(e){  
+
+    }
+  };
+  const deleteCurrentDfaFromDB = async () => {
+    try {
+      const queryMutationDelete = `
+    mutation{
+      deleteAutomata(id:"${currentDfa.id}")
+      
+    }
+    `;
+
+      await axios.post(process.env.REACT_APP_BACK_END, {
+        query: queryMutationDelete,
+      });
+      displayMessage(
+        "success",
+        "Success!",
+        `The DFA was successfully deleted!`
+      );
+      setNodes([]);
+      setEdge([]);
+
+      setGeneralInfo({
+        alphabet: [],
+        useDefault: false,
+        wipeData: true,
+        showAlphabetDefault: false,
+        result: false,
+      });
+      setCurrentDfa({ id: null });
+    } catch (e) {
+      displayMessage(
+        "warning",
+        "Error while fetching data",
+        `Oops! Looks like we got an error while deleteing the DFA: ${e.message}`
+      );
+    } finally {
+      handleShowDeleteCurrentDfa();
+    }
+  };
   const downloadURI = async (uri, firstName, lastName, id, time) => {
     const link = document.createElement("a");
     const COURSE = {
@@ -105,7 +184,7 @@ const CanvasContainer = ({
 `;
 
     try {
-      const data = await axios.post("http://localhost:3001/gql", {
+      const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryTodo,
       });
       console.log(data, "email");
@@ -129,7 +208,11 @@ const CanvasContainer = ({
     downloadURI(uri, firstName, lastName, id, time);
   };
 
+
   const downloadApplicationInfo = () => {
+
+ 
+    
     if (nodes.length > 0) {
       setJsonInfo(
         JSON.stringify({
@@ -465,20 +548,38 @@ const CanvasContainer = ({
                       className="downloadFa"
                       size={23}
                     />
-                    <BsCloudArrowUp
-                      onClick={() =>
-                        nodes.length === 0
-                          ? displayMessage(
-                              "light",
-                              "No data",
-                              "Theres nothing to be saved!"
-                            )
-                          : setShowSaveModal(true)
-                      }
-                      title="Click here to save this DFA to the database"
-                      className="saveFa"
-                      size={23}
-                    />
+                    {!currentDfa.id && (
+                      <BsCloudArrowUp
+                        onClick={() =>
+                          nodes.length === 0
+                            ? displayMessage(
+                                "light",
+                                "No data",
+                                "Theres nothing to be saved!"
+                              )
+                            : setShowSaveModal(true)
+                        }
+                        title="Click here to save this DFA to the database"
+                        className="saveFa"
+                        size={23}
+                      />
+                    )}
+                    {currentDfa.id && (
+                      <>
+                        <FcEmptyTrash
+                          title="Delete the current DFA"
+                          className="trashCurrentDfa"
+                          onClick={() => setShowDeleteCurrentDfa(true)}
+                          size={23}
+                        />
+                        <FcProcess
+                          className="updateCurrentDFA"
+                          onClick={handleCurrentDfaUpdate}
+                          title="Update current DFA"
+                          size={23}
+                        />
+                      </>
+                    )}
                   </>
                 )}
               </div>
@@ -519,6 +620,7 @@ const CanvasContainer = ({
           <FAmodal
             show={showDfaDownload}
             handleClose={handleCloseDfaDownload}
+            setCurrentDfa={setCurrentDfa}
           />
         )}
 
@@ -538,8 +640,19 @@ const CanvasContainer = ({
           />
         )}
 
-        <WipeDataModal show={showWipeModal} handleClose={handleCloseWipeData} />
+        <WipeDataModal
+          show={showWipeModal}
+          handleClose={handleCloseWipeData}
+          currentDFA={currentDfa}
+          setCurrentDfa={setCurrentDfa}
+        />
 
+        <DeleteAutomataModal
+          show={showDeleteCurrentDfa}
+          handleClose={handleShowDeleteCurrentDfa}
+          cbDelete={deleteCurrentDfaFromDB}
+          title="Are you sure you want to delete this DFA? This action cannot be undone!"
+        />
         {showAlphabetModal && (
           <AlphabetModal
             show={showAlphabetModal}

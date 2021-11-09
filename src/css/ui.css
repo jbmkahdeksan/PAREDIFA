@@ -4,7 +4,7 @@
 .todos,
 .downloadFa,
 .downloadFaSpecific,
-.infoDowloadFa,.displayFa,.deleteFASpecific,.downloadAllDfa{
+.infoDowloadFa,.displayFa,.deleteFASpecific,.downloadAllDfa,.trashCurrentDfa,.updateCurrentDFA{
     cursor: pointer;
 }
 

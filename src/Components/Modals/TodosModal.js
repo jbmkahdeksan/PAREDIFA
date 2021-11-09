@@ -16,7 +16,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 //Handle todos, tasks todo in Todo
 
-const TodosModal = ({ title, handleShow, FaM, show }) => {
+const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
   const [dbData, setDbDAta] = useState([]);
   const [singleAutomataInfo, setSingleAutomataInfo] = useState({});
   const { nodes, setNodes } = useContext(ThemeContext);
@@ -138,7 +138,7 @@ const TodosModal = ({ title, handleShow, FaM, show }) => {
     });
 
     console.log(automata.states, "automataStates");
-
+    setCurrentDfa({id:automata.id})//***************** *******************************/
     setNodes(mapStates(automata));
 
     setEdge(mapEdges(automata));
@@ -266,6 +266,7 @@ const TodosModal = ({ title, handleShow, FaM, show }) => {
         throw new Error("Couldnt find an automata with the given ID");
       }
       setDbDAta([data.data.data.singleAutomata]);
+
       console.log("single automata", data.data.data.singleAutomata);
     } catch (e) {
       handleShow();

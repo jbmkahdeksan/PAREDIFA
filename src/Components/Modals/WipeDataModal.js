@@ -19,7 +19,7 @@ import { useContext, useEffect } from "react";
  *   Schedule: 10am
  *
  */
-const WipeDataModal = (props) => {
+const WipeDataModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
@@ -52,7 +52,10 @@ const WipeDataModal = (props) => {
       finalState: "",
       prevPressed: false,
     });
-    props.handleClose();
+    if (currentDFA.id) {
+      setCurrentDfa({ id: null });
+    }
+    handleClose();
   };
 
   useEffect(() => {
@@ -63,8 +66,8 @@ const WipeDataModal = (props) => {
   return (
     <>
       <Modal
-        show={props.show}
-        onHide={props.handleClose}
+        show={show}
+        onHide={handleClose}
         backdrop="static"
         keyboard={false}
       >
@@ -76,7 +79,7 @@ const WipeDataModal = (props) => {
           press YES.
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={props.handleClose}>
+          <Button variant="secondary" onClick={handleClose}>
             NO
           </Button>
           <Button variant="primary" onClick={wipeData}>

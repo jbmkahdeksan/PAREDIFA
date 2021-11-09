@@ -34,6 +34,7 @@ const FAmodal = (props) => {
         FaM={true}
         handleDoubleClick={handleDoubleClick}
         title="DFA stored in the DB"
+        setCurrentDfa={props.setCurrentDfa}
       />
       <Message />
     </>

@@ -1,11 +1,7 @@
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { useEffect, useCallback, useState, useContext } from "react";
 import logo from "../../Images/una.png";
-import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
-import ThemeContextMsgInfo from "../Context/ContextMsg";
-import ThemeContextMsg from "../Context/ContextMessage";
-
+import useFetch from "../UseFetch/useFetch";
 /*
  *
  * Description:
@@ -20,61 +16,32 @@ import ThemeContextMsg from "../Context/ContextMessage";
  *
  */
 const About = ({ show, handleShow, ...props }) => {
-  const [dataAbout, setDataAbout] = useState(null);
-  const [fetching, setFetching] = useState(false);
-  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
-
-  const fetchDataAbout = useCallback(async () => {
-    try {
-      const queryTodo = `{
-        about{
-          authors{
-            id
-            name
-          }
-          team{
-            id
-          }
-          course{
-            id
-            crn
-            name
-          }
-          term{
-            year
-            id
-          }
-          version{
-            id
-          }
-        }
+  const queryAbout = `{
+    about{
+      authors{
+        id
+        name
       }
-      `;
-      setFetching(true);
-      const res = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryTodo,
-      });
-
-      const data = res.data.data.about;
-      console.log(data, "databout");
-      setDataAbout((e) => data);
-    } catch (e) {
-      setMsgShow((e) => true);
-      setMsgInfo((f) => ({
-        bg: "warning",
-        header: "Error while fetching data",
-        body: `Oops! Looks like we got an error while fetching data: ${e.message}`,
-      }));
-    } finally {
-      setFetching((e) => false);
+      team{
+        id
+      }
+      course{
+        id
+        crn
+        name
+      }
+      term{
+        year
+        id
+      }
+      version{
+        id
+      }
     }
-    console.log("duro papio");
-  }, [setMsgInfo, setMsgShow]);
+  }
+  `;
+  const { data, isPending, error } = useFetch(queryAbout);
 
-  useEffect(() => {
-    fetchDataAbout();
-  }, [fetchDataAbout]);
   return (
     <>
       <Offcanvas
@@ -88,7 +55,7 @@ const About = ({ show, handleShow, ...props }) => {
           <Offcanvas.Title>About the team</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          {fetching && (
+          {isPending && (
             <div className="aboutFetching">
               <h1>Retrieving data...</h1>
               <div>
@@ -96,27 +63,27 @@ const About = ({ show, handleShow, ...props }) => {
               </div>
             </div>
           )}
-          {!fetching && dataAbout && (
+          {!isPending && data && (
             <>
               <div>
                 <strong>
                   <p>
-                    {dataAbout.course.id} - {dataAbout.course.name}
+                    {data.about.course.id} - {data.about.course.name}
                   </p>
                 </strong>
                 <strong>
-                  <p>Profesor: {dataAbout.course.professor}</p>
+                  <p>Profesor: {data.about.course.professor}</p>
                 </strong>
                 <p>
-                  {dataAbout.term.id} Term {dataAbout.term.year}
+                  {data.about.term.id} Term {data.about.term.year}
                 </p>
 
-                <p>Team: {dataAbout.team.id}</p>
+                <p>Team: {data.about.team.id}</p>
                 <br></br>
                 <p>Authors: </p>
               </div>
               <div className="teamInfo" id="teamInfo">
-                {dataAbout.authors.map((author, index) => (
+                {data.about.authors.map((author, index) => (
                   <div key={index}>
                     {author.name} {author.id}
                     <br></br>
@@ -126,9 +93,12 @@ const About = ({ show, handleShow, ...props }) => {
                 <br></br>
                 <img src={logo} width="150" height="150" alt="UNA LOGO" />
                 <br></br>
-                {dataAbout.version.id}
+                {data.about.version.id}
               </div>
             </>
+          )}
+          {error && (
+            <h4>There was an error while fetching team information: {error}</h4>
           )}
         </Offcanvas.Body>
       </Offcanvas>
