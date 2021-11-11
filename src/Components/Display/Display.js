@@ -5,7 +5,7 @@ import Edge from "../CanvasElements/Edge/Edge";
 /*
  *
  * Description:
- *  Component to allow user to peek the DFA stored
+ *  Component to allow user to PEEK the DFA stored
  * Authors:
  *   Andres Alvarez Duran, ID: 117520958
  *   Joaquin Barrientos Monge, ID: 117440348

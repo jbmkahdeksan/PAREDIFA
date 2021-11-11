@@ -21,9 +21,9 @@ import { useContext, useEffect } from "react";
  */
 const WipeDataModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
   const { setNodes } = useContext(ThemeContext);
-  const {  setEdge } = useContext(ThemeContextTr);
+  const { setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
-  const {  setRunInfo } = useContext(ThemeContextRunInfo);
+  const { setRunInfo } = useContext(ThemeContextRunInfo);
 
   /*
    *
@@ -34,14 +34,13 @@ const WipeDataModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
     setNodes([]);
     setEdge([]);
 
-    const obj = {
+    setGeneralInfo({
       alphabet: [],
       useDefault: false,
       wipeData: true,
       showAlphabetDefault: false,
       result: false,
-    };
-    setGeneralInfo(obj);
+    });
 
     setRunInfo({
       nowRunning: false,

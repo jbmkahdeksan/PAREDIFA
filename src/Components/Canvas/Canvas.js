@@ -42,6 +42,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
 
+  /**  This method displays a message with important information for the user
+   * @returns void
+   */
   const displayMessage = useCallback(
     (bg, header, body) => {
       setMsgShow(true);
@@ -112,6 +115,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     );
   };
 
+  /**  This method handles nodes manipulation (adding, deleting....)
+   * @param e the event that called the method
+   * @returns void
+   */
   const handleKeyDownStates = useCallback(
     (e) => {
       console.log("handingKeyDown states");
@@ -189,6 +196,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     ]
   );
 
+  /**  This method handles node naming
+   * @param e the event that called the method
+   * @returns void
+   */
   const handleNamingState = useCallback(
     (e) => {
       console.log("ahndingNaming");
@@ -225,6 +236,11 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     },
     [nodes, selected, setNodes]
   );
+
+  /**  This method handles edge manipulation (adding, deleting....)
+   * @param e the event that called the method
+   * @returns void
+   */
   const handleKeyDownEdges = useCallback(
     (e) => {
       //ENTER
@@ -386,6 +402,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     }
   };
 
+  /**  This method adds a transition to the destination node
+   * @param selectedNode the node that was clicked to be the end of the transition
+   * @returns void
+   */
   const addTrDestination = (selectedNode) => {
     const edgeTo = edge.reduce((stored, current) => {
       if (selected === selectedNode.id) {
@@ -443,6 +463,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     setSelected("-1");
   };
 
+  /**  This method handles clicks on the stage
+   * @returns void
+   */
   const handleStageClick = () => {
     setIsFillingSymbol(false);
     setSelected("-1");
@@ -456,6 +479,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     }
   };
 
+  /**  This method handles clicks on a transition
+   * @param e the event that trigged the event
+   * @returns void
+   */
   const handleArrowClick = (e) => {
     setSelectedTr(e.target.attrs.id);
     setSelected("-1");

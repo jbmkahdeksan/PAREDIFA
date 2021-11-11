@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import { useState, useContext} from "react";
+import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
@@ -33,6 +33,12 @@ const FaSaveModal = ({ handleClose, show }) => {
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const [addingID, setAddingID] = useState(false);
   const [dfaID, setDfaID] = useState("");
+
+  /**  This method displays a toast with important information for the user
+   * @param bg the color of the Toast
+   * @param header the header of the Toast
+   * @param body the text of the Toast
+   */
   const displayMessage = (bg, header, body) => {
     setMsgShow(true);
     setMsgInfo({
@@ -42,8 +48,10 @@ const FaSaveModal = ({ handleClose, show }) => {
     });
   };
 
-  const automaticSaveAutomata = async (automataId = null) => {
-
+  /**  This method saves a DFA in the DB
+   * @param automataId optional param, user can choose to be automatic or be writted by himself
+   */
+  const saveAutomata = async (automataId = null) => {
     if (addingID && automataId.length === 0) return;
     try {
       setLoading(true);
@@ -118,7 +126,7 @@ const FaSaveModal = ({ handleClose, show }) => {
               <Button
                 variant="secondary"
                 disabled={loading}
-                onClick={() => automaticSaveAutomata()}
+                onClick={() => saveAutomata()}
               >
                 NO
               </Button>
@@ -136,10 +144,7 @@ const FaSaveModal = ({ handleClose, show }) => {
               >
                 Go back
               </Button>
-              <Button
-                disabled={loading}
-                onClick={() => automaticSaveAutomata(dfaID)}
-              >
+              <Button disabled={loading} onClick={() => saveAutomata(dfaID)}>
                 Send
               </Button>
             </>

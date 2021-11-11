@@ -9,7 +9,7 @@ import ThemeContextTr from "../Context/ContextTransitions";
 /*
  *
  * Description:
- * Regex editor modals
+ * Regex editor modal
  * Authors:
  *   Andres Alvarez Duran, ID: 117520958
  *   Joaquin Barrientos Monge, ID: 117440348
@@ -27,11 +27,15 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const [simplifyRe, setSimplifyRe] = useState(false);
   const [checkSintax, setCheckSintax] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
-  const {  setEdge } = useContext(ThemeContextTr);
-  const {  setGeneralInfo } = useContext(ThemeContextGeneral);
+  const { setEdge } = useContext(ThemeContextTr);
+  const { setGeneralInfo } = useContext(ThemeContextGeneral);
   //delete modal if theres data
   const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
   const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);
+
+  /**  This method send the RE to be compiled by the prolog server
+   * @returns void
+   */
   const sendReToCompile = async () => {
     if (re.length !== 0) {
       if (nodes.length > 0) {
@@ -40,6 +44,9 @@ const RegexEditorModal = ({ show, handleClose }) => {
     }
   };
 
+  /**  This method wipes current DFA in canvas
+   * @returns void
+   */
   const wipeDataAutomata = () => {
     setNodes([]);
     setEdge([]);

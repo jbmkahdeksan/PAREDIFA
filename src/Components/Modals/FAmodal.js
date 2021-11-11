@@ -1,8 +1,5 @@
 import TodosModal from "./TodosModal";
 import Message from "../Message/Message";
-import { useContext } from "react";
-import ThemeContextMsg from "../Context/ContextMessage";
-import ThemeContextMsgInfo from "../Context/ContextMsg";
 
 /*
  *
@@ -18,21 +15,12 @@ import ThemeContextMsgInfo from "../Context/ContextMsg";
  *
  */
 const FAmodal = (props) => {
-  const handleDoubleClick = () => {
-    props.handleClose();
-    setMsgShow(true);
-    setMsgInfo({ bg: "info", header: "Success!", body: "Well it works!" });
-  };
-
-  const {  setMsgShow } = useContext(ThemeContextMsg);
-  const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   return (
     <>
       <TodosModal
         handleShow={props.handleClose}
         show={props.show}
         FaM={true}
-        handleDoubleClick={handleDoubleClick}
         title="DFA stored in the DB"
         setCurrentDfa={props.setCurrentDfa}
       />

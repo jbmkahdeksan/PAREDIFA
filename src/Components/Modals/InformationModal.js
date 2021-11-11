@@ -24,6 +24,9 @@ const InformationModal = ({ show, handleClose, cb, fetching, progress }) => {
   const [id, setId] = useState("");
   const [time, setTime] = useState("");
 
+  /**  This method downloads an image to the user
+   * @returns void
+   */
   const handleImageDownload = () => {
     cb(firstName, lastName, id, time);
     setFirstName("");

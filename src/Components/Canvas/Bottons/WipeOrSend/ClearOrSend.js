@@ -2,9 +2,23 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { querySaveImage } from "../../../../Util/graphQLQueryUtil";
 import ThemeContext from "../../../Context/ContextStates";
-import Button from 'react-bootstrap/Button'
+import Button from "react-bootstrap/Button";
 import InformationModal from "../../../Modals/InformationModal";
 import WipeDataModal from "../../../Modals/WipeDataModal";
+
+/*
+ *
+ * Description:
+ * this component allow the user to clear the screen or send and download an image of the DFA
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const ClearOrSend = ({
   nowRunning,
   fetchingUpdateDfa,
@@ -13,7 +27,7 @@ const ClearOrSend = ({
   displayFailMessage,
   stageRef,
   currentDfa,
-  setCurrentDfa
+  setCurrentDfa,
 }) => {
   const { nodes } = useContext(ThemeContext);
   //
@@ -26,6 +40,9 @@ const ClearOrSend = ({
   const [fetching, setFeching] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  /** Checks if  the canvas is empty
+   * @returns void
+   */
   const validateOpening = () => {
     if (nodes.length > 0) {
       setShowWipeModal(true);
@@ -37,6 +54,15 @@ const ClearOrSend = ({
       );
     }
   };
+
+  /** Method to download an image of the canvas and send it to the server
+   * @param uri stage reference
+   * @param firstName first name of the student
+   * @param lastName last name of the student
+   * @param id id of the student
+   * @param time time of the  student schedule-> 10am, 12 pm ....
+   * @returns void
+   */
   const downloadURI = async (uri, firstName, lastName, id, time) => {
     const link = document.createElement("a");
     const COURSE = {
@@ -70,6 +96,14 @@ const ClearOrSend = ({
       handleCloseInformation();
     }
   };
+
+  /** Method to download an image of the canvas and send it to the server
+   * @param firstName first name of the student
+   * @param lastName last name of the student
+   * @param id id of the student
+   * @param time time of the  student schedule-> 10am, 12 pm ....
+   * @returns void
+   */
   const handleImage = (firstName, lastName, id, time) => {
     const uri = stageRef.current.toDataURL();
 

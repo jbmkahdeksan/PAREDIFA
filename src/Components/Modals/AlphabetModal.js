@@ -22,12 +22,11 @@ const AlphabetModal = (props) => {
   const [alphabet, setAlphabet] = useState("");
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
   const { setMsgShow } = useContext(ThemeContextMsg);
-  const {  setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { setMsgInfo } = useContext(ThemeContextMsgInfo);
 
   /**  This method checks for  correct input, and sets it if it maches a RE (designed for letters and numbers)
    */
   const modifyAlphabet = () => {
-    
     const regex = /[a-z0-9]/g;
     const filteredAlphabet = [...new Set(alphabet.match(regex))];
 

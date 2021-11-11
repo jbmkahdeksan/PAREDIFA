@@ -20,6 +20,19 @@ import BySteps from "./Bottons/BySteps";
 import CurrentDfa from "./Bottons/CurrentDfa/CurrentDfa";
 import DownloadOrSave from "./Bottons/CR/DownloadOrSave";
 import ClearOrSend from "./Bottons/WipeOrSend/ClearOrSend";
+/*
+ *
+ * Description:
+ * This component holds the canvas and buttons / inputs for the canvas
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const CanvasContainer = ({
   handleIncorrectSymbolChanges,
   inputString,
@@ -55,14 +68,25 @@ const CanvasContainer = ({
   //updateing dfa
   const [fetchingUpdateDfa, setFetchingUpdateDfa] = useState(false);
 
+  /** This method displays a success message to the user
+   * @param msg the msg to be displayed in the toast
+   * @returns void
+   */
   const displaySuccessMsg = (msg) => {
     displayMessage("success", "Success!", msg);
   };
 
+  /** This method displays a fail message to the user
+   * @param msg the msg to be displayed in the toast
+   * @returns void
+   */
   const displayFailMessage = (msg) => {
     displayMessage("warning", "Warning!", msg);
   };
 
+  /** This method wipes application data
+   * @returns void
+   */
   const wipeApplicationData = () => {
     //wipe data
     setNodes([]);
@@ -174,6 +198,12 @@ const CanvasContainer = ({
     });
   };
 
+  /** This method shows a toast with very important information to the user.
+   * @param bg the color of the Toast
+   * @param header the header of the Toast
+   * @param body the body of the Toast
+   * @returns void
+   */
   const displayMessage = (bg, header, body) => {
     setMsgShow(true);
     setMsgInfo({
@@ -183,6 +213,9 @@ const CanvasContainer = ({
     });
   };
 
+  /** This effect wipes some application data when genralInfpo.wipeData is true
+   * @returns void
+   */
   useEffect(() => {
     if (generalInfo.wipeData) {
       setAddingTr((e) => ({ state: false, tr: "-1" }));
@@ -190,10 +223,20 @@ const CanvasContainer = ({
       setDisablePrev((e) => true);
     }
   }, [generalInfo.wipeData]);
+
+  /** This method handle input changes on the string to be evaluated
+   * @param e the event
+   * @returns void
+   */
   const handleInputChanges = (e) => {
     handleIncorrectSymbolChanges(e.target.value);
     setInputString(e.target.value);
   };
+
+  /** This method is triggered when the user selects either run by steps or continuously and proceds to the evaluation
+   * @param type the evaluating that should be runned (by steps or continuously)
+   * @returns void
+   */
   const handleInput = (type) => {
     let edgesTmp = edge;
     //just incase user is adding a tmp tr
@@ -220,6 +263,10 @@ const CanvasContainer = ({
     );
   };
 
+    /** This callback is used when the user is evaluating the automata by steps
+   * @param runInfoObj
+   * @returns void
+   */
   const byStepCb = (runInfoObj) => {
     setIsByStep(false);
     setDisablePrev(true);

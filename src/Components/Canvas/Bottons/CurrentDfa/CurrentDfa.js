@@ -9,6 +9,19 @@ import {
   queryMutationDelete,
 } from "../../../../Util/graphQLQueryUtil";
 import DeleteAutomataModal from "../../../Modals/DeleteAutomataModal";
+/*
+ *
+ * Description:
+ * this component allows the user to delete or update the current DFA downloaded
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const CurrentDfa = ({
   dfaId,
   displayFailMessage,
@@ -23,6 +36,9 @@ const CurrentDfa = ({
   const [fetchingDelete, setFetchingDelete] = useState(false);
   const handleShowDeleteCurrentDfa = () => setShowDeleteCurrentDfa(false);
 
+  /** Updates current DFA
+   * @returns void
+   */
   const handleCurrentDfaUpdate = async () => {
     try {
       setFetchingUpdateDfa(true);
@@ -39,6 +55,10 @@ const CurrentDfa = ({
       setFetchingUpdateDfa(false);
     }
   };
+
+  /** Deletes current DFA
+   * @returns void
+   */
   const deleteCurrentDfaFromDB = async () => {
     try {
       setFetchingDelete(true);

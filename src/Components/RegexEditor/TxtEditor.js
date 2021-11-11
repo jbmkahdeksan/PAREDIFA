@@ -1,6 +1,19 @@
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+/*
+ *
+ * Description:
+ * The text editor with its options for the RE compiler
+ * Authors:
+ *   Andres Alvarez Duran, ID: 117520958
+ *   Joaquin Barrientos Monge, ID: 117440348
+ *   Oscar Ortiz Chavarria, ID: 208260347
+ *   David Zarate Marin, ID: 116770797
+ *   Group: 01
+ *   Schedule: 10am
+ *
+ */
 const TxtEditor = ({
   manualName,
   setManualName,
