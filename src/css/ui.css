@@ -48,7 +48,7 @@ body {
     margin-bottom: 2%;
 }
 
-#teamInfo,.emptyDb,.savingDFA {
+#teamInfo,.emptyDb,.savingDFA,.deleteDFA {
     margin: auto;
     text-align: center;
 } 

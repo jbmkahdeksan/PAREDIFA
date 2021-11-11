@@ -21,8 +21,8 @@ const Body = () => {
   const [errors, setErrors] = useState({
     incorrectSymbol: "",
   });
-  const { nodes, setNodes } = useContext(ThemeContext);
-  const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  const { nodes } = useContext(ThemeContext);
+  const { generalInfo } = useContext(ThemeContextGeneral);
   const [inputString, setInputString] = useState("");
   const [ready, setReady] = useState(false);
   const [finalResultInfo, setFinalResult] = useState("");
@@ -101,6 +101,7 @@ const Body = () => {
       setInputString("");
     }
   };
+
 
   return (
     <div className="container-fluid h-100">

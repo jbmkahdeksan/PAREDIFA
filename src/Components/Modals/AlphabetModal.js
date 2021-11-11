@@ -21,8 +21,8 @@ import ThemeContextMsgInfo from "../Context/ContextMsg";
 const AlphabetModal = (props) => {
   const [alphabet, setAlphabet] = useState("");
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
-  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { setMsgShow } = useContext(ThemeContextMsg);
+  const {  setMsgInfo } = useContext(ThemeContextMsgInfo);
 
   /**  This method checks for  correct input, and sets it if it maches a RE (designed for letters and numbers)
    */

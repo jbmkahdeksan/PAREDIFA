@@ -2,6 +2,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import logo from "../../Images/una.png";
 import Spinner from "react-bootstrap/Spinner";
 import useFetch from "../UseFetch/useFetch";
+import {queryAbout } from '../../Util/graphQLQueryUtil'
 /*
  *
  * Description:
@@ -16,30 +17,7 @@ import useFetch from "../UseFetch/useFetch";
  *
  */
 const About = ({ show, handleShow, ...props }) => {
-  const queryAbout = `{
-    about{
-      authors{
-        id
-        name
-      }
-      team{
-        id
-      }
-      course{
-        id
-        crn
-        name
-      }
-      term{
-        year
-        id
-      }
-      version{
-        id
-      }
-    }
-  }
-  `;
+
   const { data, isPending, error } = useFetch(queryAbout);
 
   return (

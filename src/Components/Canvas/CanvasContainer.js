@@ -1,10 +1,6 @@
 import Canvas from "./Canvas";
-import { useRef, useState, useContext, useEffect, useCallback } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import InformationModal from "../Modals/InformationModal";
-import WipeDataModal from "../Modals/WipeDataModal";
-import AlphabetModal from "../Modals/AlphabetModal";
 import DefaultAlphabetModal from "../Modals/DefaultAlphabetModal";
 import Message from "../Message/Message";
 import ThemeContext from "../Context/ContextStates";
@@ -17,13 +13,13 @@ import Reactive from "../ReactLogo/Reactive";
 import ThemeContextStage from "../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../Engine/Engine";
 import d3 from "d3";
-import axios from "axios";
-import { BsCloudArrowDown, BsCloudArrowUp } from "react-icons/bs";
-import { FcProcess, FcEmptyTrash } from "react-icons/fc";
-import FaSaveModal from "../Modals/FaSaveModal";
-import FAmodal from "../Modals/FAmodal";
-import DeleteAutomataModal from "../Modals/DeleteAutomataModal";
-import useFetch from '../UseFetch/useFetch';
+import Spinner from "react-bootstrap/Spinner";
+import AlphabetButton from "./Bottons/AlphabetButton";
+import DfaRun from "./Bottons/DfaRun";
+import BySteps from "./Bottons/BySteps";
+import CurrentDfa from "./Bottons/CurrentDfa/CurrentDfa";
+import DownloadOrSave from "./Bottons/CR/DownloadOrSave";
+import ClearOrSend from "./Bottons/WipeOrSend/ClearOrSend";
 const CanvasContainer = ({
   handleIncorrectSymbolChanges,
   inputString,
@@ -32,24 +28,13 @@ const CanvasContainer = ({
   cb,
 }) => {
   const stageRef = useRef(null);
-  // modal information handlers
-  const [showInformationModal, setShowInformationModal] = useState(false);
-  const handleCloseInformation = () => setShowInformationModal(false);
-  //modal wipedata handlers
-  const [showWipeModal, setShowWipeModal] = useState(false);
-  const handleCloseWipeData = () => setShowWipeModal(false);
-  //setAlphabet modals
-  const [showAlphabetModal, setShowAlphabetModal] = useState(false);
-  const handleCloseAlphabetModal = () => setShowAlphabetModal(false);
-
-  //input string
 
   //application information
 
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
-  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { setMsgShow } = useContext(ThemeContextMsg);
+  const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
   const [addingTr, setAddingTr] = useState({ state: false, tr: "-1" });
   const [isByStep, setIsByStep] = useState(false);
@@ -59,186 +44,43 @@ const CanvasContainer = ({
   const handleCloseDefaultAlphabetModal = () =>
     setGeneralInfo({ ...generalInfo, showAlphabetDefault: false });
 
-  const [jsonInfo, setJsonInfo] = useState("");
-
-  // some states for handling fetching
-  const [fetching, setFeching] = useState(false);
-  const [progress, setProgress] = useState(0);
-
   //runInfo
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   //stage info
-  const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
-
-  //DFA save modals
-  const [showSaveModal, setShowSaveModal] = useState(false);
-  const handleCloseSaveModal = useCallback(() => setShowSaveModal(false), []);
+  const { stageInfo } = useContext(ThemeContextStage);
 
   //current dfa downloaded
   const [currentDfa, setCurrentDfa] = useState({ id: null });
-  //to delete the current dfa downloaded from the DB
-  const [showDeleteCurrentDfa, setShowDeleteCurrentDfa] = useState(false);
-  const handleShowDeleteCurrentDfa = () => setShowDeleteCurrentDfa(false);
-  //Dfa download
-  const [showDfaDownload, setShowDfaDownload] = useState(false);
-  const handleCloseDfaDownload = useCallback(
-    () => setShowDfaDownload(false),
-    []
-  );
 
-  const handleCurrentDfaUpdate = async () => {
-    const nodosMapped = nodes.map(
-      (node) => `{
-      id: "${node.id}",
-      name: "${node.name}",
-      coord: { x: ${node.x}, y: ${node.y} },
-      end: ${node.final},
-      start: ${node.start},
-    }`
-    );
-    const edgesMapped = edge.map(
-      (ed) => `{
-      id: "${ed.id}",
-      state_src_id: {id:"${ed.from.id}",x:${ed.from.x},y:${ed.from.y}},
-      state_dst_id: {id:"${ed.to.id}",x:${ed.to.x},y:${ed.to.y}},
-      symbols: ${JSON.stringify(ed.symbol.split(","))},
-      coordTemp:{x:${ed.from.x},y:${ed.from.y}}
-    }`
-    );
-    const queryMutationUpdate = `mutation{
-      replaceAutomata(id:"${currentDfa.id}",name:"davd",alphabet:${JSON.stringify(
-        generalInfo.alphabet
-      )},states:[${nodosMapped}],transitions:[${edgesMapped}])
-    }`
+  //updateing dfa
+  const [fetchingUpdateDfa, setFetchingUpdateDfa] = useState(false);
 
-    try{
-      await axios.post(process.env.REACT_APP_BACK_END,{
-        query:queryMutationUpdate
-      })
-      
-    }catch(e){  
-
-    }
-  };
-  const deleteCurrentDfaFromDB = async () => {
-    try {
-      const queryMutationDelete = `
-    mutation{
-      deleteAutomata(id:"${currentDfa.id}")
-      
-    }
-    `;
-
-      await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryMutationDelete,
-      });
-      displayMessage(
-        "success",
-        "Success!",
-        `The DFA was successfully deleted!`
-      );
-      setNodes([]);
-      setEdge([]);
-
-      setGeneralInfo({
-        alphabet: [],
-        useDefault: false,
-        wipeData: true,
-        showAlphabetDefault: false,
-        result: false,
-      });
-      setCurrentDfa({ id: null });
-    } catch (e) {
-      displayMessage(
-        "warning",
-        "Error while fetching data",
-        `Oops! Looks like we got an error while deleteing the DFA: ${e.message}`
-      );
-    } finally {
-      handleShowDeleteCurrentDfa();
-    }
-  };
-  const downloadURI = async (uri, firstName, lastName, id, time) => {
-    const link = document.createElement("a");
-    const COURSE = {
-      code: "400",
-      subject: "HOMEWORK",
-      year: "2020",
-      cycle: "||",
-    };
-    const DESCRIPTION = `EIF${COURSE.code}_${COURSE.subject}_${COURSE.cycle}_${COURSE.year}_${firstName} ${lastName}_${id}_${time}.png`;
-    link.download = DESCRIPTION;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setFeching(true);
-    setProgress(50);
-
-    const queryTodo = `
-    
-      {
-        sendAutomata(mailAddres:"skagro87@gmail.com",binaryInfo:"${link.href}",studentName:"${firstName} ${lastName}",  studentId:"${id}", studentSchedule:"${time}")
-      }
-      
-`;
-
-    try {
-      const data = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryTodo,
-      });
-      console.log(data, "email");
-      setProgress(100);
-      setFeching(false);
-
-      displayMessage("success", "Success!", "The image was sent successfully!");
-    } catch (e) {
-      displayMessage(
-        "warning",
-        "Warning!",
-        `There was an error while sending the image:  ${e.message}`
-      );
-    } finally {
-      handleCloseInformation();
-    }
-  };
-  const handleImage = (firstName, lastName, id, time) => {
-    const uri = stageRef.current.toDataURL();
-
-    downloadURI(uri, firstName, lastName, id, time);
+  const displaySuccessMsg = (msg) => {
+    displayMessage("success", "Success!", msg);
   };
 
+  const displayFailMessage = (msg) => {
+    displayMessage("warning", "Warning!", msg);
+  };
 
-  const downloadApplicationInfo = () => {
-
- 
-    
-    if (nodes.length > 0) {
-      setJsonInfo(
-        JSON.stringify({
-          alphabet: generalInfo.alphabet,
-          states: nodes.map((node) => ({
-            name: node.name,
-            id: node.id,
-            x: node.x,
-            y: node.y,
-            start: node.start,
-            final: node.final,
-          })),
-          transitions: edge.map((tr) => ({
-            id: tr.id,
-            state_src: tr.from,
-            state_dst: tr.to,
-            symbol: tr.symbol.split(","),
-          })),
-        })
-      );
-    }
+  const wipeApplicationData = () => {
+    //wipe data
+    setNodes([]);
+    setEdge([]);
+    setGeneralInfo({
+      alphabet: [],
+      useDefault: false,
+      wipeData: true,
+      showAlphabetDefault: false,
+      result: false,
+    });
+    setCurrentDfa({ id: null });
+    //
   };
 
   const algo = () => {
     var w = stageInfo.w;
-    var h = 450;
+    // var h = 450;
 
     var dataset = {
       nodes: [
@@ -340,34 +182,12 @@ const CanvasContainer = ({
       body: body,
     });
   };
-  const handleCopyClipboard = () => {
-    if (jsonInfo.length > 0) {
-      navigator.clipboard.writeText(jsonInfo);
-      displayMessage(
-        "light",
-        "Copied text to clipboard",
-        "The text in this input field was copied into clipboard for your use"
-      );
-    }
-  };
 
-  const validateOpening = () => {
-    if (nodes.length > 0) {
-      setShowWipeModal(true);
-    } else {
-      displayMessage(
-        "light",
-        "No data detected",
-        "You haven't drawn anything!"
-      );
-    }
-  };
   useEffect(() => {
     if (generalInfo.wipeData) {
       setAddingTr((e) => ({ state: false, tr: "-1" }));
       setIsByStep((e) => false);
       setDisablePrev((e) => true);
-      setJsonInfo((e) => "");
     }
   }, [generalInfo.wipeData]);
   const handleInputChanges = (e) => {
@@ -375,11 +195,14 @@ const CanvasContainer = ({
     setInputString(e.target.value);
   };
   const handleInput = (type) => {
+    let edgesTmp = edge;
     //just incase user is adding a tmp tr
-    const filteredEdge = edge.filter((ed) => ed.type === "fixed");
-    if (filteredEdge.length !== edge.length)
+    if (addingTr.state) {
       setAddingTr({ state: false, tr: "-1" });
-    setEdge(filteredEdge);
+      edgesTmp = edge.filter((ed) => ed.type === "fixed");
+    }
+
+    setEdge(edgesTmp);
     if (type === "step") {
       setIsByStep(true);
     }
@@ -388,7 +211,7 @@ const CanvasContainer = ({
     }
     preProcessAutomata(
       nodes,
-      filteredEdge,
+      edgesTmp,
       inputString,
       runInfo,
       setRunInfo,
@@ -406,19 +229,10 @@ const CanvasContainer = ({
   return (
     <div className="h-100 col-9">
       <div className="d-flex justify-content-center my-4">
-        <div className="d-grid col-2 mx-0 text-center border-start border-2">
-          <Button
-            className="m-auto"
-            onClick={() => setShowAlphabetModal(true)}
-            disabled={runInfo.nowRunning}
-            variant="outline-primary"
-            size="sm"
-            id="setAlphabet"
-            title="(e.g.: 1, 0)"
-          >
-            Set Alphabet
-          </Button>
-        </div>
+        <AlphabetButton
+          nowRunning={runInfo.nowRunning}
+          fetchingUpdateDfa={fetchingUpdateDfa}
+        />
 
         <div className="d-grid col-5 mx-0 text-center border-start border-2">
           {runInfo.nowRunning && !isByStep && (
@@ -430,102 +244,35 @@ const CanvasContainer = ({
             </div>
           )}
           {runInfo.nowRunning && isByStep && (
-            <div className="btn-group-sm m-auto text-center" id="stepsDiv">
-              <Button
-                variant="danger"
-                id="run-prev"
-                disabled={disablePrev}
-                onClick={() => runBySteps("run-prev", runInfo, setRunInfo)}
-              >
-                ⏪ Prev step
-              </Button>
-              <Button
-                variant="success"
-                id="run-next"
-                onClick={() =>
-                  runBySteps(
-                    "run-next",
-                    runInfo,
-                    setRunInfo,
-                    byStepCb,
-                    setDisablePrev
-                  )
-                }
-              >
-                Next step ⏩
-              </Button>
-            </div>
+            <BySteps
+              disablePrev={disablePrev}
+              runBySteps={runBySteps}
+              runInfo={runInfo}
+              setRunInfo={setRunInfo}
+              byStepCb={byStepCb}
+              setDisablePrev={setDisablePrev}
+            />
           )}
           {!runInfo.nowRunning && (
-            <div>
-              <Form.Control
-                className="m-auto w-75"
-                value={inputString}
-                onChange={(e) => handleInputChanges(e)}
-                type="text"
-                id="testString"
-                placeholder="Test string"
-              />
-              <div className="btn-group-sm my-2">
-                <Button
-                  variant="primary"
-                  disabled={!ready}
-                  id="runByStep"
-                  className="mx-1"
-                  onClick={() => handleInput("step")}
-                >
-                  Run by steps
-                </Button>
-                <Button
-                  disabled={!ready}
-                  variant="primary"
-                  id="runCont"
-                  className="mx-1"
-                  onClick={() => handleInput("cont")}
-                >
-                  Run continuously
-                </Button>
-              </div>
-            </div>
+            <DfaRun
+              inputString={inputString}
+              handleInputChanges={handleInputChanges}
+              handleInput={handleInput}
+              ready={ready}
+            />
           )}
         </div>
 
-        <div className="d-grid col-5 mx-0 text-center border-start border-2">
-          <div>
-            <Form.Control
-              className="m-auto w-75"
-              value={jsonInfo}
-              onChange={(e) => setJsonInfo(e.target.value)}
-              type="text"
-              id="jsonInput"
-              placeholder="JSON"
-              disabled={runInfo.nowRunning}
-              onDoubleClick={handleCopyClipboard}
-            />
-            <div className="btn-group-sm my-2">
-              <Button
-                variant="primary"
-                onClick={downloadApplicationInfo}
-                id="jsonDownload"
-                className="mx-1"
-                disabled={runInfo.nowRunning}
-              >
-                {" "}
-                Download JSON
-              </Button>
-              <Button
-                variant="primary"
-                disabled={runInfo.nowRunning}
-                className="mx-1"
-                id="jsonUpload"
-                onClick={algo}
-              >
-                {" "}
-                Upload JSON
-              </Button>
-            </div>
-          </div>
-        </div>
+        <Button
+          variant="primary"
+          disabled={runInfo.nowRunning}
+          className="mx-1"
+          id="jsonUpload"
+          onClick={algo}
+        >
+          {" "}
+          Upload JSON
+        </Button>
       </div>
 
       <div>
@@ -536,129 +283,51 @@ const CanvasContainer = ({
             setAddingTr={setAddingTr}
           />
         </div>
+
         <div className="row my-2">
           <div id="bottomCanvas">
             <div className="bottomCanvasStyle">
               <div className="dataBaseActions d-grid gap-2 d-md-flex justify-content-md-start">
-                {!runInfo.nowRunning && (
+                {!runInfo.nowRunning && !fetchingUpdateDfa && (
                   <>
-                    <BsCloudArrowDown
-                      onClick={() => setShowDfaDownload(true)}
-                      title="Click here to download a DFA from the database"
-                      className="downloadFa"
-                      size={23}
+                    <DownloadOrSave
+                      setCurrentDfa={setCurrentDfa}
+                      displayMessage={displayMessage}
+                      currentDfaId={currentDfa.id}
                     />
-                    {!currentDfa.id && (
-                      <BsCloudArrowUp
-                        onClick={() =>
-                          nodes.length === 0
-                            ? displayMessage(
-                                "light",
-                                "No data",
-                                "Theres nothing to be saved!"
-                              )
-                            : setShowSaveModal(true)
-                        }
-                        title="Click here to save this DFA to the database"
-                        className="saveFa"
-                        size={23}
-                      />
-                    )}
-                    {currentDfa.id && (
-                      <>
-                        <FcEmptyTrash
-                          title="Delete the current DFA"
-                          className="trashCurrentDfa"
-                          onClick={() => setShowDeleteCurrentDfa(true)}
-                          size={23}
-                        />
-                        <FcProcess
-                          className="updateCurrentDFA"
-                          onClick={handleCurrentDfaUpdate}
-                          title="Update current DFA"
-                          size={23}
-                        />
-                      </>
-                    )}
+
+                    <CurrentDfa
+                      setFetchingUpdateDfa={setFetchingUpdateDfa}
+                      wipeApplicationData={wipeApplicationData}
+                      displaySuccessMsg={displaySuccessMsg}
+                      displayFailMessage={displayFailMessage}
+                      dfaId={currentDfa.id}
+                    />
+                  </>
+                )}
+                {fetchingUpdateDfa && (
+                  <>
+                    <Spinner animation="grow" size="sm" />
+                    <h5>Updating current DFA....</h5>{" "}
                   </>
                 )}
               </div>
-              <div className="canvasActions">
-                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                  <Button
-                    className="me-md-1"
-                    variant="warning"
-                    disabled={runInfo.nowRunning}
-                    onClick={validateOpening}
-                  >
-                    Clear canvas
-                  </Button>
-                  <Button
-                    className="me-5"
-                    variant="secondary"
-                    onClick={() =>
-                      nodes.length === 0
-                        ? displayMessage(
-                            "light",
-                            "No data detected",
-                            "You haven't drawn anything!"
-                          )
-                        : setShowInformationModal(true)
-                    }
-                  >
-                    Save as PNG
-                  </Button>
-                </div>
-              </div>
+              <ClearOrSend
+                stageRef={stageRef}
+                nowRunning={runInfo.nowRunning}
+                fetchingUpdateDfa={fetchingUpdateDfa}
+                displayMessage={displayMessage}
+                displaySuccessMsg={displaySuccessMsg}
+                displayFailMessage={displayFailMessage}
+                currentDfa={currentDfa}
+                setCurrentDfa={setCurrentDfa}
+              />
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        {showDfaDownload && (
-          <FAmodal
-            show={showDfaDownload}
-            handleClose={handleCloseDfaDownload}
-            setCurrentDfa={setCurrentDfa}
-          />
-        )}
-
-        {showSaveModal && (
-          <FaSaveModal
-            show={showSaveModal}
-            handleClose={handleCloseSaveModal}
-          />
-        )}
-        {showInformationModal && (
-          <InformationModal
-            cb={handleImage}
-            show={showInformationModal}
-            handleClose={handleCloseInformation}
-            fetching={fetching}
-            progress={progress}
-          />
-        )}
-
-        <WipeDataModal
-          show={showWipeModal}
-          handleClose={handleCloseWipeData}
-          currentDFA={currentDfa}
-          setCurrentDfa={setCurrentDfa}
-        />
-
-        <DeleteAutomataModal
-          show={showDeleteCurrentDfa}
-          handleClose={handleShowDeleteCurrentDfa}
-          cbDelete={deleteCurrentDfaFromDB}
-          title="Are you sure you want to delete this DFA? This action cannot be undone!"
-        />
-        {showAlphabetModal && (
-          <AlphabetModal
-            show={showAlphabetModal}
-            handleClose={handleCloseAlphabetModal}
-          />
-        )}
         <DefaultAlphabetModal handleClose={handleCloseDefaultAlphabetModal} />
         <Message />
       </div>

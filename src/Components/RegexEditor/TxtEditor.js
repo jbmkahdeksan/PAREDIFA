@@ -66,7 +66,6 @@ const TxtEditor = ({
         </Form.Label>
         <Col className="mt-2">
           <Form.Check
-            required
             type="checkbox"
             onChange={() => setSimplifyRe(!simplifyRe)}
             name="formHorizontalRadios"

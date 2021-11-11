@@ -162,7 +162,7 @@ export const runAnimation = (queue, runInfo, setRunInfo, cb) => {
 export function runBySteps(id, runInfo, setRunInfo, byStepCb, setDisablePrev) {
   let runInfoObj = runInfo;
   if (id === "run-prev") {
-    let { value, done } = getIterator().prev();
+    let { value,  } = getIterator().prev();
     if (value?.stateID) {
       runInfoObj = {
         ...runInfoObj,

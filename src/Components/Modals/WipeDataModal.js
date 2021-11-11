@@ -20,10 +20,10 @@ import { useContext, useEffect } from "react";
  *
  */
 const WipeDataModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
-  const { nodes, setNodes } = useContext(ThemeContext);
-  const { edge, setEdge } = useContext(ThemeContextTr);
+  const { setNodes } = useContext(ThemeContext);
+  const {  setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
-  const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
+  const {  setRunInfo } = useContext(ThemeContextRunInfo);
 
   /*
    *

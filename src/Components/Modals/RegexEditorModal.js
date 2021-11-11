@@ -27,8 +27,8 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const [simplifyRe, setSimplifyRe] = useState(false);
   const [checkSintax, setCheckSintax] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
-  const { edge, setEdge } = useContext(ThemeContextTr);
-  const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  const {  setEdge } = useContext(ThemeContextTr);
+  const {  setGeneralInfo } = useContext(ThemeContextGeneral);
   //delete modal if theres data
   const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
   const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);

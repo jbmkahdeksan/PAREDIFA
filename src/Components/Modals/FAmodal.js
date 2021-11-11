@@ -24,8 +24,8 @@ const FAmodal = (props) => {
     setMsgInfo({ bg: "info", header: "Success!", body: "Well it works!" });
   };
 
-  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const {  setMsgShow } = useContext(ThemeContextMsg);
+  const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   return (
     <>
       <TodosModal

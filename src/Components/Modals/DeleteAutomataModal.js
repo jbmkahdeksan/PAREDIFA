@@ -1,6 +1,13 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-const DeleteAutomataModal = ({show, handleClose, cbDelete, title}) => {
+import SpinnerCont from "../Spinner/SpinnerCont";
+const DeleteAutomataModal = ({
+  show,
+  handleClose,
+  cbDelete,
+  title,
+  fetchingDelete = false,
+}) => {
   return (
     <>
       <Modal
@@ -10,16 +17,31 @@ const DeleteAutomataModal = ({show, handleClose, cbDelete, title}) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>WARNING</Modal.Title>
+          <Modal.Title>
+            {fetchingDelete ? "Please wait..." : "WARNING"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {title}
+          {fetchingDelete && (
+            <SpinnerCont text="Deleteing DFA.."/>
+          )}
+          {!fetchingDelete && title}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            variant="secondary"
+            disabled={fetchingDelete}
+            onClick={handleClose}
+          >
             NO
           </Button>
-          <Button onClick={cbDelete} variant="primary">YES</Button>
+          <Button
+            onClick={cbDelete}
+            disabled={fetchingDelete}
+            variant="primary"
+          >
+            YES
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

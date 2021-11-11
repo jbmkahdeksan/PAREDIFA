@@ -1,10 +1,7 @@
 import Modal from "react-bootstrap/Modal";
-import { BsEye, BsDownload, BsTrash } from "react-icons/bs";
-import ListGroup from "react-bootstrap/ListGroup";
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import ThemeContext from "../Context/ContextStates";
-import Spinner from "react-bootstrap/Spinner";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
 import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextGeneral from "../Context/GeneralInfo";
@@ -14,18 +11,23 @@ import DeleteAutomataModal from "./DeleteAutomataModal";
 import { FcMultipleInputs } from "react-icons/fc";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import SpinnerCont from "../Spinner/SpinnerCont";
+import DfaList from "./DB/DfaList";
+import {
+  querySingleAutomata, queryMutationDelete, queryAllAutomatas
+} from "../../Util/graphQLQueryUtil";
 //Handle todos, tasks todo in Todo
 
 const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
   const [dbData, setDbDAta] = useState([]);
-  const [singleAutomataInfo, setSingleAutomataInfo] = useState({});
+
   const { nodes, setNodes } = useContext(ThemeContext);
-  const { edge, setEdge } = useContext(ThemeContextTr);
-  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { setEdge } = useContext(ThemeContextTr);
+  const { setMsgShow } = useContext(ThemeContextMsg);
+  const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const [fetching, setFetching] = useState(false);
   const [fetchingDelete, setFetchingDelete] = useState(false);
-  const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  const { setGeneralInfo } = useContext(ThemeContextGeneral);
   const [idDfa, setIdDfa] = useState("");
 
   //displa of dfa
@@ -60,59 +62,22 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
     shadowOpacity: 0.6,
     running: false,
   };
-  const queryAll = `{
-    allAutomatas{
-      id
-      name
-      alphabet
-      states{
-        id
-        name
-        coord{
-          x
-          y
-        }
-        end
-        start
-      }
-      transitions{
-        id
-        state_src_id{
-          id
-          x
-          y
-        }
-        state_dst_id{
-          id
-          x
-          y
-        }
-        symbols
-        coordTemp{
-          x
-          y
-        }
-      }
-      
-    }
-  }`;
 
-  const displayErrorMsg = useCallback(
-    (e) => {
-      setMsgShow((x) => true);
-      setMsgInfo((f) => ({
-        bg: "warning",
-        header: "Error while fetching data",
-        body: `Oops! Looks like we got an error while fetching data: ${e.message}`,
-      }));
-    },
-    [setMsgShow, setMsgInfo]
-  );
+
+  const displayErrorMsg = (e) => {
+    setMsgShow(true);
+    setMsgInfo({
+      bg: "warning",
+      header: "Error while fetching data",
+      body: `Oops! Looks like we got an error while fetching data: ${e.message}`,
+    });
+  };
+
   const fetchData = async () => {
     try {
       setFetching((e) => true);
       const res = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryAll,
+        query: queryAllAutomatas,
       });
 
       console.log(res, "resGraphql");
@@ -138,7 +103,7 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
     });
 
     console.log(automata.states, "automataStates");
-    setCurrentDfa({id:automata.id})//***************** *******************************/
+    setCurrentDfa({ id: automata.id }); //***************** *******************************/
     setNodes(mapStates(automata));
 
     setEdge(mapEdges(automata));
@@ -149,24 +114,17 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
 
   const handleAutomataDelete = async () => {
     setShowDeleteDfaModal(false);
-    const queryMutationDelete = `
-    mutation{
-      deleteAutomata(id:"${selectedDFA}")
-      
-    }
-    `;
-
     try {
       setFetchingDelete(true);
       await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryMutationDelete,
+        query: queryMutationDelete(selectedDFA),
       });
-      setMsgShow((x) => true);
-      setMsgInfo((f) => ({
+      setMsgShow(true);
+      setMsgInfo({
         bg: "success",
         header: "Success!",
         body: `The DFA was successfully deleted!`,
-      }));
+      });
     } catch (e) {
       displayErrorMsg(e);
     } finally {
@@ -219,48 +177,12 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
 
   const handleSingleDfaDownload = async () => {
     if (idDfa.length === 0) return;
-    const querySingleAutomata = `
-    {
-      singleAutomata(id:"${idDfa}"){
-        id
-        name
-        alphabet
-        states{
-          id
-          name
-          coord{
-            x
-            y
-          }
-          end
-          start
-        }
-        transitions{
-          id
-          state_src_id{
-            id
-            x
-            y
-          }
-          state_dst_id{
-            id
-            x
-            y
-          }
-          symbols
-          coordTemp{
-            x
-            y
-          }
-          
-        }
-      }
-    }`;
+
 
     try {
       setFetching(true);
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: querySingleAutomata,
+        query: querySingleAutomata(idDfa),
       });
       if (!data.data.data.singleAutomata) {
         throw new Error("Couldnt find an automata with the given ID");
@@ -277,9 +199,6 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
     }
   };
 
-  useEffect(() => {
-    console.log(dbData, "db data");
-  }, [dbData]);
   return (
     <>
       <Modal
@@ -311,67 +230,17 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
               />
             </div>
           )}
-          {fetching && (
-            <div className="dfaData">
-              <h1>Retrieving data...</h1>
-              <div>
-                <Spinner animation="border" variant="primary" />
-              </div>
-            </div>
-          )}
-          {fetchingDelete && (
-            <div className="dfaData">
-              <h1>Deleting automata...</h1>
-              <div>
-                <Spinner animation="border" variant="primary" />
-              </div>
-            </div>
-          )}
+          {fetching && <SpinnerCont text="Retrieving data..." />}
+          {fetchingDelete && <SpinnerCont text="Deleting automata..." />}
           {!fetching && !fetchingDelete && (
-            <div className="dfaDisplayContainer">
-              {dbData.length > 0 && (
-                <ListGroup as="ol" numbered>
-                  {dbData.map((data, index) => (
-                    <ListGroup.Item
-                      key={index}
-                      as="li"
-                      className="d-flex justify-content-between align-items-start"
-                    >
-                      <div className="ms-2 me-auto">
-                        <div className="fw-bold">{data.id}</div>
-                        {data.name === "NONE" ? "Unnamed" : data.name}
-                      </div>
-                      <BsTrash
-                        size={23}
-                        title="Click here to delete this DFA"
-                        className="deleteFASpecific"
-                        onClick={() => {
-                          setOptionTodo(1);
-                          setShowDeleteDfaModal(true);
-                          setSelectedDFA(data.id);
-                        }}
-                      />{" "}
-                      <BsDownload
-                        title="Click here to download this DFA"
-                        onClick={() => {
-                          setSelectedDFA(data.id);
-                          checkForDisplayData(data.id);
-                        }}
-                        className="downloadFaSpecific"
-                        size={23}
-                      />
-                      {"   "}
-                      <BsEye
-                        title="Click here to preview this DFA"
-                        className="displayFa"
-                        onClick={() => handleDisplayData(data.id)}
-                        size={23}
-                      />{" "}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              )}
-            </div>
+            <DfaList
+              dbData={dbData}
+              setOptionTodo={setOptionTodo}
+              setShowDeleteDfaModal={setShowDeleteDfaModal}
+              setSelectedDFA={setSelectedDFA}
+              checkForDisplayData={checkForDisplayData}
+              handleDisplayData={handleDisplayData}
+            />
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -379,7 +248,7 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
             onClick={
               dbData.length === 0 ? handleSingleDfaDownload : clearDbData
             }
-            disabled={fetching}
+            disabled={fetching || fetchingDelete}
           >
             {dbData.length === 0 ? "Retrieve" : "Clear"}
           </Button>

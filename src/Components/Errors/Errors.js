@@ -16,9 +16,9 @@ import ThemeContextGeneral from "../Context/GeneralInfo";
  *
  */
 const Errors = ({ inputString, setReady, ready, errorsSymbols }) => {
-  const { nodes, setNodes } = useContext(ThemeContext);
-  const { edge, setEdge } = useContext(ThemeContextTr);
-  const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  const { nodes } = useContext(ThemeContext);
+  const { edge } = useContext(ThemeContextTr);
+  const { generalInfo } = useContext(ThemeContextGeneral);
 
   const INITALSTATE = nodes.find((node) => node.start) ?? false;
   const FINALSTATE = nodes.find((node) => node.final) ?? false;

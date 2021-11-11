@@ -34,9 +34,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const [selected, setSelected] = useState("-1");
   const [selectedTr, setSelectedTr] = useState("-1");
   const [namingState, setIsNamingState] = useState(false);
-  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
-  const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
+  const { setMsgShow } = useContext(ThemeContextMsg);
+  const { setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { runInfo } = useContext(ThemeContextRunInfo);
   const [isFillingSymbol, setIsFillingSymbol] = useState(false);
   const [mouseIn, setMouseIn] = useState(false);
   const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
@@ -368,64 +368,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         setIsFillingSymbol(true);
 
         if (isFillingSymbol) return;
-
-        //****AQUIIII */
-
-        const edgeTo = edge.reduce((stored, current) => {
-          if (selected === selectedNode.id) {
-            if (
-              current.from.id === selectedNode.id &&
-              current.to.id === selectedNode.id
-            ) {
-              stored++;
-            }
-          }
-          if (selected !== selectedNode.id) {
-            if (current.from.id !== current.to.id) {
-              if (
-                current.to.id === selectedNode.id &&
-                current.from.id === selected
-              ) {
-                stored++;
-              }
-            }
-          }
-          return stored;
-        }, 0);
-
-        if (edgeTo) {
-          displayMessage(
-            "warning",
-            "Repeated transition",
-            "You already have a transition going to this node, remember you can edit any transition by just CLICKING it!"
-          );
-
-          setEdge(edge.filter((ed) => ed.type !== "temporary"));
-          setAddingTr({ state: false, tr: "-1" });
-          setIsFillingSymbol(false);
-
-          return;
-        }
-
-        setEdge(
-          edge.map((ed) =>
-            ed.id === addingTr.tr
-              ? {
-                  ...ed,
-                  type: "fixed",
-                  to: {
-                    id: selectedNode.id,
-                    x: selectedNode.coord.x,
-                    y: selectedNode.coord.y,
-                  },
-                }
-              : ed
-          )
-        );
-        setSelectedTr(addingTr.tr);
-        setAddingTr({ state: false, tr: "-1" });
-        setSelected("-1");
-
+        addTrDestination(selectedNode);
         return;
       }
       if (selectedTr !== "-1") {
@@ -435,29 +378,93 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       setSelected(e.target.attrs.id);
     }
     if (e.target.attrs.type === "stage") {
-      setIsFillingSymbol(false);
-      setSelected("-1");
-      setSelectedTr("-1");
-      if (selectedTr !== "-1") {
-        setEdge(edge.filter((ed) => ed.symbol.length !== 0));
-      }
-      if (addingTr.state) {
-        setAddingTr({ state: false, id: "-1" });
-        setEdge(edge.filter((ed) => ed.id !== addingTr.tr));
-      }
-     
+      handleStageClick();
     }
 
     if (e.target.attrs.type === "arrow") {
-      setSelectedTr(e.target.attrs.id);
-      setSelected("-1");
-      if (addingTr.state || isFillingSymbol) {
-        if (isFillingSymbol) setIsFillingSymbol(false);
-        setAddingTr({ state: false, id: "-1" });
-        setEdge(
-          edge.filter((ed) => ed.id !== addingTr.tr && ed.symbol.length !== 0)
-        );
+      handleArrowClick(e);
+    }
+  };
+
+  const addTrDestination = (selectedNode) => {
+    const edgeTo = edge.reduce((stored, current) => {
+      if (selected === selectedNode.id) {
+        if (
+          current.from.id === selectedNode.id &&
+          current.to.id === selectedNode.id
+        ) {
+          stored++;
+        }
       }
+      if (selected !== selectedNode.id) {
+        if (current.from.id !== current.to.id) {
+          if (
+            current.to.id === selectedNode.id &&
+            current.from.id === selected
+          ) {
+            stored++;
+          }
+        }
+      }
+      return stored;
+    }, 0);
+
+    if (edgeTo) {
+      displayMessage(
+        "warning",
+        "Repeated transition",
+        "You already have a transition going to this node, remember you can edit any transition by just CLICKING it!"
+      );
+
+      setEdge(edge.filter((ed) => ed.type !== "temporary"));
+      setAddingTr({ state: false, tr: "-1" });
+      setIsFillingSymbol(false);
+
+      return;
+    }
+
+    setEdge(
+      edge.map((ed) =>
+        ed.id === addingTr.tr
+          ? {
+              ...ed,
+              type: "fixed",
+              to: {
+                id: selectedNode.id,
+                x: selectedNode.coord.x,
+                y: selectedNode.coord.y,
+              },
+            }
+          : ed
+      )
+    );
+    setSelectedTr(addingTr.tr);
+    setAddingTr({ state: false, tr: "-1" });
+    setSelected("-1");
+  };
+
+  const handleStageClick = () => {
+    setIsFillingSymbol(false);
+    setSelected("-1");
+    setSelectedTr("-1");
+    if (selectedTr !== "-1") {
+      setEdge(edge.filter((ed) => ed.symbol.length !== 0));
+    }
+    if (addingTr.state) {
+      setAddingTr({ state: false, id: "-1" });
+      setEdge(edge.filter((ed) => ed.id !== addingTr.tr));
+    }
+  };
+
+  const handleArrowClick = (e) => {
+    setSelectedTr(e.target.attrs.id);
+    setSelected("-1");
+    if (addingTr.state || isFillingSymbol) {
+      if (isFillingSymbol) setIsFillingSymbol(false);
+      setAddingTr({ state: false, id: "-1" });
+      setEdge(
+        edge.filter((ed) => ed.id !== addingTr.tr && ed.symbol.length !== 0)
+      );
     }
   };
   /** Adds an event listener to the window on window opening
@@ -485,10 +492,9 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const handleTmpTr = (e) => {
     if (e.target.attrs.type !== "nodo") return;
     if (selectedTr !== "-1") return;
-    const coord = e.target.attrs.coord;
-
     if (isFillingSymbol) return;
 
+    const coord = e.target.attrs.coord;
     const id = Date.now().toString();
     setAddingTr({ state: true, tr: id });
     setEdge([

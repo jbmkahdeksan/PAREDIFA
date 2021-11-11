@@ -7,7 +7,7 @@ import ThemeContextMsgInfo from "../Context/ContextMsg";
 /*
  *
  * Description:
- *  A lovely toast for showing information to the user
+ *  A lovely toast for showing important information to the user
  * Authors:
  *   Andres Alvarez Duran, ID: 117520958
  *   Joaquin Barrientos Monge, ID: 117440348
@@ -19,7 +19,7 @@ import ThemeContextMsgInfo from "../Context/ContextMsg";
  */
 const Message = () => {
   const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { msgInfo } = useContext(ThemeContextMsgInfo);
 
   return (
     <>

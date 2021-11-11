@@ -1,6 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import Spinner from "react-bootstrap/Spinner";
-import { useState, useContext, useCallback } from "react";
+import { useState, useContext} from "react";
 import Button from "react-bootstrap/Button";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
@@ -9,6 +8,8 @@ import axios from "axios";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
 import ThemeContextMsg from "../Context/ContextMessage";
 import Form from "react-bootstrap/Form";
+import SpinnerCont from "../Spinner/SpinnerCont";
+import { queryMutationSaveSingleDfa } from "../../Util/graphQLQueryUtil";
 
 /*
  *
@@ -28,58 +29,32 @@ const FaSaveModal = ({ handleClose, show }) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
-  const { msgShow, setMsgShow } = useContext(ThemeContextMsg);
-  const { msgInfo, setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { setMsgShow } = useContext(ThemeContextMsg);
+  const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const [addingID, setAddingID] = useState(false);
   const [dfaID, setDfaID] = useState("");
-  const displayMessage = useCallback(
-    (bg, header, body) => {
-      setMsgShow((e) => true);
-      setMsgInfo((e) => ({
-        bg: bg,
-        header: header,
-        body: body,
-      }));
-    },
-    [setMsgShow, setMsgInfo]
-  );
+  const displayMessage = (bg, header, body) => {
+    setMsgShow(true);
+    setMsgInfo({
+      bg: bg,
+      header: header,
+      body: body,
+    });
+  };
+
   const automaticSaveAutomata = async (automataId = null) => {
-    console.log(addingID, automataId , automataId.length === 0,'aumata adding')
+
     if (addingID && automataId.length === 0) return;
     try {
-      const nodosMapped = nodes.map(
-        (node) => `{
-        id: "${node.id}",
-        name: "${node.name}",
-        coord: { x: ${node.x}, y: ${node.y} },
-        end: ${node.final},
-        start: ${node.start},
-      }`
-      );
-      const edgesMapped = edge.map(
-        (ed) => `{
-        id: "${ed.id}",
-        state_src_id: {id:"${ed.from.id}",x:${ed.from.x},y:${ed.from.y}},
-        state_dst_id: {id:"${ed.to.id}",x:${ed.to.x},y:${ed.to.y}},
-        symbols: ${JSON.stringify(ed.symbol.split(","))},
-        coordTemp:{x:${ed.from.x},y:${ed.from.y}}
-      }`
-      );
-
-      const queryMutation = `mutation{
-            saveAutomata(id:"${
-              automataId || Date.now()
-            }",name:"NONE",alphabet:${JSON.stringify(
-        generalInfo.alphabet
-      )},states:[${nodosMapped}],transitions:[${edgesMapped}]){
-              id
-            }
-          }`;
-
-      setLoading((e) => true);
+      setLoading(true);
 
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryMutation,
+        query: queryMutationSaveSingleDfa(
+          automataId,
+          generalInfo.alphabet,
+          nodes,
+          edge
+        ),
       });
 
       navigator.clipboard.writeText(data.data.data.saveAutomata.id);
@@ -134,13 +109,8 @@ const FaSaveModal = ({ handleClose, show }) => {
             {!loading && !addingID && (
               <h4>Would you like to add your own id to the DFA?</h4>
             )}
-            {loading && (
-              <>
-                <h1>Saving DFA....</h1>
-                <Spinner animation="border" variant="primary" />
-              </>
-            )}
           </div>
+          {loading && <SpinnerCont text="Saving DFA..." />}
         </Modal.Body>
         <Modal.Footer>
           {!addingID && (
