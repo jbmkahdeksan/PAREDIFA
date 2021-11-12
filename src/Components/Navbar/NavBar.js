@@ -3,9 +3,9 @@ import Navbar from "react-bootstrap/NavBar";
 import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import logo from "../../Images/neg_favicon.png";
-import About from "../Modals/About";
-import GuideModal from "../Modals/GuideModal";
-import RegexEditorModal from "../Modals/RegexEditorModal";
+import About from "../Modals/NavBarModals/AboutModal/About";
+import Instructions from "../Modals/NavBarModals/GuideModal/Instructions";
+import RegexEditorModal from "../Modals/NavBarModals/ReModal/RegexEditorModal";
 import React from "react";
 /*
  *
@@ -81,7 +81,7 @@ const NavBar = () => {
         </Container>
       </Navbar>
       {showAbout && <About show={showAbout} handleShow={handleShow} />}
-      <GuideModal handleShow={handleShowIns} lgShow={lgShow} />
+      <Instructions handleShow={handleShowIns} lgShow={lgShow} />
       <RegexEditorModal show={showEditor} handleClose={handleShowEditor} />
     </>
   );

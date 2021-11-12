@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import ThemeContext from "../../../Context/ContextStates";
 import { BsCloudArrowDown, BsCloudArrowUp } from "react-icons/bs";
-import FAmodal from "../../../Modals/FAmodal";
-import FaSaveModal from "../../../Modals/FaSaveModal";
+import FAmodal from "../../../Modals/DownloadOrSaveModal/FAmodal";
+import FaSaveModal from "../../../Modals/DownloadOrSaveModal/FaSaveModal";
 /*
  *
  * Description:

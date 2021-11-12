@@ -1,11 +1,11 @@
-import TxtEditor from "../RegexEditor/TxtEditor";
+import TxtEditor from "../../../RegexEditor/TxtEditor";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useState, useContext } from "react";
-import ThemeContext from "../Context/ContextStates";
-import DeleteAutomataModal from "./DeleteAutomataModal";
-import ThemeContextGeneral from "../Context/GeneralInfo";
-import ThemeContextTr from "../Context/ContextTransitions";
+import ThemeContext from "../../../Context/ContextStates";
+import DeleteAutomataModal from "../../DeleteAutomataModal";
+import ThemeContextGeneral from "../../../Context/GeneralInfo";
+import ThemeContextTr from "../../../Context/ContextTransitions";
 /*
  *
  * Description:

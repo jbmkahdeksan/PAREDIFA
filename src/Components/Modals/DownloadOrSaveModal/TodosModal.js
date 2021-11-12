@@ -1,21 +1,21 @@
 import Modal from "react-bootstrap/Modal";
 import { useState, useContext } from "react";
 import axios from "axios";
-import ThemeContext from "../Context/ContextStates";
-import ThemeContextMsgInfo from "../Context/ContextMsg";
-import ThemeContextMsg from "../Context/ContextMessage";
-import ThemeContextGeneral from "../Context/GeneralInfo";
-import ThemeContextTr from "../Context/ContextTransitions";
-import Display from "../Display/Display";
-import DeleteAutomataModal from "./DeleteAutomataModal";
+import ThemeContext from "../../Context/ContextStates";
+import ThemeContextMsgInfo from "../../Context/ContextMsg";
+import ThemeContextMsg from "../../Context/ContextMessage";
+import ThemeContextGeneral from "../../Context/GeneralInfo";
+import ThemeContextTr from "../../Context/ContextTransitions";
+import Display from "../../Display/Display";
+import DeleteAutomataModal from "../DeleteAutomataModal";
 import { FcMultipleInputs } from "react-icons/fc";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import SpinnerCont from "../Spinner/SpinnerCont";
-import DfaList from "./DB/DfaList";
+import SpinnerCont from "../../Spinner/SpinnerCont";
+import DfaList from "../DB/DfaList";
 import {
   querySingleAutomata, queryMutationDelete, queryAllAutomatas
-} from "../../Util/graphQLQueryUtil";
+} from "../../../Util/graphQLQueryUtil";
 //Handle todos, tasks todo in Todo
 
 const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {

@@ -1,5 +1,5 @@
 import TodosModal from "./TodosModal";
-import Message from "../Message/Message";
+import Message from "../../Message/Message";
 
 /*
  *

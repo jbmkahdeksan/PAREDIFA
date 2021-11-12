@@ -12,7 +12,7 @@ import Modal from "react-bootstrap/Modal";
  *   Schedule: 10am
  *
  */
-const GuideModal = (props) => {
+const Instructions = (props) => {
   return (
     <>
       <Modal
@@ -53,4 +53,4 @@ const GuideModal = (props) => {
   );
 };
 
-export default GuideModal;
+export default Instructions;

@@ -19,7 +19,7 @@ import { useContext, useEffect } from "react";
  *   Schedule: 10am
  *
  */
-const WipeDataModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
+const ClearCanvasModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
   const { setNodes } = useContext(ThemeContext);
   const { setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
@@ -90,4 +90,4 @@ const WipeDataModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
   );
 };
 
-export default WipeDataModal;
+export default ClearCanvasModal;

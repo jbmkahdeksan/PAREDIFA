@@ -1,8 +1,8 @@
 import Offcanvas from "react-bootstrap/Offcanvas";
-import logo from "../../Images/una.png";
+import logo from "../../../../Images/una.png";
 import Spinner from "react-bootstrap/Spinner";
-import useFetch from "../UseFetch/useFetch";
-import { queryAbout } from "../../Util/graphQLQueryUtil";
+import useFetch from "../../../UseFetch/useFetch";
+import { queryAbout } from "../../../../Util/graphQLQueryUtil";
 /*
  *
  * Description:

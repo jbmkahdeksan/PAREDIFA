@@ -1,15 +1,15 @@
 import Modal from "react-bootstrap/Modal";
 import { useState, useContext } from "react";
 import Button from "react-bootstrap/Button";
-import ThemeContext from "../Context/ContextStates";
-import ThemeContextTr from "../Context/ContextTransitions";
-import ThemeContextGeneral from "../Context/GeneralInfo";
+import ThemeContext from "../../Context/ContextStates";
+import ThemeContextTr from "../../Context/ContextTransitions";
+import ThemeContextGeneral from "../../Context/GeneralInfo";
 import axios from "axios";
-import ThemeContextMsgInfo from "../Context/ContextMsg";
-import ThemeContextMsg from "../Context/ContextMessage";
+import ThemeContextMsgInfo from "../../Context/ContextMsg";
+import ThemeContextMsg from "../../Context/ContextMessage";
 import Form from "react-bootstrap/Form";
-import SpinnerCont from "../Spinner/SpinnerCont";
-import { queryMutationSaveSingleDfa } from "../../Util/graphQLQueryUtil";
+import SpinnerCont from "../../Spinner/SpinnerCont";
+import { queryMutationSaveSingleDfa } from "../../../Util/graphQLQueryUtil";
 
 /*
  *

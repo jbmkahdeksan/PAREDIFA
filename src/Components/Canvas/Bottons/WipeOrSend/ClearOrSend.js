@@ -4,7 +4,7 @@ import { querySaveImage } from "../../../../Util/graphQLQueryUtil";
 import ThemeContext from "../../../Context/ContextStates";
 import Button from "react-bootstrap/Button";
 import InformationModal from "../../../Modals/InformationModal";
-import WipeDataModal from "../../../Modals/WipeDataModal";
+import ClearCanvasModal from "../../../Modals/ClearCanvasModal";
 
 /*
  *
@@ -148,7 +148,7 @@ const ClearOrSend = ({
           progress={progress}
         />
       )}
-      <WipeDataModal
+      <ClearCanvasModal
         show={showWipeModal}
         handleClose={handleCloseWipeData}
         currentDFA={currentDfa}

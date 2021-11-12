@@ -21,35 +21,27 @@ const useFetch = (query) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const abortCont = new AbortController();
+    const cancelTokenSource = axios.CancelToken.source();
 
     const getData = async () => {
       try {
         const res = await axios.post(process.env.REACT_APP_BACK_END, {
           query: query,
+          cancelToken: cancelTokenSource.token,
         });
 
-        console.log('data BACK USEFFECt',res)
-
-        const data = res.data.data;
-        console.log(data, "databout");
-    
-        setData(data);
+        setData(res.data.data);
         setIsPending(false);
         setError(null);
       } catch (e) {
-        if (e.name === "AbortError") {
-          console.log("aboert");
-        } else {
-          setIsPending(false);
-          setError(e.message);
-        }
+        setIsPending(false);
+        setError(e.message);
       }
     };
 
     getData();
 
-    return () => abortCont.abort();
+    return () => cancelTokenSource.cancel();
   }, [query]);
   return { data, isPending, error };
 };
