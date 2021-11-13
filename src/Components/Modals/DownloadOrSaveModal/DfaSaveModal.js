@@ -24,7 +24,7 @@ import { queryMutationSaveSingleDfa } from "../../../Util/graphQLQueryUtil";
  *   Schedule: 10am
  *
  */
-const FaSaveModal = ({ handleClose, show }) => {
+const DfaSaveModal = ({ handleClose, show }) => {
   const [loading, setLoading] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
@@ -155,4 +155,4 @@ const FaSaveModal = ({ handleClose, show }) => {
   );
 };
 
-export default FaSaveModal;
+export default DfaSaveModal;

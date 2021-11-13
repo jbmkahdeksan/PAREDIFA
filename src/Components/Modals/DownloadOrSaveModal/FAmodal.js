@@ -1,4 +1,4 @@
-import TodosModal from "./TodosModal";
+import DBActionsModal from "./DBActionsModal";
 import Message from "../../Message/Message";
 
 /*
@@ -17,7 +17,7 @@ import Message from "../../Message/Message";
 const FAmodal = (props) => {
   return (
     <>
-      <TodosModal
+      <DBActionsModal
         handleShow={props.handleClose}
         show={props.show}
         FaM={true}

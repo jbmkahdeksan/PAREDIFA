@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import ThemeContext from "../../../Context/ContextStates";
 import { BsCloudArrowDown, BsCloudArrowUp } from "react-icons/bs";
 import FAmodal from "../../../Modals/DownloadOrSaveModal/FAmodal";
-import FaSaveModal from "../../../Modals/DownloadOrSaveModal/FaSaveModal";
+import DfaSaveModal from "../../../Modals/DownloadOrSaveModal/DfaSaveModal";
 /*
  *
  * Description:
@@ -57,7 +57,7 @@ const DownloadOrSave = ({ setCurrentDfa, displayMessage, currentDfaId }) => {
         />
       )}
       {showSaveModal && (
-        <FaSaveModal show={showSaveModal} handleClose={handleCloseSaveModal} />
+        <DfaSaveModal show={showSaveModal} handleClose={handleCloseSaveModal} />
       )}
     </>
   );

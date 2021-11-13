@@ -1,6 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import ThemeContextGeneral from "../Context/GeneralInfo";
+import ThemeContextGeneral from "../../Context/GeneralInfo";
 import { useContext } from "react";
 
 /*

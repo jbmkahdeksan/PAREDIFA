@@ -1,6 +1,6 @@
 import Button from "react-bootstrap/Button";
 import {useState} from 'react'
-import AlphabetModal from "../../Modals/AlphabetModal";
+import AlphabetModal from "../../Modals/AlphabetModals/AlphabetModal";
 /*
  *
  * Description:

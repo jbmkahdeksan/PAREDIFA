@@ -8,7 +8,7 @@ import {
   queryMutationUpdate,
   queryMutationDelete,
 } from "../../../../Util/graphQLQueryUtil";
-import DeleteAutomataModal from "../../../Modals/DeleteAutomataModal";
+import DeleteAutomataModal from "../../../Modals/DeleteDFAModal/DeleteAutomataModal";
 /*
  *
  * Description:
@@ -49,7 +49,7 @@ const CurrentDfa = ({
       displaySuccessMsg("The DFA was updated successfully!");
     } catch (e) {
       displayFailMessage(
-        `There was an error while sending the image:  ${e.message}`
+        `There was an while updating the DFA:  ${e.message}`
       );
     } finally {
       setFetchingUpdateDfa(false);

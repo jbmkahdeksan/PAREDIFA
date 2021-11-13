@@ -7,18 +7,18 @@ import ThemeContextMsg from "../../Context/ContextMessage";
 import ThemeContextGeneral from "../../Context/GeneralInfo";
 import ThemeContextTr from "../../Context/ContextTransitions";
 import Display from "../../Display/Display";
-import DeleteAutomataModal from "../DeleteAutomataModal";
+import DeleteAutomataModal from "../DeleteDFAModal/DeleteAutomataModal";
 import { FcMultipleInputs } from "react-icons/fc";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import SpinnerCont from "../../Spinner/SpinnerCont";
-import DfaList from "../DB/DfaList";
+import DfaList from "../DBDataModals/DfaList";
 import {
   querySingleAutomata, queryMutationDelete, queryAllAutomatas
 } from "../../../Util/graphQLQueryUtil";
 //Handle todos, tasks todo in Todo
 
-const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
+const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
   const [dbData, setDbDAta] = useState([]);
 
   const { nodes, setNodes } = useContext(ThemeContext);
@@ -278,4 +278,4 @@ const TodosModal = ({ title, handleShow, show, setCurrentDfa }) => {
   );
 };
 
-export default TodosModal;
+export default DBActionsModal;

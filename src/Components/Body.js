@@ -122,8 +122,9 @@ const Body = () => {
               setReady={setReady}
               errorsSymbols={errors.incorrectSymbol}
             />
-            <div className="accepted">{finalResultInfo}</div>
+           
           </div>
+          <div className="accepted">{finalResultInfo}</div>
         </div>
       </div>
     </div>

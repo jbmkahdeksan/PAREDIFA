@@ -2,9 +2,9 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useState, useContext } from "react";
-import ThemeContextGeneral from "../Context/GeneralInfo";
-import ThemeContextMsg from "../Context/ContextMessage";
-import ThemeContextMsgInfo from "../Context/ContextMsg";
+import ThemeContextGeneral from "../../Context/GeneralInfo";
+import ThemeContextMsg from "../../Context/ContextMessage";
+import ThemeContextMsgInfo from "../../Context/ContextMsg";
 /*
  *
  * Description:

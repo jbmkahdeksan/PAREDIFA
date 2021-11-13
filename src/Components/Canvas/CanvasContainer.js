@@ -1,7 +1,7 @@
 import Canvas from "./Canvas";
 import { useRef, useState, useContext, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import DefaultAlphabetModal from "../Modals/DefaultAlphabetModal";
+import DefaultAlphabetModal from "../Modals/AlphabetModals/DefaultAlphabetModal";
 import Message from "../Message/Message";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
