@@ -1,9 +1,9 @@
-import CanvasContainer from "./Canvas/CanvasContainer";
+import CanvasContainer from "./CanvasContainer";
 import { useState, useContext } from "react";
-import ThemeContext from "../Components/Context/ContextStates";
+import ThemeContext from "../Context/ContextStates";
 
-import ThemeContextGeneral from "../Components/Context/GeneralInfo";
-import Errors from "../Components/Errors/Errors";
+import ThemeContextGeneral from "../Context/GeneralInfo";
+import Errors from "../Errors/Errors";
 /*
  *
  * Description:

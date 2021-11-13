@@ -8,7 +8,7 @@ import ThemeContextGeneral from "./Components/Context/GeneralInfo";
 import ThemeContextRunInfo from "./Components/Context/ContextRunInfo";
 import ThemeContextStage from "./Components/Context/StageInfo";
 import NavBar from "./Components/Navbar/NavBar";
-import Body from "./Components/Body";
+import Body from "./Components/MainContainers/Body";
 /*
  *
  * Description:
@@ -43,6 +43,7 @@ function App() {
     finalState: "",
     prevPressed: false,
   });
+
 
   const [stageInfo, setStageInfo] = useState({ w: 900, h: 450 });
   return (

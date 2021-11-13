@@ -1,4 +1,4 @@
-import Canvas from "./Canvas";
+import Canvas from "../Canvas/Canvas";
 import { useRef, useState, useContext, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import DefaultAlphabetModal from "../Modals/AlphabetModals/DefaultAlphabetModal";
