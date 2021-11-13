@@ -84,7 +84,7 @@ const ClearOrSend = ({
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: querySaveImage(link.href, firstName, lastName, id, time),
       });
-      console.log(data, "email");
+      
       setProgress(100);
       setFeching(false);
       displaySuccessMsg("The image was sent successfully!");

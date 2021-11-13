@@ -80,7 +80,7 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
         query: queryAllAutomatas,
       });
 
-      console.log(res, "resGraphql");
+   
       setDbDAta((e) => res.data.data.allAutomatas);
     } catch (e) {
       displayErrorMsg(e);
@@ -102,14 +102,14 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
       result: false,
     });
 
-    console.log(automata.states, "automataStates");
+  
     setCurrentDfa({ id: automata.id }); //***************** *******************************/
     setNodes(mapStates(automata));
 
     setEdge(mapEdges(automata));
     if (showDeleteDfaModal) setShowDeleteDfaModal(false);
     handleShow();
-    console.log(automata, "automata");
+   
   };
 
   const handleAutomataDelete = async () => {
@@ -189,7 +189,7 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
       }
       setDbDAta([data.data.data.singleAutomata]);
 
-      console.log("single automata", data.data.data.singleAutomata);
+      
     } catch (e) {
       handleShow();
       displayErrorMsg(e);

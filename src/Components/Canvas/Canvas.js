@@ -121,7 +121,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
    */
   const handleKeyDownStates = useCallback(
     (e) => {
-      console.log("handingKeyDown states");
+  
       if (e.keyCode === 81) {
         if (generalInfo.alphabet.length === 0) {
           setGeneralInfo({ ...generalInfo, showAlphabetDefault: true });
@@ -202,7 +202,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
    */
   const handleNamingState = useCallback(
     (e) => {
-      console.log("ahndingNaming");
+      
       //ENTER
       if (e.keyCode === 13) {
         setIsNamingState(false);
@@ -327,7 +327,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         handleKeyDownEdges(e);
         return;
       }
-      console.log("HANDING CB GENERAL 1");
+      
       if (namingState) {
         handleNamingState(e);
         return;
