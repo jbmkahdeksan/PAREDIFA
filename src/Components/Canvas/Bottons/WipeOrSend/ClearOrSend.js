@@ -3,8 +3,8 @@ import axios from "axios";
 import { querySaveImage } from "../../../../Util/graphQLQueryUtil";
 import ThemeContext from "../../../Context/ContextStates";
 import Button from "react-bootstrap/Button";
-import InformationModal from "../../../Modals/InformationModal";
-import ClearCanvasModal from "../../../Modals/ClearCanvasModal";
+import InformationModal from "../../../Modals/ClearOrSaveAsImgModal/InformationModal";
+import ClearCanvasModal from "../../../Modals/ClearOrSaveAsImgModal/ClearCanvasModal";
 
 /*
  *
