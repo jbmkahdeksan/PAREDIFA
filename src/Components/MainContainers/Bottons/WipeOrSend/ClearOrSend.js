@@ -81,7 +81,7 @@ const ClearOrSend = ({
     setProgress(50);
 
     try {
-      const data = await axios.post(process.env.REACT_APP_BACK_END, {
+       await axios.post(process.env.REACT_APP_BACK_END, {
         query: querySaveImage(link.href, firstName, lastName, id, time),
       });
       
