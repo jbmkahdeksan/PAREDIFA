@@ -90,4 +90,5 @@ const ClearCanvasModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
   );
 };
 
+
 export default ClearCanvasModal;

@@ -18,6 +18,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
  *   Schedule: 10am
  *
  */
+
 const InformationModal = ({ show, handleClose, cb, fetching, progress }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
