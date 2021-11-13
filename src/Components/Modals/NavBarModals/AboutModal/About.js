@@ -49,7 +49,7 @@ const About = ({ show, handleShow, ...props }) => {
                   </p>
                 </strong>
                 <strong>
-                  <p>Profesor: {data.about.course.professor}</p>
+                  <p>Professor: {data.about.course.professor}</p>
                 </strong>
                 <p>
                   {data.about.term.id} Term {data.about.term.year}

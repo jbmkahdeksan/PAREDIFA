@@ -54,6 +54,7 @@ const DownloadOrSave = ({ setCurrentDfa, displayMessage, currentDfaId }) => {
           show={showDfaDownload}
           handleClose={handleCloseDfaDownload}
           setCurrentDfa={setCurrentDfa}
+          currentDfaId={currentDfaId}
         />
       )}
       {showSaveModal && (

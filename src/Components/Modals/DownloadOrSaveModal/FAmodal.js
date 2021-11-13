@@ -23,6 +23,7 @@ const FAmodal = (props) => {
         FaM={true}
         title="DFA stored in the DB"
         setCurrentDfa={props.setCurrentDfa}
+        currentDfaId={props.currentDfaId}
       />
       <Message />
     </>

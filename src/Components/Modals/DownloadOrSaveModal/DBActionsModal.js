@@ -14,11 +14,19 @@ import Form from "react-bootstrap/Form";
 import SpinnerCont from "../../Spinner/SpinnerCont";
 import DfaList from "../DBDataModals/DfaList";
 import {
-  querySingleAutomata, queryMutationDelete, queryAllAutomatas
+  querySingleAutomata,
+  queryMutationDelete,
+  queryAllAutomatas,
 } from "../../../Util/graphQLQueryUtil";
 //Handle todos, tasks todo in Todo
 
-const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
+const DBActionsModal = ({
+  title,
+  handleShow,
+  show,
+  setCurrentDfa,
+  currentDfaId,
+}) => {
   const [dbData, setDbDAta] = useState([]);
 
   const { nodes, setNodes } = useContext(ThemeContext);
@@ -63,7 +71,6 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
     running: false,
   };
 
-
   const displayErrorMsg = (e) => {
     setMsgShow(true);
     setMsgInfo({
@@ -80,7 +87,6 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
         query: queryAllAutomatas,
       });
 
-   
       setDbDAta((e) => res.data.data.allAutomatas);
     } catch (e) {
       displayErrorMsg(e);
@@ -102,23 +108,37 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
       result: false,
     });
 
-  
     setCurrentDfa({ id: automata.id }); //***************** *******************************/
     setNodes(mapStates(automata));
 
     setEdge(mapEdges(automata));
     if (showDeleteDfaModal) setShowDeleteDfaModal(false);
     handleShow();
-   
   };
 
+  const wipeApplicationData = () => {
+    setCurrentDfa({ id: null });
+    setNodes([]);
+    setEdge([]);
+    setGeneralInfo({
+      alphabet: [],
+      useDefault: false,
+      wipeData: true,
+      showAlphabetDefault: false,
+      result: false,
+    });
+  };
   const handleAutomataDelete = async () => {
+  
     setShowDeleteDfaModal(false);
     try {
       setFetchingDelete(true);
       await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryMutationDelete(selectedDFA),
       });
+      if (currentDfaId && currentDfaId === selectedDFA) {
+        wipeApplicationData();
+      }
       setMsgShow(true);
       setMsgInfo({
         bg: "success",
@@ -178,7 +198,6 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
   const handleSingleDfaDownload = async () => {
     if (idDfa.length === 0) return;
 
-
     try {
       setFetching(true);
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
@@ -188,8 +207,6 @@ const DBActionsModal = ({ title, handleShow, show, setCurrentDfa }) => {
         throw new Error("Couldnt find an automata with the given ID");
       }
       setDbDAta([data.data.data.singleAutomata]);
-
-      
     } catch (e) {
       handleShow();
       displayErrorMsg(e);
