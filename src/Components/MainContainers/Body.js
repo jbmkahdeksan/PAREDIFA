@@ -1,4 +1,4 @@
-import CanvasContainer from "./CanvasContainer";
+import CanvasAndButtons from "./CanvasAndButtons/CanvasAndButtons";
 import { useState, useContext } from "react";
 import ThemeContext from "../Context/ContextStates";
 
@@ -106,14 +106,14 @@ const Body = () => {
   return (
     <div className="container-fluid h-100">
       <div className="row h-100">
-        <CanvasContainer
+        <CanvasAndButtons
           handleIncorrectSymbolChanges={handleIncorrectSymbolChanges}
           inputString={inputString}
           setInputString={setInputString}
           cb={finalResult}
           ready={ready}
         />
-        <div className={"h-100 col-3 mx-auto border-start border-5 mt-4 ps-2"}>
+        <div className="h-100 col-3 mx-auto border-start border-5 mt-4 ps-2">
           <div className="errors">
             {errors.incorrectSymbol}
             <Errors

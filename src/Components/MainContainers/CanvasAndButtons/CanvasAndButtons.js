@@ -1,25 +1,25 @@
-import Canvas from "../Canvas/Canvas";
+import Canvas from "../../Canvas/Canvas";
 import { useRef, useState, useContext, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import DefaultAlphabetModal from "../Modals/AlphabetModals/DefaultAlphabetModal";
-import Message from "../Message/Message";
-import ThemeContext from "../Context/ContextStates";
-import ThemeContextTr from "../Context/ContextTransitions";
-import ThemeContextMsgInfo from "../Context/ContextMsg";
-import ThemeContextMsg from "../Context/ContextMessage";
-import ThemeContextGeneral from "../Context/GeneralInfo";
-import ThemeContextRunInfo from "../Context/ContextRunInfo";
-import Reactive from "../ReactLogo/Reactive";
-import ThemeContextStage from "../Context/StageInfo";
-import { preProcessAutomata, runBySteps } from "../Engine/Engine";
+import DefaultAlphabetModal from "../../Modals/AlphabetModals/DefaultAlphabetModal";
+import Message from "../../Message/Message";
+import ThemeContext from "../../Context/ContextStates";
+import ThemeContextTr from "../../Context/ContextTransitions";
+import ThemeContextMsgInfo from "../../Context/ContextMsg";
+import ThemeContextMsg from "../../Context/ContextMessage";
+import ThemeContextGeneral from "../../Context/GeneralInfo";
+import ThemeContextRunInfo from "../../Context/ContextRunInfo";
+import Reactive from "../../ReactLogo/Reactive";
+import ThemeContextStage from "../../Context/StageInfo";
+import { preProcessAutomata, runBySteps } from "../../Engine/Engine";
 import d3 from "d3";
 import Spinner from "react-bootstrap/Spinner";
-import AlphabetButton from "./Bottons/Alphabet/AlphabetButton";
-import DfaRun from "./Bottons/RunDFA/DfaRun";
-import BySteps from "./Bottons/RunDFA/BySteps";
-import CurrentDfa from "./Bottons/CurrentDfa/CurrentDfa";
-import DownloadOrSave from "./Bottons/CR/DownloadOrSave";
-import ClearOrSend from "./Bottons/WipeOrSend/ClearOrSend";
+import AlphabetButton from "./Buttons/Alphabet/AlphabetButton";
+import DfaRun from "./Buttons/RunDFA/DfaRun";
+import BySteps from "./Buttons/RunDFA/BySteps";
+import CurrentDfa from "../Bottons/CurrentDfa/CurrentDfa";
+import DownloadOrSave from "./Buttons/CR/DownloadOrSave";
+import ClearOrSend from "./Buttons/WipeOrSend/ClearOrSend";
 /*
  *
  * Description:
@@ -33,7 +33,7 @@ import ClearOrSend from "./Bottons/WipeOrSend/ClearOrSend";
  *   Schedule: 10am
  *
  */
-const CanvasContainer = ({
+const CanvasAndButtons = ({
   handleIncorrectSymbolChanges,
   inputString,
   setInputString,
@@ -239,7 +239,7 @@ const CanvasContainer = ({
    */
   const handleInput = (type) => {
     let edgesTmp = edge;
-    //just incase user is adding a tmp tr
+    // user is adding a tmp tr
     if (addingTr.state) {
       setAddingTr({ state: false, tr: "-1" });
       edgesTmp = edge.filter((ed) => ed.type === "fixed");
@@ -382,4 +382,4 @@ const CanvasContainer = ({
   );
 };
 
-export default CanvasContainer;
+export default CanvasAndButtons;
