@@ -1,23 +1,23 @@
 /*
-* Description:
-*   Transition class
-* Authors:
-*   Andres Alvarez Duran, ID: 117520958
-*   Joaquin Barrientos Monge, ID: 117440348
-*   Oscar Ortiz Chavarria, ID: 208260347
-*   David Zarate Marin, ID: 116770797
-*   Group: 01
-*   Schedule: 10am 
-* 
-*/
+ * Description:
+ *   Transition class
+ * EIF400 -- Paradigmas de Programacion
+ * @since II Term - 2021
+ * @authors Team 01-10am
+ *  - Andres Alvarez Duran 117520958
+ *  - Joaquin Barrientos Monge 117440348
+ *  - Oscar Ortiz Chavarria 208260347
+ *  - David Zarate Marin 116770797
+ *
+ */
 
-export default class Transition{
-    constructor(id, state_src, state_dst, symbols) {
-      this.id = id;
-      this.state_src = state_src;
-      this.state_dst = state_dst;
-      this.symbols = symbols;		
-      state_src.transitionsOut[state_src.transitionsOut.length] = this;
-      state_dst.transitionsIn[state_dst.transitionsIn.length] = this;
-    }
+export default class Transition {
+  constructor(id, state_src, state_dst, symbols) {
+    this.id = id;
+    this.state_src = state_src;
+    this.state_dst = state_dst;
+    this.symbols = symbols;
+    state_src.transitionsOut[state_src.transitionsOut.length] = this;
+    state_dst.transitionsIn[state_dst.transitionsIn.length] = this;
   }
+}
