@@ -265,6 +265,7 @@ const DBActionsModal = ({
               setSelectedDFA={setSelectedDFA}
               checkForDisplayData={checkForDisplayData}
               handleDisplayData={handleDisplayData}
+              currentDfaId={currentDfaId}
             />
           )}
         </Modal.Body>

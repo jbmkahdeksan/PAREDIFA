@@ -8,7 +8,7 @@ import { BsEye, BsDownload, BsTrash } from "react-icons/bs";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -21,6 +21,7 @@ const DfaList = ({
   setSelectedDFA,
   checkForDisplayData,
   handleDisplayData,
+  currentDfaId,
 }) => {
   return (
     <div className="dfaDisplayContainer">
@@ -30,11 +31,16 @@ const DfaList = ({
             <ListGroup.Item
               key={index}
               as="li"
+              variant={
+                currentDfaId && currentDfaId === data.id ? "success" : ""
+              }
               className="d-flex justify-content-between align-items-start"
             >
               <div className="ms-2 me-auto">
                 <div className="fw-bold">{data.id}</div>
-                {data.name === "NONE" ? "Unnamed" : data.name}
+                {currentDfaId && currentDfaId === data.id
+                  ? "Currently being displayed"
+                  : ""}
               </div>
               <BsTrash
                 size={23}
