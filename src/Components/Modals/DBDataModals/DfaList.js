@@ -31,7 +31,7 @@ const DfaList = ({
             <ListGroup.Item
               key={index}
               as="li"
-              variant={
+              variant={  
                 currentDfaId && currentDfaId === data.id ? "success" : ""
               }
               className="d-flex justify-content-between align-items-start"
