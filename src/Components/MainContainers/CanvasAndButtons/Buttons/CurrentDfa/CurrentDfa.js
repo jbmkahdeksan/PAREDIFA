@@ -28,6 +28,7 @@ const CurrentDfa = ({
   displaySuccessMsg,
   wipeApplicationData,
   setFetchingUpdateDfa,
+  addingTr,
 }) => {
   const { nodes } = useContext(ThemeContext);
   const { edge } = useContext(ThemeContextTr);
@@ -43,14 +44,19 @@ const CurrentDfa = ({
     try {
       setFetchingUpdateDfa(true);
       await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryMutationUpdate(dfaId, nodes, edge, generalInfo.alphabet),
+        query: queryMutationUpdate(
+          dfaId,
+          nodes,
+          addingTr.state
+            ? edge.filter((ed) => ed.type === "fixed" && ed.symbol.length !== 0)
+            : edge,
+          generalInfo.alphabet
+        ),
       });
       wipeApplicationData();
       displaySuccessMsg("The DFA was updated successfully!");
     } catch (e) {
-      displayFailMessage(
-        `There was an while updating the DFA:  ${e.message}`
-      );
+      displayFailMessage(`There was an while updating the DFA:  ${e.message}`);
     } finally {
       setFetchingUpdateDfa(false);
     }

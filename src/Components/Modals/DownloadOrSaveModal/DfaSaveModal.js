@@ -24,7 +24,7 @@ import { queryMutationSaveSingleDfa } from "../../../Util/graphQLQueryUtil";
  *   Schedule: 10am
  *
  */
-const DfaSaveModal = ({ handleClose, show }) => {
+const DfaSaveModal = ({ handleClose, show, addingTr }) => {
   const [loading, setLoading] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
@@ -55,13 +55,15 @@ const DfaSaveModal = ({ handleClose, show }) => {
     if (addingID && automataId.length === 0) return;
     try {
       setLoading(true);
-
+  
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryMutationSaveSingleDfa(
           automataId,
           generalInfo.alphabet,
           nodes,
-          edge
+          addingTr.state
+            ? edge.filter((ed) => ed.type === "fixed" && ed.symbol.length !== 0)
+            : edge
         ),
       });
 

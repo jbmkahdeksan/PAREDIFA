@@ -16,7 +16,12 @@ import DfaSaveModal from "../../../../Modals/DownloadOrSaveModal/DfaSaveModal";
  *   Schedule: 10am
  *
  */
-const DownloadOrSave = ({ setCurrentDfa, displayMessage, currentDfaId }) => {
+const DownloadOrSave = ({
+  setCurrentDfa,
+  displayMessage,
+  currentDfaId,
+  addingTr,
+}) => {
   const { nodes } = useContext(ThemeContext);
   const [showDfaDownload, setShowDfaDownload] = useState(false);
   const handleCloseDfaDownload = () => setShowDfaDownload(false);
@@ -58,7 +63,11 @@ const DownloadOrSave = ({ setCurrentDfa, displayMessage, currentDfaId }) => {
         />
       )}
       {showSaveModal && (
-        <DfaSaveModal show={showSaveModal} handleClose={handleCloseSaveModal} />
+        <DfaSaveModal
+          show={showSaveModal}
+          addingTr={addingTr}
+          handleClose={handleCloseSaveModal}
+        />
       )}
     </>
   );

@@ -341,6 +341,7 @@ const CanvasAndButtons = ({
                       setCurrentDfa={setCurrentDfa}
                       displayMessage={displayMessage}
                       currentDfaId={currentDfa.id}
+                      addingTr={addingTr}
                     />
 
                     <CurrentDfa
@@ -349,6 +350,7 @@ const CanvasAndButtons = ({
                       displaySuccessMsg={displaySuccessMsg}
                       displayFailMessage={displayFailMessage}
                       dfaId={currentDfa.id}
+                      addingTr={addingTr}
                     />
                   </>
                 )}
