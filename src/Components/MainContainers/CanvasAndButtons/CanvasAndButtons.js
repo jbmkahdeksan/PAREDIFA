@@ -27,7 +27,7 @@ import ClearOrSend from "./Buttons/WipeOrSend/ClearOrSend";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -263,7 +263,7 @@ const CanvasAndButtons = ({
     );
   };
 
-    /** This callback is used when the user is evaluating the automata by steps
+  /** This callback is used when the user is evaluating the automata by steps
    * @param runInfoObj
    * @returns void
    */
@@ -309,17 +309,18 @@ const CanvasAndButtons = ({
             />
           )}
         </div>
-
-        <Button
-          variant="primary"
-          disabled={runInfo.nowRunning}
-          className="mx-1"
-          id="jsonUpload"
-          onClick={algo}
-        >
-          {" "}
-          Upload JSON
-        </Button>
+        {false && (
+          <Button
+            variant="primary"
+            disabled={runInfo.nowRunning}
+            className="mx-1"
+            id="jsonUpload"
+            onClick={algo}
+          >
+            {" "}
+            Upload JSON
+          </Button>
+        )}
       </div>
 
       <div>

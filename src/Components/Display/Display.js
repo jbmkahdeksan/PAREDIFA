@@ -26,7 +26,7 @@ const Display = ({ show, handleClose, nodes, edges }) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-sm">
-            Displaying DFA *View only mode*
+            Peeking DFA
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
