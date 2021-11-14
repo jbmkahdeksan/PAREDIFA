@@ -1,14 +1,14 @@
 import { FcProcess, FcEmptyTrash } from "react-icons/fc";
-import ThemeContext from "../../../Context/ContextStates";
-import ThemeContextTr from "../../../Context/ContextTransitions";
-import ThemeContextGeneral from "../../../Context/GeneralInfo";
+import ThemeContext from "../../../../Context/ContextStates";
+import ThemeContextTr from "../../../../Context/ContextTransitions";
+import ThemeContextGeneral from "../../../../Context/GeneralInfo";
 import axios from "axios";
 import { useContext, useState } from "react";
 import {
   queryMutationUpdate,
   queryMutationDelete,
-} from "../../../../Util/graphQLQueryUtil";
-import DeleteAutomataModal from "../../../Modals/DeleteDFAModal/DeleteAutomataModal";
+} from "../../../../../Util/graphQLQueryUtil";
+import DeleteAutomataModal from "../../../../Modals/DeleteDFAModal/DeleteAutomataModal";
 /*
  *
  * Description:

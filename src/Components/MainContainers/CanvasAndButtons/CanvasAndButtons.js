@@ -17,7 +17,7 @@ import Spinner from "react-bootstrap/Spinner";
 import AlphabetButton from "./Buttons/Alphabet/AlphabetButton";
 import DfaRun from "./Buttons/RunDFA/DfaRun";
 import BySteps from "./Buttons/RunDFA/BySteps";
-import CurrentDfa from "../Bottons/CurrentDfa/CurrentDfa";
+import CurrentDfa from "./Buttons/CurrentDfa/CurrentDfa";
 import DownloadOrSave from "./Buttons/CR/DownloadOrSave";
 import ClearOrSend from "./Buttons/WipeOrSend/ClearOrSend";
 /*
