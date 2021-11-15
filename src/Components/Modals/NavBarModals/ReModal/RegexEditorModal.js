@@ -8,6 +8,7 @@ import ThemeContextGeneral from "../../../Context/GeneralInfo";
 import ThemeContextTr from "../../../Context/ContextTransitions";
 import ThemeContextMsgInfo from "../../../Context/ContextMsg";
 import ThemeContextMsg from "../../../Context/ContextMessage";
+import ThemeContextStage from "../../../Context/StageInfo";
 import axios from "axios";
 import d3 from "d3";
 /*
@@ -30,11 +31,12 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const [dfaName, setDfaName] = useState("");
   const [simplifyRe, setSimplifyRe] = useState(false);
   const [checkSintax, setCheckSintax] = useState(false);
-  const { nodes, setNodes } = useContext(ThemeContext);
+  const {  setNodes } = useContext(ThemeContext);
   const { setEdge } = useContext(ThemeContextTr);
   const { setGeneralInfo } = useContext(ThemeContextGeneral);
   const { setMsgShow } = useContext(ThemeContextMsg);
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
+  const { stageInfo } = useContext(ThemeContextStage);
   //delete modal if theres data
   const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
   const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);
@@ -113,7 +115,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   };
 
   const algo = (nodos, ed) => {
-    var w = 900;
+    var w = stageInfo.w;
     // var h = 450;
 
     var dataset = {
