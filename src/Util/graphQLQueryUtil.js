@@ -149,6 +149,7 @@ export const queryAbout = `{
           id
           crn
           name
+          professor
         }
         term{
           year
