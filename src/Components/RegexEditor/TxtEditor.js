@@ -32,7 +32,7 @@ const TxtEditor = ({
     <>
       <Form.Group as={Row} className="mb-5">
         <Form.Label as="legend" column sm={2}>
-          Asign name to DFA
+          Asign ID to DFA
         </Form.Label>
         <Col sm={10}>
           <Form.Check
@@ -93,7 +93,7 @@ const TxtEditor = ({
             value={dfaName}
             onChange={(e) => setDfaName(e.target.value)}
             id="alphabetInput"
-            placeholder="DFA name"
+            placeholder="DFA ID"
           />
         </Form.Group>
       )}
