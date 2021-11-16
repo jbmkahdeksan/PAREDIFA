@@ -9,6 +9,7 @@ import ThemeContextTr from "../../../Context/ContextTransitions";
 import ThemeContextMsgInfo from "../../../Context/ContextMsg";
 import ThemeContextMsg from "../../../Context/ContextMessage";
 import ThemeContextStage from "../../../Context/StageInfo";
+import { queryCompileRe } from "../../../../Util/graphQLQueryUtil";
 import axios from "axios";
 import d3 from "d3";
 /*
@@ -31,7 +32,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const [dfaName, setDfaName] = useState("");
   const [simplifyRe, setSimplifyRe] = useState(false);
   const [checkSintax, setCheckSintax] = useState(false);
-  const {  setNodes } = useContext(ThemeContext);
+  const { nodes, setNodes } = useContext(ThemeContext);
   const { setEdge } = useContext(ThemeContextTr);
   const { setGeneralInfo } = useContext(ThemeContextGeneral);
   const { setMsgShow } = useContext(ThemeContextMsg);
@@ -47,70 +48,62 @@ const RegexEditorModal = ({ show, handleClose }) => {
    * @returns void
    */
   const sendReToCompile = async () => {
+    setFeching(true);
+    const data = await axios.post(process.env.REACT_APP_BACK_END, {
+      query: queryCompileRe(
+        manualName ? dfaName : Date.now(),
+        checkSintax,
+        simplifyRe,
+        re
+      ),
+    });
+
+    const res = data.data.data.compileRE;
+    console.log(res, "data");
+    const edges = res.edges;
+    const nodosNuevos = res.nodes;
+    console.log(
+      edges.map((e) => ({
+        source: nodosNuevos.findIndex((nod) => nod.name === e.source),
+        target: nodosNuevos.findIndex((nod) => nod.name === e.target),
+        symbol: e.symbol,
+      }))
+    );
+    setGeneralInfo({
+      alphabet: res.alphabet,
+      useDefault: false,
+      wipeData: true,
+      showAlphabetDefault: false,
+      result: false,
+    });
+
+    setFeching(false);
+    setRe("");
+    if (showDeleteAutomata) setShowDeleteAutomata(false);
+    handleClose();
+    algo(
+      nodosNuevos.map((nod) => ({
+        ...nod,
+        final: nod.final,
+        start: nod.initial,
+      })),
+      edges.map((e) => ({
+        source: nodosNuevos.findIndex((nod) => nod.name === e.source),
+        target: nodosNuevos.findIndex((nod) => nod.name === e.target),
+        symbol: e.symbol,
+      }))
+    );
+  };
+  /**  This method alerts the user incase theres any data in the canvas
+   * @returns void
+   */
+  const checkForData = async () => {
     if (re.length !== 0) {
-      const queryTodo = `
-      {
-        compileRE(re:{id:"${
-          manualName ? dfaName : Date.now()
-        }",checkSintax:${checkSintax},simpBeforeComp:${simplifyRe},RE:"${re}"}){
-          nodes{
-            name
-            label
-            initial
-            final
-          }
-         
-          edges{
-            source
-            target
-            symbol
-          }
-          alphabet
-        }
-      }`;
-      /* if (nodes.length > 0) {
+      if (nodes.length > 0) {
         setShowDeleteAutomata(true);
+      } else {
+        sendReToCompile();
       }
-*/
-      setFeching(true);
-      const data = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryTodo,
-      });
-
-      const res = data.data.data.compileRE;
-      console.log(res, "data");
-      const edges = res.edges;
-      const nodosNuevos = res.nodes;
-      console.log(
-        edges.map((e) => ({
-          source: nodosNuevos.findIndex((nod) => nod.name === e.source),
-          target: nodosNuevos.findIndex((nod) => nod.name === e.target),
-          symbol: e.symbol,
-        }))
-      );
-      setGeneralInfo({
-        alphabet: res.alphabet,
-        useDefault: false,
-        wipeData: true,
-        showAlphabetDefault: false,
-        result: false,
-      });
-
-      setFeching(false);
-      setRe("");
-      handleClose();
-      algo(
-        nodosNuevos.map((nod) => ({
-          ...nod,
-          final: nod.final,
-          start: nod.initial,
-        })),
-        edges.map((e) => ({
-          source: nodosNuevos.findIndex((nod) => nod.name === e.source),
-          target: nodosNuevos.findIndex((nod) => nod.name === e.target),
-          symbol: e.symbol,
-        }))
-      );
     }
   };
 
@@ -148,9 +141,9 @@ const RegexEditorModal = ({ show, handleClose }) => {
     force.on("end", () => {
       setMsgShow(true);
       setMsgInfo({
-        bg: 'light',
-        header: 'Information',
-        body: 'Im done',
+        bg: "light",
+        header: "Information",
+        body: "Im done",
       });
     });
 
@@ -192,21 +185,6 @@ const RegexEditorModal = ({ show, handleClose }) => {
     });
   };
 
-  /**  This method wipes current DFA in canvas
-   * @returns void
-   */
-  const wipeDataAutomata = () => {
-    setNodes([]);
-    setEdge([]);
-    setGeneralInfo({
-      alphabet: [],
-      useDefault: false,
-      wipeData: true,
-      showAlphabetDefault: false,
-      result: false,
-    });
-    handleShowDeleteAutomata();
-  };
   return (
     <>
       <Modal
@@ -240,7 +218,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button onClick={sendReToCompile} variant="primary">
+          <Button onClick={checkForData} variant="primary">
             Send
           </Button>
         </Modal.Footer>
@@ -249,7 +227,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
         title="Are you sure you want to procede to send the RE? Your progess will be lost! "
         show={showDeleteAutomata}
         handleClose={handleShowDeleteAutomata}
-        cbDelete={wipeDataAutomata}
+        cbDelete={sendReToCompile}
       />
     </>
   );

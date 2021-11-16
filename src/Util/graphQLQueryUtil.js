@@ -5,7 +5,7 @@
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -202,6 +202,24 @@ export const queryAllAutomatas = `{
   }
 }`;
 
+export const queryCompileRe = (dfaName, checkSintax, simplifyRe, re) => `
+{
+  compileRE(re:{id:"${dfaName}",checkSintax:${checkSintax},simpBeforeComp:${simplifyRe},RE:"${re}"}){
+    nodes{
+      name
+      label
+      initial
+      final
+    }
+   
+    edges{
+      source
+      target
+      symbol
+    }
+    alphabet
+  }
+}`;
 /**  This method is  a query for sending an image to the server
  */
 export const querySaveImage = (href, firstName, lastName, id, time) =>
