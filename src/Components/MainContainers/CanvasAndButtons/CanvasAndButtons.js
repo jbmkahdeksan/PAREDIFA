@@ -221,6 +221,7 @@ const CanvasAndButtons = ({
       setAddingTr((e) => ({ state: false, tr: "-1" }));
       setIsByStep((e) => false);
       setDisablePrev((e) => true);
+      setCurrentDfa(e=>({ id: null }));
     }
   }, [generalInfo.wipeData]);
 
