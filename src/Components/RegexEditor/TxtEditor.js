@@ -38,7 +38,7 @@ const TxtEditor = ({
           <Form.Check
             required
             type="radio"
-            label="Automatico"
+            label="Automatic"
             onChange={() => {
               if (manualName) setManualName(false);
               setAutomatico(true);
@@ -49,7 +49,7 @@ const TxtEditor = ({
           <Form.Check
             required
             type="radio"
-            label="Manual"
+            label="Self-assign"
             onChange={() => {
               if (automatico) setAutomatico(false);
               setManualName(true);
