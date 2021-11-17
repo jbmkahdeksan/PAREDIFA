@@ -1,6 +1,5 @@
 import Canvas from "../../Canvas/Canvas";
 import { useRef, useState, useContext, useEffect } from "react";
-import Button from "react-bootstrap/Button";
 import DefaultAlphabetModal from "../../Modals/AlphabetModals/DefaultAlphabetModal";
 import Message from "../../Message/Message";
 import ThemeContext from "../../Context/ContextStates";
@@ -14,13 +13,13 @@ import ThemeContextLayingDFA from "../../Context/ContextLayingDFA";
 import Reactive from "../../ReactLogo/Reactive";
 import { preProcessAutomata, runBySteps } from "../../Engine/Engine";
 import Spinner from "react-bootstrap/Spinner";
-import AlphabetButton from "./Buttons/Alphabet/AlphabetButton";
 import DfaRun from "./Buttons/RunDFA/DfaRun";
 import BySteps from "./Buttons/RunDFA/BySteps";
 import CurrentDfa from "./Buttons/CurrentDfa/CurrentDfa";
 import DownloadOrSave from "./Buttons/CR/DownloadOrSave";
 import ClearOrSend from "./Buttons/WipeOrSend/ClearOrSend";
 import AnimationLayingDfa from "../../LayingDFA/AnimationLayingDfa";
+import AlphabetOrCompile from "./Buttons/SetAlphabetOrCompileToDfa/AlphabetOrCompile";
 
 /*
  *
@@ -41,9 +40,7 @@ const CanvasAndButtons = ({
   setInputString,
   ready,
   cb,
-  INITALSTATE,
-  FINALSTATE,
-  canCompileToDfa
+  canCompileToDfa,
 }) => {
   const stageRef = useRef(null);
 
@@ -64,7 +61,6 @@ const CanvasAndButtons = ({
 
   //runInfo
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
-
 
   //current dfa downloaded
   const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
@@ -190,17 +186,12 @@ const CanvasAndButtons = ({
         {layingDFA && <AnimationLayingDfa />}
         {!layingDFA && (
           <>
-            <div className="d-grid col-3 mx-0 text-center border-start border-2">
-              <div className="btn-group-sm m-auto text-center">
-                <AlphabetButton
-                  nowRunning={runInfo.nowRunning}
-                  fetchingUpdateDfa={fetchingUpdateDfa}
-                />
-                {canCompileToDfa && (
-                  <Button variant="outline-primary">Convert to DFA</Button>
-                )}
-              </div>
-            </div>
+            <AlphabetOrCompile
+              nowRunning={runInfo.nowRunning}
+              fetchingUpdateDfa={fetchingUpdateDfa}
+              canCompileToDfa={canCompileToDfa}
+            />
+
             <div className="d-grid col-5 mx-0 text-center border-start border-2">
               {runInfo.nowRunning && !isByStep && (
                 <div className="automataRun m-auto">
