@@ -10,6 +10,7 @@ import ThemeContextMsg from "../../Context/ContextMessage";
 import ThemeContextGeneral from "../../Context/GeneralInfo";
 import ThemeContextRunInfo from "../../Context/ContextRunInfo";
 import ThemeContextCurrentDFA from "../../Context/ContextCurrentDFA";
+import ThemeContextLayingDFA from "../../Context/ContextLayingDFA";
 import Reactive from "../../ReactLogo/Reactive";
 import ThemeContextStage from "../../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../../Engine/Engine";
@@ -21,6 +22,8 @@ import BySteps from "./Buttons/RunDFA/BySteps";
 import CurrentDfa from "./Buttons/CurrentDfa/CurrentDfa";
 import DownloadOrSave from "./Buttons/CR/DownloadOrSave";
 import ClearOrSend from "./Buttons/WipeOrSend/ClearOrSend";
+import AnimationLayingDfa from "../../LayingDFA/AnimationLayingDfa";
+
 /*
  *
  * Description:
@@ -64,10 +67,13 @@ const CanvasAndButtons = ({
   const { stageInfo } = useContext(ThemeContextStage);
 
   //current dfa downloaded
-  const {currentDfa, setCurrentDfa} = useContext(ThemeContextCurrentDFA);
+  const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
 
   //updateing dfa
   const [fetchingUpdateDfa, setFetchingUpdateDfa] = useState(false);
+
+  //application laying out dfa
+  const { layingDFA } = useContext(ThemeContextLayingDFA);
 
   /** This method displays a success message to the user
    * @param msg the msg to be displayed in the toast
@@ -222,7 +228,6 @@ const CanvasAndButtons = ({
       setAddingTr((e) => ({ state: false, tr: "-1" }));
       setIsByStep((e) => false);
       setDisablePrev((e) => true);
-      
     }
   }, [generalInfo.wipeData]);
 
@@ -278,39 +283,44 @@ const CanvasAndButtons = ({
   return (
     <div className="h-100 col-9">
       <div className="d-flex justify-content-center my-4">
-        <AlphabetButton
-          nowRunning={runInfo.nowRunning}
-          fetchingUpdateDfa={fetchingUpdateDfa}
-        />
+        {layingDFA && <AnimationLayingDfa />}
+        {!layingDFA && (
+          <>
+            <AlphabetButton
+              nowRunning={runInfo.nowRunning}
+              fetchingUpdateDfa={fetchingUpdateDfa}
+            />
 
-        <div className="d-grid col-5 mx-0 text-center border-start border-2">
-          {runInfo.nowRunning && !isByStep && (
-            <div className="automataRun m-auto">
-              <h4>Automata is running...</h4>
-              <div className="spinner">
-                <Reactive />
-              </div>
+            <div className="d-grid col-5 mx-0 text-center border-start border-2">
+              {runInfo.nowRunning && !isByStep && (
+                <div className="automataRun m-auto">
+                  <h4>Automata is running...</h4>
+                  <div className="spinner">
+                    <Reactive />
+                  </div>
+                </div>
+              )}
+              {runInfo.nowRunning && isByStep && (
+                <BySteps
+                  disablePrev={disablePrev}
+                  runBySteps={runBySteps}
+                  runInfo={runInfo}
+                  setRunInfo={setRunInfo}
+                  byStepCb={byStepCb}
+                  setDisablePrev={setDisablePrev}
+                />
+              )}
+              {!runInfo.nowRunning && (
+                <DfaRun
+                  inputString={inputString}
+                  handleInputChanges={handleInputChanges}
+                  handleInput={handleInput}
+                  ready={ready}
+                />
+              )}
             </div>
-          )}
-          {runInfo.nowRunning && isByStep && (
-            <BySteps
-              disablePrev={disablePrev}
-              runBySteps={runBySteps}
-              runInfo={runInfo}
-              setRunInfo={setRunInfo}
-              byStepCb={byStepCb}
-              setDisablePrev={setDisablePrev}
-            />
-          )}
-          {!runInfo.nowRunning && (
-            <DfaRun
-              inputString={inputString}
-              handleInputChanges={handleInputChanges}
-              handleInput={handleInput}
-              ready={ready}
-            />
-          )}
-        </div>
+          </>
+        )}
         {false && (
           <Button
             variant="primary"
@@ -333,50 +343,51 @@ const CanvasAndButtons = ({
             setAddingTr={setAddingTr}
           />
         </div>
+        {!layingDFA && (
+          <div className="row my-2">
+            <div id="bottomCanvas">
+              <div className="bottomCanvasStyle">
+                <div className="dataBaseActions d-grid gap-2 d-md-flex justify-content-md-start">
+                  {!runInfo.nowRunning && !fetchingUpdateDfa && (
+                    <>
+                      <DownloadOrSave
+                        setCurrentDfa={setCurrentDfa}
+                        displayMessage={displayMessage}
+                        currentDfaId={currentDfa.id}
+                        addingTr={addingTr}
+                      />
 
-        <div className="row my-2">
-          <div id="bottomCanvas">
-            <div className="bottomCanvasStyle">
-              <div className="dataBaseActions d-grid gap-2 d-md-flex justify-content-md-start">
-                {!runInfo.nowRunning && !fetchingUpdateDfa && (
-                  <>
-                    <DownloadOrSave
-                      setCurrentDfa={setCurrentDfa}
-                      displayMessage={displayMessage}
-                      currentDfaId={currentDfa.id}
-                      addingTr={addingTr}
-                    />
-
-                    <CurrentDfa
-                      setFetchingUpdateDfa={setFetchingUpdateDfa}
-                      wipeApplicationData={wipeApplicationData}
-                      displaySuccessMsg={displaySuccessMsg}
-                      displayFailMessage={displayFailMessage}
-                      dfaId={currentDfa.id}
-                      addingTr={addingTr}
-                    />
-                  </>
-                )}
-                {fetchingUpdateDfa && (
-                  <>
-                    <Spinner animation="grow" size="sm" />
-                    <h5>Updating current DFA....</h5>{" "}
-                  </>
-                )}
+                      <CurrentDfa
+                        setFetchingUpdateDfa={setFetchingUpdateDfa}
+                        wipeApplicationData={wipeApplicationData}
+                        displaySuccessMsg={displaySuccessMsg}
+                        displayFailMessage={displayFailMessage}
+                        dfaId={currentDfa.id}
+                        addingTr={addingTr}
+                      />
+                    </>
+                  )}
+                  {fetchingUpdateDfa && (
+                    <>
+                      <Spinner animation="grow" size="sm" />
+                      <h5>Updating current DFA....</h5>{" "}
+                    </>
+                  )}
+                </div>
+                <ClearOrSend
+                  stageRef={stageRef}
+                  nowRunning={runInfo.nowRunning}
+                  fetchingUpdateDfa={fetchingUpdateDfa}
+                  displayMessage={displayMessage}
+                  displaySuccessMsg={displaySuccessMsg}
+                  displayFailMessage={displayFailMessage}
+                  currentDfa={currentDfa}
+                  setCurrentDfa={setCurrentDfa}
+                />
               </div>
-              <ClearOrSend
-                stageRef={stageRef}
-                nowRunning={runInfo.nowRunning}
-                fetchingUpdateDfa={fetchingUpdateDfa}
-                displayMessage={displayMessage}
-                displaySuccessMsg={displaySuccessMsg}
-                displayFailMessage={displayFailMessage}
-                currentDfa={currentDfa}
-                setCurrentDfa={setCurrentDfa}
-              />
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div>

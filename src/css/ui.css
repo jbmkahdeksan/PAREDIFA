@@ -129,5 +129,42 @@ canvas{
 
 
 
+            
+
+            
+#gear2 {
+    left: 60px;
+}
+
+#gear3 {
+    top: 45px;
+    left: 110px;
+}
+
+.spin {
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+}
+
+#hammer{
+
+
+    animation:pedo 1s linear infinite;
+}
+
+.layingDFA{
+    text-align: center;
+    margin-top:1.5%;
+  
+}
+@-moz-keyframes spin { 10% { -moz-transform: rotate(90deg); } }
+@-webkit-keyframes spin { 10% { -webkit-transform: rotate(90deg); } }
+@keyframes spin { 10% { -webkit-transform: rotate(0deg); transform:rotate(-50deg); } }
+
+
+
+@keyframes pedo{ 100% { transform-origin: left top;transform: rotateZ(3.142rad);} }
+
 
 

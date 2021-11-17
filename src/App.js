@@ -8,6 +8,7 @@ import ThemeContextGeneral from "./Components/Context/GeneralInfo";
 import ThemeContextRunInfo from "./Components/Context/ContextRunInfo";
 import ThemeContextStage from "./Components/Context/StageInfo";
 import ThemeContextCurrentDFA from "./Components/Context/ContextCurrentDFA";
+import ThemeContextLayingDFA from "./Components/Context/ContextLayingDFA";
 import NavBar from "./Components/Navbar/NavBar";
 import Body from "./Components/MainContainers/Body";
 /*
@@ -29,6 +30,7 @@ function App() {
   const [msgShow, setMsgShow] = useState(false);
   const [msgInfo, setMsgInfo] = useState({ bg: "", header: "", body: "" });
   const [currentDfa, setCurrentDfa] = useState({ id: null });
+  const [layingDFA, setLayingDFA]=useState(false)
   const [generalInfo, setGeneralInfo] = useState({
     alphabet: [],
     useDefault: false,
@@ -63,11 +65,13 @@ function App() {
                     <ThemeContextCurrentDFA.Provider
                       value={{ currentDfa, setCurrentDfa }}
                     >
+                      <ThemeContextLayingDFA.Provider value={{layingDFA, setLayingDFA}}>
                       <NavBar />
                       <Switch>
                         <Route exact path="/" component={Body} />
                         <Redirect exact to="/" />
                       </Switch>
+                      </ThemeContextLayingDFA.Provider>
                     </ThemeContextCurrentDFA.Provider>
                   </ThemeContextStage.Provider>
                 </ThemeContextRunInfo.Provider>

@@ -6,6 +6,7 @@ import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 import ThemeContextRunInfo from "../Context/ContextRunInfo";
 import ThemeContextStage from "../Context/StageInfo";
+import ThemeContextLayingDFA from "../Context/ContextLayingDFA";
 import { Stage, Layer } from "react-konva";
 import TemporaryEdge from "../CanvasElements/Edge/TemporaryEdge";
 import Node from "../CanvasElements/Node/Node";
@@ -20,7 +21,7 @@ import ResultShape from "../CanvasElements/Shapes/ResultShape";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -41,6 +42,8 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   const [mouseIn, setMouseIn] = useState(false);
   const { stageInfo, setStageInfo } = useContext(ThemeContextStage);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
+  //application laying out dfa
+  const { layingDFA } = useContext(ThemeContextLayingDFA);
 
   /**  This method displays a message with important information for the user
    * @returns void
@@ -121,7 +124,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
    */
   const handleKeyDownStates = useCallback(
     (e) => {
-  
       if (e.keyCode === 81) {
         if (generalInfo.alphabet.length === 0) {
           setGeneralInfo({ ...generalInfo, showAlphabetDefault: true });
@@ -202,7 +204,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
    */
   const handleNamingState = useCallback(
     (e) => {
-      
       //ENTER
       if (e.keyCode === 13) {
         setIsNamingState(false);
@@ -327,7 +328,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         handleKeyDownEdges(e);
         return;
       }
-      
+
       if (namingState) {
         handleNamingState(e);
         return;
@@ -562,6 +563,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
   }, []);
   return (
     <Stage
+      listening={!layingDFA}
       className="mx-auto"
       onDblClick={handleTmpTr}
       ref={stageRef}

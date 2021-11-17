@@ -9,6 +9,7 @@ import ThemeContextTr from "../../../Context/ContextTransitions";
 import ThemeContextCurrentDFA from "../../../Context/ContextCurrentDFA";
 import ThemeContextMsgInfo from "../../../Context/ContextMsg";
 import ThemeContextMsg from "../../../Context/ContextMessage";
+import ThemeContextLayingDFA from "../../../Context/ContextLayingDFA";
 import ThemeContextStage from "../../../Context/StageInfo";
 import { queryCompileRe } from "../../../../Util/graphQLQueryUtil";
 import axios from "axios";
@@ -40,6 +41,8 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { stageInfo } = useContext(ThemeContextStage);
   const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
+    //application laying out dfa
+    const {  setLayingDFA} = useContext(ThemeContextLayingDFA);
   //delete modal if theres data
   const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
   const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);
@@ -141,6 +144,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       .start();
 
     force.on("end", () => {
+      setLayingDFA(false)
       setMsgShow(true);
       setMsgInfo({
         bg: "light",
@@ -149,6 +153,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       });
     });
 
+    setLayingDFA(true)
     force.on("tick", function () {
       const array = [];
       const arrayEdge = [];
