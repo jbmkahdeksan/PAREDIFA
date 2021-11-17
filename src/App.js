@@ -7,6 +7,7 @@ import ThemeContextMsgInfo from "./Components/Context/ContextMsg";
 import ThemeContextGeneral from "./Components/Context/GeneralInfo";
 import ThemeContextRunInfo from "./Components/Context/ContextRunInfo";
 import ThemeContextStage from "./Components/Context/StageInfo";
+import ThemeContextCurrentDFA from "./Components/Context/ContextCurrentDFA";
 import NavBar from "./Components/Navbar/NavBar";
 import Body from "./Components/MainContainers/Body";
 /*
@@ -27,6 +28,7 @@ function App() {
   const [edge, setEdge] = useState([]);
   const [msgShow, setMsgShow] = useState(false);
   const [msgInfo, setMsgInfo] = useState({ bg: "", header: "", body: "" });
+  const [currentDfa, setCurrentDfa] = useState({ id: null });
   const [generalInfo, setGeneralInfo] = useState({
     alphabet: [],
     useDefault: false,
@@ -44,7 +46,6 @@ function App() {
     prevPressed: false,
   });
 
-
   const [stageInfo, setStageInfo] = useState({ w: 900, h: 450 });
   return (
     <BrowserRouter>
@@ -59,11 +60,15 @@ function App() {
                   <ThemeContextStage.Provider
                     value={{ stageInfo, setStageInfo }}
                   >
-                    <NavBar />
-                    <Switch>
-                      <Route exact path="/" component={Body} />
-                      <Redirect exact to="/" />
-                    </Switch>
+                    <ThemeContextCurrentDFA.Provider
+                      value={{ currentDfa, setCurrentDfa }}
+                    >
+                      <NavBar />
+                      <Switch>
+                        <Route exact path="/" component={Body} />
+                        <Redirect exact to="/" />
+                      </Switch>
+                    </ThemeContextCurrentDFA.Provider>
                   </ThemeContextStage.Provider>
                 </ThemeContextRunInfo.Provider>
               </ThemeContextGeneral.Provider>

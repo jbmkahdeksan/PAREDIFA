@@ -9,6 +9,7 @@ import ThemeContextMsgInfo from "../../Context/ContextMsg";
 import ThemeContextMsg from "../../Context/ContextMessage";
 import ThemeContextGeneral from "../../Context/GeneralInfo";
 import ThemeContextRunInfo from "../../Context/ContextRunInfo";
+import ThemeContextCurrentDFA from "../../Context/ContextCurrentDFA";
 import Reactive from "../../ReactLogo/Reactive";
 import ThemeContextStage from "../../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../../Engine/Engine";
@@ -63,7 +64,7 @@ const CanvasAndButtons = ({
   const { stageInfo } = useContext(ThemeContextStage);
 
   //current dfa downloaded
-  const [currentDfa, setCurrentDfa] = useState({ id: null });
+  const {currentDfa, setCurrentDfa} = useContext(ThemeContextCurrentDFA);
 
   //updateing dfa
   const [fetchingUpdateDfa, setFetchingUpdateDfa] = useState(false);
@@ -221,7 +222,7 @@ const CanvasAndButtons = ({
       setAddingTr((e) => ({ state: false, tr: "-1" }));
       setIsByStep((e) => false);
       setDisablePrev((e) => true);
-      //setCurrentDfa(e=>({ id: null }));
+      
     }
   }, [generalInfo.wipeData]);
 

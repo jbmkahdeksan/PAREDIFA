@@ -6,6 +6,7 @@ import ThemeContext from "../../../Context/ContextStates";
 import DeleteAutomataModal from "../../DeleteDFAModal/DeleteAutomataModal";
 import ThemeContextGeneral from "../../../Context/GeneralInfo";
 import ThemeContextTr from "../../../Context/ContextTransitions";
+import ThemeContextCurrentDFA from "../../../Context/ContextCurrentDFA";
 import ThemeContextMsgInfo from "../../../Context/ContextMsg";
 import ThemeContextMsg from "../../../Context/ContextMessage";
 import ThemeContextStage from "../../../Context/StageInfo";
@@ -38,6 +39,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const { setMsgShow } = useContext(ThemeContextMsg);
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { stageInfo } = useContext(ThemeContextStage);
+  const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
   //delete modal if theres data
   const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
   const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);
@@ -76,7 +78,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       showAlphabetDefault: false,
       result: false,
     });
-
+    if (currentDfa.id) setCurrentDfa({ id: null });
     setFeching(false);
     setRe("");
     if (showDeleteAutomata) setShowDeleteAutomata(false);
