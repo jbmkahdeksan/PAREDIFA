@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import ThemeContext from "../Context/ContextStates";
-import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
 /*
  *
@@ -9,75 +8,25 @@ import ThemeContextGeneral from "../Context/GeneralInfo";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
  *
  */
-const Errors = ({ inputString, setReady, ready, errorsSymbols }) => {
+const Errors = ({
+  inputString,
+  setReady,
+  ready,
+  errorsSymbols,
+  INITALSTATE,
+  FINALSTATE,
+  automataComplete
+}) => {
   const { nodes } = useContext(ThemeContext);
-  const { edge } = useContext(ThemeContextTr);
   const { generalInfo } = useContext(ThemeContextGeneral);
 
-  const INITALSTATE = nodes.find((node) => node.start) ?? false;
-  const FINALSTATE = nodes.find((node) => node.final) ?? false;
 
-  /**
-   * This method is to check whether automata is ready to go
-   * @returns html code
-   * */
-  const isAutomataComplete = () => {
-    const state_symbols = nodes.reduce((stored, current) => {
-      stored.push(
-        edge
-          .filter((ed) => ed.from.id === current.id)
-          .map((ed) =>
-            ed.symbol.length === 1 ? ed.symbol : ed.symbol.split(",")
-          )
-          .flat()
-      );
-      return stored;
-    }, []);
-
-    const error = nodes.reduce((stored, state, index) => {
-      let exitSymbols = generalInfo.alphabet.filter(
-        (elem) => !state_symbols[index].includes(elem)
-      );
-
-      if (exitSymbols.length) {
-        stored.push(
-          <>
-            state # {state.name} has no exit transition containing the symbols{" "}
-            {exitSymbols.toString()}.
-          </>
-        );
-      }
-
-      return stored;
-    }, []);
-
-    return error.length === 0
-      ? ""
-      : [
-          <>
-            {" "}
-            <b>
-              ERROR - <i> AUTOMATA NOT COMPLETE </i>
-            </b>
-            <br></br>
-            {error.map((ms, index) => (
-              <div key={index}>
-                {ms}
-                <br></br>
-              </div>
-            ))}
-            <br></br>
-            <br></br>
-          </>,
-          false,
-        ];
-  };
 
   /**
    * This method is to create an error
@@ -122,7 +71,7 @@ const Errors = ({ inputString, setReady, ready, errorsSymbols }) => {
     );
     return obj;
   };
-  const automataComplete = isAutomataComplete();
+
   return (
     <div className={""}>
       {generalInfo.alphabet.length === 0 && (

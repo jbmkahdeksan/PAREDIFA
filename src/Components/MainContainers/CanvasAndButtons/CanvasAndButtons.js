@@ -12,9 +12,7 @@ import ThemeContextRunInfo from "../../Context/ContextRunInfo";
 import ThemeContextCurrentDFA from "../../Context/ContextCurrentDFA";
 import ThemeContextLayingDFA from "../../Context/ContextLayingDFA";
 import Reactive from "../../ReactLogo/Reactive";
-import ThemeContextStage from "../../Context/StageInfo";
 import { preProcessAutomata, runBySteps } from "../../Engine/Engine";
-import d3 from "d3";
 import Spinner from "react-bootstrap/Spinner";
 import AlphabetButton from "./Buttons/Alphabet/AlphabetButton";
 import DfaRun from "./Buttons/RunDFA/DfaRun";
@@ -43,6 +41,9 @@ const CanvasAndButtons = ({
   setInputString,
   ready,
   cb,
+  INITALSTATE,
+  FINALSTATE,
+  canCompileToDfa
 }) => {
   const stageRef = useRef(null);
 
@@ -63,8 +64,7 @@ const CanvasAndButtons = ({
 
   //runInfo
   const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
-  //stage info
-  const { stageInfo } = useContext(ThemeContextStage);
+
 
   //current dfa downloaded
   const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
@@ -107,102 +107,6 @@ const CanvasAndButtons = ({
     });
     setCurrentDfa({ id: null });
     //
-  };
-
-  const algo = () => {
-    var w = stageInfo.w;
-    // var h = 450;
-
-    var dataset = {
-      nodes: [
-        { name: "" },
-        { name: "" },
-        { name: "" },
-        { name: "" },
-        { name: "" },
-        { name: "" },
-        { name: "" },
-        { name: "" },
-        { name: "" },
-        { name: "" },
-      ],
-      edges: [
-        { source: 0, target: 0, symbol: "Z" },
-        { source: 0, target: 2, symbol: "Z" },
-        { source: 0, target: 3, symbol: "Z" },
-        { source: 0, target: 4 },
-        { source: 1, target: 5 },
-        { source: 2, target: 5 },
-        { source: 2, target: 5 },
-        { source: 3, target: 4 },
-        { source: 5, target: 8 },
-        { source: 5, target: 9 },
-        { source: 6, target: 7 },
-        { source: 7, target: 8 },
-        { source: 8, target: 9 },
-        { source: 9, target: 1 },
-      ],
-    };
-
-    const algo = {
-      start: false,
-      selected: false,
-      final: false,
-      width: 40,
-      height: 40,
-      type: "circle",
-      shadowColor: "black",
-      shadowBlur: 10,
-      shadowOpacity: 0.6,
-    };
-    var force = d3.layout
-      .force()
-      .nodes(dataset.nodes)
-      .links(dataset.edges)
-      .size([w, 450])
-      .linkDistance(50)
-      .charge(-900)
-      .gravity(0.2)
-      .theta(0.8)
-      .alpha(0.1)
-      .start();
-
-    force.on("end", () => console.log("fuck u"));
-
-    force.on("tick", function () {
-      const array = [];
-      const arrayEdge = [];
-      dataset.nodes.forEach((nod, index) =>
-        array.push({
-          id: index.toString(),
-          name: `S${index}`,
-          x: nod.x,
-          y: nod.y,
-          ...algo,
-        })
-      );
-
-      dataset.edges.forEach((ed, index) =>
-        arrayEdge.push({
-          id: index.toString(),
-          symbol: "1",
-          type: "fixed",
-          from: {
-            id: `${array[ed.source.index].id}`,
-            x: array[ed.source.index].x,
-            y: array[ed.source.index].y,
-          },
-          to: {
-            id: `${array[ed.target.index].id}`,
-            x: array[ed.target.index].x,
-            y: array[ed.target.index].y,
-          },
-        })
-      );
-
-      setNodes(array);
-      setEdge(arrayEdge);
-    });
   };
 
   /** This method shows a toast with very important information to the user.
@@ -286,11 +190,17 @@ const CanvasAndButtons = ({
         {layingDFA && <AnimationLayingDfa />}
         {!layingDFA && (
           <>
-            <AlphabetButton
-              nowRunning={runInfo.nowRunning}
-              fetchingUpdateDfa={fetchingUpdateDfa}
-            />
-
+            <div className="d-grid col-3 mx-0 text-center border-start border-2">
+              <div className="btn-group-sm m-auto text-center">
+                <AlphabetButton
+                  nowRunning={runInfo.nowRunning}
+                  fetchingUpdateDfa={fetchingUpdateDfa}
+                />
+                {canCompileToDfa && (
+                  <Button variant="outline-primary">Convert to DFA</Button>
+                )}
+              </div>
+            </div>
             <div className="d-grid col-5 mx-0 text-center border-start border-2">
               {runInfo.nowRunning && !isByStep && (
                 <div className="automataRun m-auto">
@@ -320,18 +230,6 @@ const CanvasAndButtons = ({
               )}
             </div>
           </>
-        )}
-        {false && (
-          <Button
-            variant="primary"
-            disabled={runInfo.nowRunning}
-            className="mx-1"
-            id="jsonUpload"
-            onClick={algo}
-          >
-            {" "}
-            Upload JSON
-          </Button>
         )}
       </div>
 

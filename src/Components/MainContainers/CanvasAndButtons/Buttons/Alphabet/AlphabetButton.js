@@ -22,9 +22,9 @@ const AlphabetButton = ({
   const handleCloseAlphabetModal = () => setShowAlphabetModal(false);
   return (
     <>
-      <div className="d-grid col-2 mx-0 text-center border-start border-2">
+      <div >
         <Button
-          className="m-auto"
+          className="m-auto mb-2"
           onClick={() => setShowAlphabetModal(true)}
           disabled={nowRunning || fetchingUpdateDfa}
           variant="outline-primary"
