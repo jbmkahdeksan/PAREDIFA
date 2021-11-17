@@ -40,7 +40,7 @@ export const arrowEnd = (node1, angle) => ({
 export const arrowCurve = (angle, node1, node2, witdh) => {
   let proximity_coeficient =
     Math.sqrt(Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)) /
-    witdh;
+    Math.sqrt(Math.pow(450- 0, 2) + Math.pow(witdh - 0, 2))
   const curvePower = 100 * proximity_coeficient;
 
   const arrowStarts = arrowStart(node2, angle);
