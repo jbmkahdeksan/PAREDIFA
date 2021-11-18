@@ -56,6 +56,7 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
     try {
       setLoading(true);
   
+      console.log(nodes,'saving nodes')
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryMutationSaveSingleDfa(
           automataId,

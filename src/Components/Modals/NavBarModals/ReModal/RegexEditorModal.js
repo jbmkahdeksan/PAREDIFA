@@ -69,7 +69,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
 
       const edges = res.edges;
       const nodosNuevos = res.nodes;
-
+      console.log(res.nodes,'nodos de la request')
       setGeneralInfo({
         alphabet: res.alphabet,
         useDefault: false,
@@ -82,13 +82,21 @@ const RegexEditorModal = ({ show, handleClose }) => {
       setRe("");
       if (showDeleteAutomata) setShowDeleteAutomata(false);
       handleClose();
+      console.log(        nodosNuevos.map((nod,index) => ({
+        ...nod,
+        id:`${Date.now()+index}`,
+        final: nod.final,
+        start: nod.initial,
+      })),'nodos')
       algo(
-        nodosNuevos.map((nod) => ({
+        nodosNuevos.map((nod,index) => ({
           ...nod,
+          id:`${Date.now()+index}`,
           final: nod.final,
           start: nod.initial,
         })),
-        edges.map((e) => ({
+        edges.map((e,index) => ({
+          id:`${Date.now()+index}`,
           source: e.source,
           target: e.target,
           symbol: e.symbol,
@@ -163,7 +171,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       const arrayEdge = [];
       dataset.nodes.forEach((nod, index) =>
         array.push({
-          id: index.toString(),
+          id: nod.id,
           name: nod.label,
           final: nod.final,
           start: nod.start,
@@ -175,7 +183,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
 
       dataset.edges.forEach((ed, index) =>
         arrayEdge.push({
-          id: index.toString(),
+          id: ed.id,
           symbol: ed.symbol,
           type: "fixed",
           from: {
