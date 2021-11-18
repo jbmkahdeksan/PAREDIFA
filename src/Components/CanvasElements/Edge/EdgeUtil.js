@@ -5,7 +5,7 @@
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -40,7 +40,7 @@ export const arrowEnd = (node1, angle) => ({
 export const arrowCurve = (angle, node1, node2, witdh) => {
   let proximity_coeficient =
     Math.sqrt(Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)) /
-    Math.sqrt(Math.pow(450- 0, 2) + Math.pow(witdh - 0, 2))
+    Math.sqrt(Math.pow(450 - 0, 2) + Math.pow(witdh - 0, 2));
   const curvePower = 100 * proximity_coeficient;
 
   const arrowStarts = arrowStart(node2, angle);
@@ -127,15 +127,7 @@ export const drawTrText = (
   }
 
   //symbol
-
-  ctx.font = "15px Georgia";
-  ctx.strokeStyle = ctx.fillStyle = running
-    ? "#6c5ce7"
-    : id === selectedTr
-    ? "#e17055"
-    : flag
-    ? "green"
-    : "#000000";
+  fillColor(ctx, running, id, selectedTr, flag);
   ctx.fillText(txt, text_pos.x, text_pos.y);
 };
 export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag, running) => {
@@ -159,22 +151,26 @@ export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag, running) => {
     );
   } else {
     let center = { x: src.x, y: dst.y };
-    ctx.font = "15px Georgia";
     ctx.textAlign = "right";
     ctx.textBaseline = "top";
-    ctx.strokeStyle = ctx.fillStyle = running
-      ? "#6c5ce7"
-      : id === selectedTr
-      ? "#e17055"
-      : flag
-      ? "green"
-      : "#000000";
+    fillColor(ctx, running, id, selectedTr, flag);
     ctx.fillText(
       txt,
       center.x - 20 + txt.length * 3,
       center.y - radius / 2 - 50
     );
   }
+};
+
+const fillColor = (ctx, running, id, selectedTr, flag) => {
+  ctx.font = "15px Georgia";
+  ctx.strokeStyle = ctx.fillStyle = running
+    ? "#6c5ce7"
+    : id === selectedTr
+    ? "#e17055"
+    : flag
+    ? "green"
+    : "#000000";
 };
 
 /**
