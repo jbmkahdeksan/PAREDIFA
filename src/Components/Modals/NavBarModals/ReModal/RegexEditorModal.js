@@ -41,8 +41,8 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { stageInfo } = useContext(ThemeContextStage);
   const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
-    //application laying out dfa
-    const {   layingDFA, setLayingDFA} = useContext(ThemeContextLayingDFA);
+  //application laying out dfa
+  const { layingDFA, setLayingDFA } = useContext(ThemeContextLayingDFA);
   //delete modal if theres data
   const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
   const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);
@@ -53,47 +53,55 @@ const RegexEditorModal = ({ show, handleClose }) => {
    * @returns void
    */
   const sendReToCompile = async () => {
-    setFeching(true);
-    const data = await axios.post(process.env.REACT_APP_BACK_END, {
-      query: queryCompileRe(
-        manualName ? dfaName : Date.now(),
-        checkSintax,
-        simplifyRe,
-        re
-      ),
-    });
+    try {
+      setFeching(true);
+      const data = await axios.post(process.env.REACT_APP_BACK_END, {
+        query: queryCompileRe(
+          manualName ? dfaName : Date.now(),
+          checkSintax,
+          simplifyRe,
+          re
+        ),
+      });
 
-    
-    const res = data.data.data.compileRE;
-    console.log(res, "data");
+      const res = data.data.data.compileRE;
+      console.log(res, "data");
 
-    const edges = res.edges;
-    const nodosNuevos = res.nodes;
+      const edges = res.edges;
+      const nodosNuevos = res.nodes;
 
-    setGeneralInfo({
-      alphabet: res.alphabet,
-      useDefault: false,
-      wipeData: true,
-      showAlphabetDefault: false,
-      result: false,
-    });
-    if (currentDfa.id) setCurrentDfa({ id: null });
-    setFeching(false);
-    setRe("");
-    if (showDeleteAutomata) setShowDeleteAutomata(false);
-    handleClose();
-    algo(
-      nodosNuevos.map((nod) => ({
-        ...nod,
-        final: nod.final,
-        start: nod.initial,
-      })),
-      edges.map((e) => ({
-        source: e.source,
-        target: e.target,
-        symbol: e.symbol,
-      }))
-    );
+      setGeneralInfo({
+        alphabet: res.alphabet,
+        useDefault: false,
+        wipeData: true,
+        showAlphabetDefault: false,
+        result: false,
+      });
+      if (currentDfa.id) setCurrentDfa({ id: null });
+      setFeching(false);
+      setRe("");
+      if (showDeleteAutomata) setShowDeleteAutomata(false);
+      handleClose();
+      algo(
+        nodosNuevos.map((nod) => ({
+          ...nod,
+          final: nod.final,
+          start: nod.initial,
+        })),
+        edges.map((e) => ({
+          source: e.source,
+          target: e.target,
+          symbol: e.symbol,
+        }))
+      );
+    } catch (e) {
+      setMsgShow(true);
+      setMsgInfo({
+        bg: "warning",
+        header: "Information",
+        body: `There was an error while compiling your RE: ${e.message}`
+      });
+    }
   };
   /**  This method alerts the user incase theres any data in the canvas
    * @returns void
@@ -140,7 +148,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       .start();
 
     force.on("end", () => {
-      setLayingDFA(false)
+      setLayingDFA(false);
       setMsgShow(true);
       setMsgInfo({
         bg: "light",
@@ -149,7 +157,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       });
     });
 
-    setLayingDFA(true)
+    setLayingDFA(true);
     force.on("tick", function () {
       const array = [];
       const arrayEdge = [];
@@ -221,8 +229,8 @@ const RegexEditorModal = ({ show, handleClose }) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button onClick={checkForData} disabled={layingDFA}variant="primary">
-            {layingDFA? 'Disabled until laying of the DFA is done': 'Send'}
+          <Button onClick={checkForData} disabled={layingDFA} variant="primary">
+            {layingDFA ? "Disabled until laying of the DFA is done" : "Send"}
           </Button>
         </Modal.Footer>
       </Modal>
