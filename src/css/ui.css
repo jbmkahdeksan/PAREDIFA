@@ -126,31 +126,16 @@ canvas{
     z-index: 11;
 }
 
-
-
-
-            
-
-            
-#gear2 {
-    left: 60px;
-}
-
-#gear3 {
-    top: 45px;
-    left: 110px;
-}
-
 .spin {
     -webkit-animation:spin 1s linear infinite;
     -moz-animation:spin 1s linear infinite;
     animation:spin 1s linear infinite;
 }
 
-#hammer{
+#dfaIcon{
 
 
-    animation:pedo 1s linear infinite;
+    animation: dfa 1s linear infinite;
 }
 
 .layingDFA{
@@ -164,7 +149,7 @@ canvas{
 
 
 
-@keyframes pedo{ 100% { transform-origin: left top;transform: rotateZ(3.142rad);} }
+@keyframes dfa { 100% { transform-origin: left top;transform: rotateZ(3.142rad);} }
 
 
 
