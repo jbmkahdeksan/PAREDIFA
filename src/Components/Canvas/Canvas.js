@@ -86,6 +86,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
    * @param coord coords -> {x,y}
    * @param id id of the state where the state coord should be updated
    */
+  
   const updateCoordEdges = (coord, id) => {
     setEdge(
       edge.map((arrow) => {
