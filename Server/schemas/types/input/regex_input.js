@@ -23,7 +23,7 @@ const regularExpresionType = new GraphQLInputObjectType({
       type: GraphQLNonNull(GraphQLBoolean),
       description: "Check syntax?",
     },
-    simpBeforeComp: { 
+    simpBeforeComp: {
       type: GraphQLNonNull(GraphQLBoolean),
       description: "Simplify expression before compiling?",
     },

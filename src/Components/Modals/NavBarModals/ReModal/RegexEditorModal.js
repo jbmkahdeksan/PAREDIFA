@@ -63,17 +63,13 @@ const RegexEditorModal = ({ show, handleClose }) => {
       ),
     });
 
+    
     const res = data.data.data.compileRE;
     console.log(res, "data");
+
     const edges = res.edges;
     const nodosNuevos = res.nodes;
-    console.log(
-      edges.map((e) => ({
-        source: nodosNuevos.findIndex((nod) => nod.name === e.source),
-        target: nodosNuevos.findIndex((nod) => nod.name === e.target),
-        symbol: e.symbol,
-      }))
-    );
+
     setGeneralInfo({
       alphabet: res.alphabet,
       useDefault: false,
@@ -93,8 +89,8 @@ const RegexEditorModal = ({ show, handleClose }) => {
         start: nod.initial,
       })),
       edges.map((e) => ({
-        source: nodosNuevos.findIndex((nod) => nod.name === e.source),
-        target: nodosNuevos.findIndex((nod) => nod.name === e.target),
+        source: e.source,
+        target: e.target,
         symbol: e.symbol,
       }))
     );
@@ -136,7 +132,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       .nodes(dataset.nodes)
       .links(dataset.edges)
       .size([w, 450])
-      .linkDistance(120)
+      .linkDistance(200)
       .charge(-900)
       .gravity(0.2)
       .theta(0.8)
