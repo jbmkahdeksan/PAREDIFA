@@ -287,6 +287,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
 
       //DELETE
       if (e.keyCode === 46) {
+        setEdge([])
         setEdge(edge.filter((ed) => ed.id !== selectedTr));
         setSelectedTr("-1");
         if (isFillingSymbol) setIsFillingSymbol(false);

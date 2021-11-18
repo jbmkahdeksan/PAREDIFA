@@ -58,7 +58,6 @@ const Edge = ({
       : "green";
   return (
     <Group
-      onclick={() => setFlag(true)}
       listening={!isRunning}
       onMouseEnter={() => setFlag(true)}
       onMouseOut={() => setFlag(false)}
