@@ -11,6 +11,7 @@ import ThemeContextMsgInfo from "../../../Context/ContextMsg";
 import ThemeContextMsg from "../../../Context/ContextMessage";
 import ThemeContextLayingDFA from "../../../Context/ContextLayingDFA";
 import ThemeContextStage from "../../../Context/StageInfo";
+import SpinnerCont from "../../../Spinner/SpinnerCont";
 import { queryCompileRe } from "../../../../Util/graphQLQueryUtil";
 import axios from "axios";
 import d3 from "d3";
@@ -35,7 +36,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const [simplifyRe, setSimplifyRe] = useState(false);
   const [checkSintax, setCheckSintax] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
-  const { setEdge } = useContext(ThemeContextTr);
+  const {  setEdge } = useContext(ThemeContextTr);
   const { setGeneralInfo } = useContext(ThemeContextGeneral);
   const { setMsgShow } = useContext(ThemeContextMsg);
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
@@ -65,11 +66,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       });
 
       const res = data.data.data.compileRE;
-      console.log(res, "data");
 
-      const edges = res.edges;
-      const nodosNuevos = res.nodes;
-      console.log(res.nodes,'nodos de la request')
       setGeneralInfo({
         alphabet: res.alphabet,
         useDefault: false,
@@ -82,21 +79,15 @@ const RegexEditorModal = ({ show, handleClose }) => {
       setRe("");
       if (showDeleteAutomata) setShowDeleteAutomata(false);
       handleClose();
-      console.log(        nodosNuevos.map((nod,index) => ({
-        ...nod,
-        id:`${Date.now()+index}`,
-        final: nod.final,
-        start: nod.initial,
-      })),'nodos')
-      algo(
-        nodosNuevos.map((nod,index) => ({
+      layout(
+        res.nodes.map((nod, index) => ({
           ...nod,
-          id:`${Date.now()+index}`,
+          id: `${Date.now() + index}`,
           final: nod.final,
           start: nod.initial,
         })),
-        edges.map((e,index) => ({
-          id:`${Date.now()+index}`,
+        res.edges.map((e, index) => ({
+          id: `${Date.now() + index}`,
           source: e.source,
           target: e.target,
           symbol: e.symbol,
@@ -107,7 +98,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       setMsgInfo({
         bg: "warning",
         header: "Information",
-        body: `There was an error while compiling your RE: ${e.message}`
+        body: `There was an error while compiling your RE: ${e.message}`,
       });
     }
   };
@@ -124,16 +115,15 @@ const RegexEditorModal = ({ show, handleClose }) => {
     }
   };
 
-  const algo = (nodos, ed) => {
+  const layout = (nodos, ed) => {
     var w = stageInfo.w;
-    // var h = 450;
 
     var dataset = {
       nodes: nodos,
       edges: ed,
     };
 
-    const algo = {
+    const nodeProperties = {
       selected: false,
 
       width: 40,
@@ -167,17 +157,17 @@ const RegexEditorModal = ({ show, handleClose }) => {
 
     setLayingDFA(true);
     force.on("tick", function () {
-      const array = [];
+      const arrayNodes = [];
       const arrayEdge = [];
       dataset.nodes.forEach((nod, index) =>
-        array.push({
+        arrayNodes.push({
           id: nod.id,
           name: nod.label,
           final: nod.final,
           start: nod.start,
           x: nod.x,
           y: nod.y,
-          ...algo,
+          ...nodeProperties,
         })
       );
 
@@ -187,19 +177,19 @@ const RegexEditorModal = ({ show, handleClose }) => {
           symbol: ed.symbol,
           type: "fixed",
           from: {
-            id: `${array[ed.source.index].id}`,
-            x: array[ed.source.index].x,
-            y: array[ed.source.index].y,
+            id: `${arrayNodes[ed.source.index].id}`,
+            x: arrayNodes[ed.source.index].x,
+            y: arrayNodes[ed.source.index].y,
           },
           to: {
-            id: `${array[ed.target.index].id}`,
-            x: array[ed.target.index].x,
-            y: array[ed.target.index].y,
+            id: `${arrayNodes[ed.target.index].id}`,
+            x: arrayNodes[ed.target.index].x,
+            y: arrayNodes[ed.target.index].y,
           },
         })
       );
 
-      setNodes(array);
+      setNodes(arrayNodes);
       setEdge(arrayEdge);
     });
   };
@@ -218,26 +208,33 @@ const RegexEditorModal = ({ show, handleClose }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="txtContainer">
-          <TxtEditor
-            manualName={manualName}
-            setManualName={setManualName}
-            automatico={automatico}
-            setAutomatico={setAutomatico}
-            setCheckSintax={setCheckSintax}
-            checkSintax={checkSintax}
-            setSimplifyRe={setSimplifyRe}
-            simplifyRe={simplifyRe}
-            dfaName={dfaName}
-            setDfaName={setDfaName}
-            re={re}
-            setRe={setRe}
-          />
+          {fetching && <SpinnerCont />}
+          {!fetching && (
+            <TxtEditor
+              manualName={manualName}
+              setManualName={setManualName}
+              automatico={automatico}
+              setAutomatico={setAutomatico}
+              setCheckSintax={setCheckSintax}
+              checkSintax={checkSintax}
+              setSimplifyRe={setSimplifyRe}
+              simplifyRe={simplifyRe}
+              dfaName={dfaName}
+              setDfaName={setDfaName}
+              re={re}
+              setRe={setRe}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button onClick={checkForData} disabled={layingDFA} variant="primary">
+          <Button
+            onClick={checkForData}
+            disabled={layingDFA || fetching}
+            variant="primary"
+          >
             {layingDFA ? "Disabled until laying of the DFA is done" : "Send"}
           </Button>
         </Modal.Footer>
