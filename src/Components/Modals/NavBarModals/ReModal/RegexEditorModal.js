@@ -42,7 +42,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const { stageInfo } = useContext(ThemeContextStage);
   const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
     //application laying out dfa
-    const {  setLayingDFA} = useContext(ThemeContextLayingDFA);
+    const {   layingDFA, setLayingDFA} = useContext(ThemeContextLayingDFA);
   //delete modal if theres data
   const [showDeleteAutomata, setShowDeleteAutomata] = useState(false);
   const handleShowDeleteAutomata = () => setShowDeleteAutomata(false);
@@ -225,8 +225,8 @@ const RegexEditorModal = ({ show, handleClose }) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button onClick={checkForData} variant="primary">
-            Send
+          <Button onClick={checkForData} disabled={layingDFA}variant="primary">
+            {layingDFA? 'Disabled until laying of the DFA is done': 'Send'}
           </Button>
         </Modal.Footer>
       </Modal>
