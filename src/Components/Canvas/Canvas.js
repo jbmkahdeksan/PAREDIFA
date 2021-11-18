@@ -28,7 +28,7 @@ import ResultShape from "../CanvasElements/Shapes/ResultShape";
  *
  */
 const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
-  const [mouseCoord, setMouseCoord] = useState({}); //HANDLE AFTER DELETEDAOSKDOASKD
+  const [mouseCoord, setMouseCoord] = useState({}); 
   const [mouseDown, setMouseDown] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
@@ -65,17 +65,11 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
    */
   const findKeyRepeat = useCallback(
     (id, key) => {
-      const letterRepeat =
-        edge.reduce((stored, current) => {
-          if (
-            current.from.id === id &&
-            current.symbol?.split(",").indexOf(key) !== -1
-          ) {
-            stored++;
-          }
-          return stored;
-        }, 0) >= 1;
-
+      const letterRepeat = edge.some(
+        (current) =>
+          current.from.id === id &&
+          current.symbol?.split(",").indexOf(key) !== -1
+      );
       if (letterRepeat) {
         displayMessage(
           "warning",
@@ -403,34 +397,24 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     }
   };
 
+  const findEdgeRepeat = (selectedNode) =>
+    edge.some(
+      (current) =>
+        (selected === selectedNode.id &&
+          current.from.id === selectedNode.id &&
+          current.to.id === selectedNode.id) ||
+        (selected !== selectedNode.id &&
+          current.from.id !== current.to.id &&
+          current.to.id === selectedNode.id &&
+          current.from.id === selected)
+    );
+
   /**  This method adds a transition to the destination node
    * @param selectedNode the node that was clicked to be the end of the transition
    * @returns void
    */
   const addTrDestination = (selectedNode) => {
-    const edgeTo = edge.reduce((stored, current) => {
-      if (selected === selectedNode.id) {
-        if (
-          current.from.id === selectedNode.id &&
-          current.to.id === selectedNode.id
-        ) {
-          stored++;
-        }
-      }
-      if (selected !== selectedNode.id) {
-        if (current.from.id !== current.to.id) {
-          if (
-            current.to.id === selectedNode.id &&
-            current.from.id === selected
-          ) {
-            stored++;
-          }
-        }
-      }
-      return stored;
-    }, 0);
-
-    if (edgeTo) {
+    if (findEdgeRepeat(selectedNode)) {
       displayMessage(
         "warning",
         "Repeated transition",
@@ -521,7 +505,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
     if (e.target.attrs.type !== "nodo") return;
     if (selectedTr !== "-1") return;
     if (isFillingSymbol) return;
-
     const coord = e.target.attrs.coord;
     const id = Date.now().toString();
     setAddingTr({ state: true, tr: id });
@@ -592,8 +575,6 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
         )}
         {nodes.map((node, index) => (
           <Node
-            mouseCoord={mouseCoord}
-            listaNodos={nodes}
             setSelected={setSelected}
             selected={selected}
             key={index}
