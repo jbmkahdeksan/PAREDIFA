@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { useState } from "react";
+import { useState} from "react";
 import ThemeContext from "./Components/Context/ContextStates";
 import ThemeContextMsg from "./Components/Context/ContextMessage";
 import ThemeContextTr from "./Components/Context/ContextTransitions";
@@ -49,6 +49,7 @@ function App() {
   });
 
   const [stageInfo, setStageInfo] = useState({ w: 900, h: 450 });
+
   return (
     <BrowserRouter>
       <ThemeContextMsg.Provider value={{ msgShow, setMsgShow }}>

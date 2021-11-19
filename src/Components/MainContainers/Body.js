@@ -1,5 +1,5 @@
 import CanvasAndButtons from "./CanvasAndButtons/CanvasAndButtons";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import ThemeContext from "../Context/ContextStates";
 import ThemeContextTr from "../Context/ContextTransitions";
 import ThemeContextGeneral from "../Context/GeneralInfo";
@@ -161,14 +161,13 @@ const Body = () => {
         ];
   };
 
-
   /**
    * This method is to create an error
    * @returns html code
    * */
   const createError = (type, msg) => {
     if (ready) {
-        setReady(false);
+      setReady(false);
     }
     return (
       <>
@@ -182,7 +181,11 @@ const Body = () => {
   };
 
   const automataComplete = isAutomataComplete();
-
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
+    };
+  }, []);
   return (
     <div className="container-fluid h-100">
       <div className="row h-100">
@@ -207,7 +210,7 @@ const Body = () => {
               INITALSTATE={INITALSTATE}
               FINALSTATE={FINALSTATE}
               automataComplete={automataComplete}
-              createError={ createError}
+              createError={createError}
             />
           </div>
           <div className="accepted">{finalResultInfo}</div>

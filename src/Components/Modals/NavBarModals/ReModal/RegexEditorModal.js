@@ -66,7 +66,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       });
 
       const res = data.data.data.compileRE;
-
+      sessionStorage.setItem('regex', re);
       setGeneralInfo({
         alphabet: res.alphabet,
         useDefault: false,

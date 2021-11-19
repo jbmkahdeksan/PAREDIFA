@@ -18,7 +18,7 @@ import { queryMutationSaveSingleDfa } from "../../../Util/graphQLQueryUtil";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -55,8 +55,8 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
     if (addingID && automataId.length === 0) return;
     try {
       setLoading(true);
-  
-      console.log(nodes,'saving nodes')
+
+      console.log(nodes, "saving nodes");
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryMutationSaveSingleDfa(
           automataId,
@@ -64,9 +64,12 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
           nodes,
           addingTr.state
             ? edge.filter((ed) => ed.type === "fixed" && ed.symbol.length !== 0)
-            : edge
+            : edge,
+          sessionStorage.getItem("regex") ?? ""
         ),
       });
+
+      if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
 
       navigator.clipboard.writeText(data.data.data.saveAutomata.id);
       displayMessage(
@@ -74,13 +77,6 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         "Succesfull upload",
         "Automata was uploaded successfully to the server,  copied the automata ID to your clipboard"
       );
-    } catch (e) {
-      displayMessage(
-        "warning",
-        "Error",
-        `Oops! Looks lke there was an issue while uploading the data to the server: ${e.message}`
-      );
-    } finally {
       //limpiar datos application
       setNodes((e) => []);
       setEdge((e) => []);
@@ -97,6 +93,13 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         setAddingID(false);
       }
       setLoading((e) => false);
+    } catch (e) {
+      displayMessage(
+        "warning",
+        "Error",
+        `Oops! Looks lke there was an issue while uploading the data to the server: ${e.message}`
+      );
+    } finally {
       handleClose();
     }
   };

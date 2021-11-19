@@ -33,7 +33,7 @@ const ClearCanvasModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
   const wipeData = () => {
     setNodes([]);
     setEdge([]);
-
+    if(sessionStorage.getItem("regex") ) sessionStorage.removeItem("regex")
     setGeneralInfo({
       alphabet: [],
       useDefault: false,

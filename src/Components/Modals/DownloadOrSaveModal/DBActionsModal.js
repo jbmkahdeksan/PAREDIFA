@@ -8,26 +8,24 @@ import ThemeContextGeneral from "../../Context/GeneralInfo";
 import ThemeContextTr from "../../Context/ContextTransitions";
 import Display from "../../Display/Display";
 import DeleteAutomataModal from "../DeleteDFAModal/DeleteAutomataModal";
-import { FcMultipleInputs } from "react-icons/fc";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import SpinnerCont from "../../Spinner/SpinnerCont";
 import DfaList from "../DBDataModals/DfaList";
-import {
-  querySingleAutomata,
-  queryMutationDelete,
-  queryAllAutomatas,
-} from "../../../Util/graphQLQueryUtil";
+import DeleteByRegex from "../../MainContainers/CanvasAndButtons/Buttons/DBActions/DeleteByRegex";
+import DfaDownload from "../../MainContainers/CanvasAndButtons/Buttons/DBActions/DfaDownload";
+import ListAllDfa from "../../MainContainers/CanvasAndButtons/Buttons/DBActions/ListAllDfa";
+import { queryMutationDelete } from "../../../Util/graphQLQueryUtil";
 //Handle todos, tasks todo in Todo
 /*
-* EIF400 -- Paradigmas de Programacion
-* @since II Term - 2021
-* @authors Team 01-10am
-*  - Andres Alvarez Duran 117520958 
-*  - Joaquin Barrientos Monge 117440348
-*  - Oscar Ortiz Chavarria 208260347
-*  - David Zarate Marin 116770797
-*/
+ * EIF400 -- Paradigmas de Programacion
+ * @since II Term - 2021
+ * @authors Team 01-10am
+ *  - Andres Alvarez Duran 117520958
+ *  - Joaquin Barrientos Monge 117440348
+ *  - Oscar Ortiz Chavarria 208260347
+ *  - David Zarate Marin 116770797
+ */
 const DBActionsModal = ({
   title,
   handleShow,
@@ -65,6 +63,7 @@ const DBActionsModal = ({
     setShowDeleteDfaModal(false);
     setOptionTodo(0);
   };
+
   //selectedAutomata for deleteing/ uploading to the display
   const [selectedDFA, setSelectedDFA] = useState("");
   const [optionTodo, setOptionTodo] = useState(0);
@@ -79,30 +78,22 @@ const DBActionsModal = ({
     running: false,
   };
 
-  const displayErrorMsg = (e) => {
+  const diplayMsg = (bg, header, body) => {
     setMsgShow(true);
     setMsgInfo({
-      bg: "warning",
-      header: "Error while fetching data",
-      body: `Oops! Looks like we got an error while fetching data: ${e.message}`,
+      bg: bg,
+      header: header,
+      body: body,
     });
   };
+  const displayErrorMsg = (e) =>
+    diplayMsg(
+      "warning",
+      "Error while fetching data",
+      `Oops! Looks like we got an error while fetching data: ${e.message}`
+    );
 
-  const fetchData = async () => {
-    try {
-      setFetching((e) => true);
-      const res = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryAllAutomatas,
-      });
-
-      setDbDAta((e) => res.data.data.allAutomatas);
-    } catch (e) {
-      displayErrorMsg(e);
-      handleShow();
-    } finally {
-      setFetching((e) => false);
-    }
-  };
+  const displaySuccessMsg = (msg) => diplayMsg("success", "Success!", msg);
 
   const handleAutomataDownload = (automataId) => {
     const automata = dbData.find(
@@ -115,7 +106,10 @@ const DBActionsModal = ({
       showAlphabetDefault: false,
       result: false,
     });
-
+    if (automata.regex.length !== 0)
+      sessionStorage.setItem("regex", automata.regex);
+    if (automata.regex.length === 0 && sessionStorage.getItem("regex"))
+      sessionStorage.removeItem("regex");
     setCurrentDfa({ id: automata.id }); //***************** *******************************/
     setNodes(mapStates(automata));
 
@@ -137,7 +131,6 @@ const DBActionsModal = ({
     });
   };
   const handleAutomataDelete = async () => {
-  
     setShowDeleteDfaModal(false);
     try {
       setFetchingDelete(true);
@@ -145,14 +138,10 @@ const DBActionsModal = ({
         query: queryMutationDelete(selectedDFA),
       });
       if (currentDfaId && currentDfaId === selectedDFA) {
+        if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
         wipeApplicationData();
       }
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "success",
-        header: "Success!",
-        body: `The DFA was successfully deleted!`,
-      });
+      displaySuccessMsg(`The DFA was successfully deleted!`);
     } catch (e) {
       displayErrorMsg(e);
     } finally {
@@ -203,27 +192,6 @@ const DBActionsModal = ({
     handleAutomataDownload(automataId);
   };
 
-  const handleSingleDfaDownload = async () => {
-    if (idDfa.length === 0) return;
-
-    try {
-      setFetching(true);
-      const data = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: querySingleAutomata(idDfa),
-      });
-      if (!data.data.data.singleAutomata) {
-        throw new Error("Couldnt find an automata with the given ID");
-      }
-      setDbDAta([data.data.data.singleAutomata]);
-    } catch (e) {
-      handleShow();
-      displayErrorMsg(e);
-    } finally {
-      setFetching(false);
-      setIdDfa("");
-    }
-  };
-
   return (
     <>
       <Modal
@@ -235,11 +203,11 @@ const DBActionsModal = ({
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">
             {title}{" "}
-            <FcMultipleInputs
-              size={33}
-              title="Click here to list them all"
-              onClick={fetchData}
-              className="downloadAllDfa"
+            <ListAllDfa
+              setFetching={setFetching}
+              setDbDAta={setDbDAta}
+              displayErrorMsg={displayErrorMsg}
+              handleShow={handleShow}
             />
           </Modal.Title>
         </Modal.Header>
@@ -251,7 +219,7 @@ const DBActionsModal = ({
                 type="text"
                 value={idDfa}
                 onChange={(e) => setIdDfa(e.target.value)}
-                placeholder="ID of DFA to retrieve"
+                placeholder="ID/RE of DFA to retrieve/delete"
               />
             </div>
           )}
@@ -270,14 +238,33 @@ const DBActionsModal = ({
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            onClick={
-              dbData.length === 0 ? handleSingleDfaDownload : clearDbData
-            }
-            disabled={fetching || fetchingDelete}
-          >
-            {dbData.length === 0 ? "Retrieve" : "Clear"}
-          </Button>
+          <DeleteByRegex
+            length={dbData.length}
+            fetching={fetching}
+            fetchingDelete={fetchingDelete}
+            displayErrorMsg={displayErrorMsg}
+            idDfa={idDfa}
+            handleShow={handleShow}
+            displaySuccessMsg={displaySuccessMsg}
+          />
+
+          {dbData.length === 0 && (
+            <DfaDownload
+              idDfa={idDfa}
+              setIdDfa={setIdDfa}
+              setDbDAta={setDbDAta}
+              handleShow={handleShow}
+              displayErrorMsg={displayErrorMsg}
+              setFetching={setFetching}
+              fetchingDelete={fetchingDelete}
+              fetching={fetching}
+            />
+          )}
+          {dbData.length !== 0 && (
+            <Button onClick={clearDbData} disabled={fetching || fetchingDelete}>
+              Clear
+            </Button>
+          )}
         </Modal.Footer>
       </Modal>
       <Display

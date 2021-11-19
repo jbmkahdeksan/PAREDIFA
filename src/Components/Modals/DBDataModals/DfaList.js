@@ -31,15 +31,29 @@ const DfaList = ({
             <ListGroup.Item
               key={index}
               as="li"
-              variant={  
-                currentDfaId && currentDfaId === data.id ? "success" : ""
+              variant={
+                currentDfaId &&
+                currentDfaId === data.id &&
+                data.regex.length > 0
+                  ? "primary"
+                  : currentDfaId && currentDfaId === data.id
+                  ? "success"
+                  : data.regex.length > 0
+                  ? "secondary"
+                  : ""
               }
               className="d-flex justify-content-between align-items-start"
             >
               <div className="ms-2 me-auto">
                 <div className="fw-bold">{data.id}</div>
-                {currentDfaId && currentDfaId === data.id
+                {currentDfaId &&
+                currentDfaId === data.id &&
+                data.regex.length > 0
+                  ? `Currently being displayed && regex made --> ${data.regex}`
+                  : currentDfaId && currentDfaId === data.id
                   ? "Currently being displayed"
+                  : data.regex.length > 0
+                  ? `Regex made --> ${data.regex}`
                   : ""}
               </div>
               <BsTrash

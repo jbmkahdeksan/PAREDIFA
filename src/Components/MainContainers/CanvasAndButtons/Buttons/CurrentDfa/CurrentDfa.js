@@ -16,7 +16,7 @@ import DeleteAutomataModal from "../../../../Modals/DeleteDFAModal/DeleteAutomat
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -50,10 +50,12 @@ const CurrentDfa = ({
           addingTr.state
             ? edge.filter((ed) => ed.type === "fixed" && ed.symbol.length !== 0)
             : edge,
-          generalInfo.alphabet
+          generalInfo.alphabet,
+          sessionStorage.getItem("regex") ?? ""
         ),
       });
       wipeApplicationData();
+      if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
       displaySuccessMsg("The DFA was updated successfully!");
     } catch (e) {
       displayFailMessage(`There was an while updating the DFA:  ${e.message}`);
@@ -72,6 +74,7 @@ const CurrentDfa = ({
         query: queryMutationDelete(dfaId),
       });
       displaySuccessMsg(`The DFA was successfully deleted!`);
+      if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
       wipeApplicationData();
     } catch (e) {
       displayFailMessage(

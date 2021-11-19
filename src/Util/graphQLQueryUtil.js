@@ -49,11 +49,17 @@ export const mapEdgesForQuery = (edge) =>
  * @param edge the current edges of the application
  * @return a string
  */
-export const queryMutationSaveSingleDfa = (automataId, alphabet, nodes, edge) =>
+export const queryMutationSaveSingleDfa = (
+  automataId,
+  alphabet,
+  nodes,
+  edge,
+  re = ""
+) =>
   `mutation{
       saveAutomata(id:"${
         automataId || Date.now()
-      }",name:"NONE",alphabet:${JSON.stringify(
+      }",regex:"${re}",alphabet:${JSON.stringify(
     alphabet
   )},states:[${mapNodesForQuery(nodes)}],transitions:[${mapEdgesForQuery(
     edge
@@ -69,9 +75,15 @@ export const queryMutationSaveSingleDfa = (automataId, alphabet, nodes, edge) =>
  * @param edge the current edges of the application
  * @return a string
  */
-export const queryMutationUpdate = (currentDfaID, nodes, edge, alphabet) =>
+export const queryMutationUpdate = (
+  currentDfaID,
+  nodes,
+  edge,
+  alphabet,
+  re = ""
+) =>
   `mutation{
-      replaceAutomata(id:"${currentDfaID}",name:"davd",alphabet:${JSON.stringify(
+      replaceAutomata(id:"${currentDfaID}",regex:"${re}",alphabet:${JSON.stringify(
     alphabet
   )},states:[${mapNodesForQuery(nodes)}],transitions:[${mapEdgesForQuery(
     edge
@@ -99,7 +111,7 @@ export const querySingleAutomata = (idDfa) =>
     {
       singleAutomata(id:"${idDfa}"){
         id
-        name
+        regex
         alphabet
         states{
           id
@@ -168,7 +180,7 @@ export const queryAbout = `{
 export const queryAllAutomatas = `{
   allAutomatas{
     id
-    name
+    regex
     alphabet
     states{
       id
@@ -230,3 +242,9 @@ export const querySaveImage = (href, firstName, lastName, id, time) =>
       }
       
 `;
+
+export const queryDeleteByRe = (re) =>
+  `mutation{
+    deleteAutomataByRegex(regex:"${re}")
+  }
+  `;
