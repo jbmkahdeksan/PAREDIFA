@@ -56,7 +56,6 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
     try {
       setLoading(true);
 
-      console.log(nodes, "saving nodes");
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryMutationSaveSingleDfa(
           automataId,
@@ -92,7 +91,6 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         setDfaID("");
         setAddingID(false);
       }
-      setLoading((e) => false);
     } catch (e) {
       displayMessage(
         "warning",
@@ -100,6 +98,7 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         `Oops! Looks lke there was an issue while uploading the data to the server: ${e.message}`
       );
     } finally {
+      setLoading((e) => false);
       handleClose();
     }
   };

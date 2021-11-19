@@ -181,6 +181,10 @@ const Body = () => {
   };
 
   const automataComplete = isAutomataComplete();
+
+  /**  This effect watches if user is reloading page and if the regex inside session storage is not null, wipes it.
+   * @returns void
+   */
   useEffect(() => {
     window.onbeforeunload = () => {
       if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");

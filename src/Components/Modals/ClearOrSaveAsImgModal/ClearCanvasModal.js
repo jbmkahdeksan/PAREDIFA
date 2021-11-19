@@ -13,7 +13,7 @@ import { useContext, useEffect } from "react";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -33,7 +33,7 @@ const ClearCanvasModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
   const wipeData = () => {
     setNodes([]);
     setEdge([]);
-    if(sessionStorage.getItem("regex") ) sessionStorage.removeItem("regex")
+    if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
     setGeneralInfo({
       alphabet: [],
       useDefault: false,
@@ -56,7 +56,10 @@ const ClearCanvasModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
     }
     handleClose();
   };
-
+  /**  Effect that is listening to any change on wiping data from the canvas, 
+   * if its true it will reset it back to its original value. 
+   * @returns void
+   */
   useEffect(() => {
     if (generalInfo.wipeData) {
       setGeneralInfo((e) => ({ ...generalInfo, wipeData: false }));
@@ -89,6 +92,5 @@ const ClearCanvasModal = ({ show, handleClose, currentDFA, setCurrentDfa }) => {
     </>
   );
 };
-
 
 export default ClearCanvasModal;

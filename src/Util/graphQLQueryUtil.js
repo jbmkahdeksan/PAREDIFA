@@ -213,10 +213,16 @@ export const queryAllAutomatas = `{
     
   }
 }`;
-
-export const queryCompileRe = (dfaName, checkSintax, simplifyRe, re) => `
+/**  This method is  a query for compiling a RE to a DFA
+ * @param dfaId the id of the DFA given by the user
+ * @param re the regular expression given by the user
+ * @param checkSintax if it should the sintax should be checked
+ * @param simplifyRe if it should simplify the RE
+ * @return a string and its attributes
+ */
+export const queryCompileRe = (dfaId, checkSintax, simplifyRe, re) => `
 {
-  compileRE(re:{id:"${dfaName}",checkSintax:${checkSintax},simpBeforeComp:${simplifyRe},RE:"${re}"}){
+  compileRE(re:{id:"${dfaId}",checkSintax:${checkSintax},simpBeforeComp:${simplifyRe},RE:"${re}"}){
     nodes{
       name
       label
@@ -233,7 +239,13 @@ export const queryCompileRe = (dfaName, checkSintax, simplifyRe, re) => `
   }
 }`;
 /**  This method is  a query for sending an image to the server
- */
+ * @param href encoded base 64 encoded URL
+ * @param firstName first name of the student
+ * @param lastName last name of the student
+ * @id id of the student
+ * @param time scheduled time of the student
+ * @return void
+ * */
 export const querySaveImage = (href, firstName, lastName, id, time) =>
   `
     
@@ -243,6 +255,10 @@ export const querySaveImage = (href, firstName, lastName, id, time) =>
       
 `;
 
+/**  This method is  a query to delete a RE related to a DFA
+ * @param re the regular expression
+ * @return void
+ * */
 export const queryDeleteByRe = (re) =>
   `mutation{
     deleteAutomataByRegex(regex:"${re}")

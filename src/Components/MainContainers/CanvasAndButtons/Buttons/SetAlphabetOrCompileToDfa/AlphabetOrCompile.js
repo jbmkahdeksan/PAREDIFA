@@ -1,5 +1,18 @@
 import AlphabetButton from "../Alphabet/AlphabetButton";
 import CompileToDfa from "../CompileToDFA/CompileToDfa";
+/*
+ *
+ * Description:
+ * Component that hold the alphabet button and the compile to DFA button
+ * EIF400 -- Paradigmas de Programacion
+ * @since II Term - 2021
+ * @authors Team 01-10am
+ *  - Andres Alvarez Duran 117520958
+ *  - Joaquin Barrientos Monge 117440348
+ *  - Oscar Ortiz Chavarria 208260347
+ *  - David Zarate Marin 116770797
+ *
+ */
 const AlphabetOrCompile = ({
   fetchingUpdateDfa,
   nowRunning,

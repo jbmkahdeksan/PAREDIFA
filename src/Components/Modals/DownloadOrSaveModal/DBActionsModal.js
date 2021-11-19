@@ -78,6 +78,12 @@ const DBActionsModal = ({
     running: false,
   };
 
+  /**  Method to display a toast with a very important message to the user
+   * @param bg the color of the toast
+   * @param header the header of the Toast
+   * @param body the body of the toast
+   * @returns void
+   */
   const diplayMsg = (bg, header, body) => {
     setMsgShow(true);
     setMsgInfo({
@@ -86,6 +92,10 @@ const DBActionsModal = ({
       body: body,
     });
   };
+  /**  Method to display a toast with an error message to the user
+   * @param e the error
+   * @returns void
+   */
   const displayErrorMsg = (e) =>
     diplayMsg(
       "warning",
@@ -93,8 +103,16 @@ const DBActionsModal = ({
       `Oops! Looks like we got an error while fetching data: ${e.message}`
     );
 
+  /**  Method to display a toast with a success message to the user
+   * @param msg the msg
+   * @returns void
+   */
   const displaySuccessMsg = (msg) => diplayMsg("success", "Success!", msg);
 
+  /**  Method to display download the automata with the given id
+   * @param automataId The id of the automata
+   * @returns void
+   */
   const handleAutomataDownload = (automataId) => {
     const automata = dbData.find(
       (automata) => automata.id === (automataId || selectedDFA)
@@ -118,6 +136,9 @@ const DBActionsModal = ({
     handleShow();
   };
 
+  /**  Method to wipe application data
+   * @returns void
+   */
   const wipeApplicationData = () => {
     setCurrentDfa({ id: null });
     setNodes([]);
@@ -130,6 +151,10 @@ const DBActionsModal = ({
       result: false,
     });
   };
+
+  /**  Method to delete a DFA from the DB
+   * @returns void
+   */
   const handleAutomataDelete = async () => {
     setShowDeleteDfaModal(false);
     try {
@@ -150,11 +175,19 @@ const DBActionsModal = ({
     }
   };
 
+  /**  Method to delete the temporary data of the  DB that is being displayed tot he user
+   * @returns void
+   */
   const clearDbData = () => {
     setDbDAta([]);
     setSelectedDFA("");
     setOptionTodo(0);
   };
+
+  /**  Method to map states so we can show them when the user is peeking
+   * @param automata the DFA selected to peek
+   * @returns an array of states
+   */
   const mapStates = (automata) =>
     automata.states.map((state) => ({
       id: state.id,
@@ -166,6 +199,10 @@ const DBActionsModal = ({
       ...stateKonvaInformation,
     }));
 
+  /**  Method to map edges so we can show them when the user is peeking
+   * @param automata the DFA selected to peek
+   * @returns an array of edges
+   */
   const mapEdges = (automata) =>
     automata.transitions.map((tr) => ({
       running: false,
@@ -176,6 +213,11 @@ const DBActionsModal = ({
       from: tr.state_src_id,
       to: tr.state_dst_id,
     }));
+
+  /**  Method to show the modal for peeking to the selected DFA
+   * @param automataId the id of the  DFA selected to peek
+   * @returns void
+   */
   const handleDisplayData = (automataId) => {
     const automata = dbData.find((automata) => automata.id === automataId);
     setDisplayDfa(true);
@@ -183,6 +225,10 @@ const DBActionsModal = ({
     setEdgesDisplay(mapEdges(automata));
   };
 
+  /**  Method to pick wether the user wants to download an DFA or delete
+   * @param automataId the id of the  DFA selected 
+   * @returns void
+   */
   const checkForDisplayData = (automataId) => {
     if (nodes.length > 0) {
       setOptionTodo(2);

@@ -1,6 +1,19 @@
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { querySingleAutomata } from "../../../../../Util/graphQLQueryUtil";
+/*
+ *
+ * Description:
+ * Component for downloaing a single DFA
+ * EIF400 -- Paradigmas de Programacion
+ * @since II Term - 2021
+ * @authors Team 01-10am
+ *  - Andres Alvarez Duran 117520958
+ *  - Joaquin Barrientos Monge 117440348
+ *  - Oscar Ortiz Chavarria 208260347
+ *  - David Zarate Marin 116770797
+ *
+ */
 const DfaDownload = ({
   idDfa,
   setIdDfa,
@@ -9,8 +22,11 @@ const DfaDownload = ({
   displayErrorMsg,
   setFetching,
   fetchingDelete,
-  fetching 
+  fetching,
 }) => {
+  /**  This method fetches a single DFA
+   * @returns void
+   */
   const handleSingleDfaDownload = async () => {
     if (idDfa.length === 0) return;
 

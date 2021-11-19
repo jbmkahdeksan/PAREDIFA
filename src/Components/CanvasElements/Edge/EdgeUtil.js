@@ -130,6 +130,18 @@ export const drawTrText = (
   fillColor(ctx, running, id, selectedTr, flag);
   ctx.fillText(txt, text_pos.x, text_pos.y);
 };
+
+/**
+ * This method is to the text on the edge
+ * @param ctx the canvas context
+ * @param src node src
+ *  @param dst node dst
+ *  @param txt symbol of the edge being added
+ *  @param id the id of the transition
+ *  @param selectedTr the id of the selected  transition
+ *   @param flag is the mouse currently on the transition
+ *  @param running if the automata being evaluated
+ * */
 export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag, running) => {
   if (src.id !== dst.id) {
     let vector2_ort = { x: src.y - dst.y, y: dst.x - src.x };
@@ -162,6 +174,14 @@ export const textEdge = (ctx, src, dst, txt, id, selectedTr, flag, running) => {
   }
 };
 
+/**
+ * This method is to fill the color of the text and font
+ * @param ctx the canvas context
+ *  @param id the id of the transition
+ *  @param selectedTr the id of the selected  transition
+ *   @param flag is the mouse currently on the transition
+ *  @param running if the automata being evaluated
+ * */
 const fillColor = (ctx, running, id, selectedTr, flag) => {
   ctx.font = "15px Georgia";
   ctx.strokeStyle = ctx.fillStyle = running

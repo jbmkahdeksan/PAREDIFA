@@ -398,7 +398,10 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
       handleArrowClick(e);
     }
   };
-
+  /**  This method checks if theres already a transition where the user is putting the edge
+   * @param selectedNode the node that was clicked to be the end of the transition
+   * @returns boolean
+   */
   const findEdgeRepeat = (selectedNode) =>
     edge.some(
       (current) =>

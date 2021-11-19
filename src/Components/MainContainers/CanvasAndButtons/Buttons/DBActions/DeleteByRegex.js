@@ -3,6 +3,19 @@ import { useState } from "react";
 import { queryDeleteByRe } from "../../../../../Util/graphQLQueryUtil";
 import Button from "react-bootstrap/Button";
 import DeleteAutomataModal from "../../../../Modals/DeleteDFAModal/DeleteAutomataModal";
+/*
+ *
+ * Description:
+ * Component for deleting an automata by a RE
+ * EIF400 -- Paradigmas de Programacion
+ * @since II Term - 2021
+ * @authors Team 01-10am
+ *  - Andres Alvarez Duran 117520958
+ *  - Joaquin Barrientos Monge 117440348
+ *  - Oscar Ortiz Chavarria 208260347
+ *  - David Zarate Marin 116770797
+ *
+ */
 const DeleteByRegex = ({
   length,
   fetching,
@@ -13,13 +26,16 @@ const DeleteByRegex = ({
   displaySuccessMsg,
   wipeApplicationData,
 }) => {
-  //YOU DELETE IS THE CURRENT DFA IN THE SCREEN???????????AD?A?D?A?SDA?SD
   const [fetchingDeleteByRe, setDeleteFetchingByRe] = useState(false);
   //deleta automata by re info
   const [showDeleteDfaModalByRe, setShowDeleteDfaModalByRe] = useState(false);
   const handleCloseShowDeleteDfaModalByRe = () => {
     setShowDeleteDfaModalByRe(false);
   };
+
+  /**  This method deletes an automata by a RE
+   * @returns void
+   */
   const deleteAutomataByRegex = async () => {
     if (idDfa === 0) return;
     try {
