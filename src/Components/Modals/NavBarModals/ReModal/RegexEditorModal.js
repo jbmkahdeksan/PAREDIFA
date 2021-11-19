@@ -116,9 +116,9 @@ const RegexEditorModal = ({ show, handleClose }) => {
   };
 
   const layout = (nodos, ed) => {
-    var w = stageInfo.w;
+ 
 
-    var dataset = {
+    const dataset = {
       nodes: nodos,
       edges: ed,
     };
@@ -137,7 +137,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       .force()
       .nodes(dataset.nodes)
       .links(dataset.edges)
-      .size([w, 450])
+      .size([stageInfo.w, 450])
       .linkDistance(200)
       .charge(-900)
       .gravity(0.2)

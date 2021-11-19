@@ -27,9 +27,6 @@ const Body = () => {
   const [inputString, setInputString] = useState("");
   const [ready, setReady] = useState(false);
   const [finalResultInfo, setFinalResult] = useState("");
-
-
-
   const INITALSTATE = nodes.find((node) => node.start) ?? false;
   const FINALSTATE = nodes.find((node) => node.final) ?? false;
 
@@ -163,6 +160,27 @@ const Body = () => {
           false,
         ];
   };
+
+
+  /**
+   * This method is to create an error
+   * @returns html code
+   * */
+  const createError = (type, msg) => {
+    if (ready) {
+        setReady(false);
+    }
+    return (
+      <>
+        <b>
+          ERROR - <i> {type} </i>
+        </b>
+        <br></br> {msg} <br></br>
+        <br></br>
+      </>
+    );
+  };
+
   const automataComplete = isAutomataComplete();
 
   return (
@@ -189,6 +207,7 @@ const Body = () => {
               INITALSTATE={INITALSTATE}
               FINALSTATE={FINALSTATE}
               automataComplete={automataComplete}
+              createError={ createError}
             />
           </div>
           <div className="accepted">{finalResultInfo}</div>

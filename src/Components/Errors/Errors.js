@@ -21,56 +21,36 @@ const Errors = ({
   errorsSymbols,
   INITALSTATE,
   FINALSTATE,
-  automataComplete
+  automataComplete,
+  createError
 }) => {
   const { nodes } = useContext(ThemeContext);
   const { generalInfo } = useContext(ThemeContextGeneral);
 
 
-
-  /**
-   * This method is to create an error
-   * @returns html code
-   * */
-  const createError = (type, msg) => {
-    if (ready) {
-      setTimeout(() => {
-        setReady(false);
-      }, 0);
-    }
-    return (
-      <>
-        <b>
-          ERROR - <i> {type} </i>
-        </b>
-        <br></br> {msg} <br></br>
-        <br></br>
-      </>
-    );
-  };
-
-  /**
+    /**
    * This method is to display on the screen that the automata is ready to go
    * @returns html code
    * */
-  const automataReady = () => {
-    if (!ready) {
-      setTimeout(() => {
-        setReady(true);
-      }, 0);
-    }
+     const automataReady = () => {
+      if (!ready) {
+        setTimeout(() =>{
+          setReady(true);
+        },0)
+      }
+  
+      const obj = (
+        <div>
+          <b>
+            ERROR - <i> NONE </i>
+          </b>
+          <br></br> automata is good to go <br></br>
+          <br></br>
+        </div>
+      );
+      return obj;
+    };
 
-    const obj = (
-      <div>
-        <b>
-          ERROR - <i> NONE </i>
-        </b>
-        <br></br> automata is good to go <br></br>
-        <br></br>
-      </div>
-    );
-    return obj;
-  };
 
   return (
     <div className={""}>
