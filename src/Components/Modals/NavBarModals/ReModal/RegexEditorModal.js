@@ -13,8 +13,8 @@ import ThemeContextLayingDFA from "../../../Context/ContextLayingDFA";
 import ThemeContextStage from "../../../Context/StageInfo";
 import SpinnerCont from "../../../Spinner/SpinnerCont";
 import { queryCompileRe } from "../../../../Util/graphQLQueryUtil";
+import { layout } from "../../../../Util/LayoutUtil";
 import axios from "axios";
-import d3 from "d3";
 /*
  *
  * Description:
@@ -36,7 +36,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const [simplifyRe, setSimplifyRe] = useState(false);
   const [checkSintax, setCheckSintax] = useState(false);
   const { nodes, setNodes } = useContext(ThemeContext);
-  const {  setEdge } = useContext(ThemeContextTr);
+  const { setEdge } = useContext(ThemeContextTr);
   const { setGeneralInfo } = useContext(ThemeContextGeneral);
   const { setMsgShow } = useContext(ThemeContextMsg);
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
@@ -66,7 +66,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
       });
 
       const res = data.data.data.compileRE;
-      sessionStorage.setItem('regex', re);
+      sessionStorage.setItem("regex", re);
       setGeneralInfo({
         alphabet: res.alphabet,
         useDefault: false,
@@ -75,10 +75,9 @@ const RegexEditorModal = ({ show, handleClose }) => {
         result: false,
       });
       if (currentDfa.id) setCurrentDfa({ id: null });
-     
+
       setRe("");
       if (showDeleteAutomata) setShowDeleteAutomata(false);
-   
       layout(
         res.nodes.map((nod, index) => ({
           ...nod,
@@ -91,7 +90,12 @@ const RegexEditorModal = ({ show, handleClose }) => {
           source: e.source,
           target: e.target,
           symbol: e.symbol,
-        }))
+        })),
+        stageInfo.w,
+        cbMsg,
+        setLayingDFA,
+        setNodes,
+        setEdge
       );
     } catch (e) {
       setMsgShow(true);
@@ -100,11 +104,19 @@ const RegexEditorModal = ({ show, handleClose }) => {
         header: "Information",
         body: `There was an error while compiling your RE: ${e.message}`,
       });
-    }
-    finally{
+    } finally {
       setFeching(false);
-      handleClose()
+      handleClose();
     }
+  };
+  const cbMsg = () => {
+    setLayingDFA(false);
+    setMsgShow(true);
+    setMsgInfo({
+      bg: "light",
+      header: "Information",
+      body: "Im done",
+    });
   };
   /**  This method alerts the user incase theres any data in the canvas
    * @returns void
@@ -117,85 +129,6 @@ const RegexEditorModal = ({ show, handleClose }) => {
         sendReToCompile();
       }
     }
-  };
-
-  const layout = (nodos, ed) => {
- 
-
-    const dataset = {
-      nodes: nodos,
-      edges: ed,
-    };
-
-    const nodeProperties = {
-      selected: false,
-
-      width: 40,
-      height: 40,
-      type: "circle",
-      shadowColor: "black",
-      shadowBlur: 10,
-      shadowOpacity: 0.6,
-    };
-    var force = d3.layout
-      .force()
-      .nodes(dataset.nodes)
-      .links(dataset.edges)
-      .size([stageInfo.w, 450])
-      .linkDistance(200)
-      .charge(-900)
-      .gravity(0.2)
-      .theta(0.8)
-      .alpha(0.1)
-      .start();
-
-    force.on("end", () => {
-      setLayingDFA(false);
-      setMsgShow(true);
-      setMsgInfo({
-        bg: "light",
-        header: "Information",
-        body: "Im done",
-      });
-    });
-
-    setLayingDFA(true);
-    force.on("tick", function () {
-      const arrayNodes = [];
-      const arrayEdge = [];
-      dataset.nodes.forEach((nod, index) =>
-        arrayNodes.push({
-          id: nod.id,
-          name: nod.label,
-          final: nod.final,
-          start: nod.start,
-          x: nod.x,
-          y: nod.y,
-          ...nodeProperties,
-        })
-      );
-
-      dataset.edges.forEach((ed, index) =>
-        arrayEdge.push({
-          id: ed.id,
-          symbol: ed.symbol,
-          type: "fixed",
-          from: {
-            id: `${arrayNodes[ed.source.index].id}`,
-            x: arrayNodes[ed.source.index].x,
-            y: arrayNodes[ed.source.index].y,
-          },
-          to: {
-            id: `${arrayNodes[ed.target.index].id}`,
-            x: arrayNodes[ed.target.index].x,
-            y: arrayNodes[ed.target.index].y,
-          },
-        })
-      );
-
-      setNodes(arrayNodes);
-      setEdge(arrayEdge);
-    });
   };
 
   return (

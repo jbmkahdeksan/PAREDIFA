@@ -264,3 +264,27 @@ export const queryDeleteByRe = (re) =>
     deleteAutomataByRegex(regex:"${re}")
   }
   `;
+
+export const queryNfaToDfa = (alphabet, nodes, edges) =>
+  `
+    {
+      convertNFA_into_DFA(alphabet:${JSON.stringify(
+        alphabet
+      )},states:[${mapNodesForQuery(nodes)}],transitions:[${mapEdgesForQuery(
+    edges
+  )}]){
+        nodes{
+          name
+          label
+          initial
+          final
+        }
+        edges{
+          source
+          target
+          symbol
+        }
+        alphabet
+      }
+    }
+    `;
