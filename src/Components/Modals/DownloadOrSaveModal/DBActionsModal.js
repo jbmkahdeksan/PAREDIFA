@@ -246,6 +246,7 @@ const DBActionsModal = ({
             idDfa={idDfa}
             handleShow={handleShow}
             displaySuccessMsg={displaySuccessMsg}
+            wipeApplicationData={wipeApplicationData}
           />
 
           {dbData.length === 0 && (

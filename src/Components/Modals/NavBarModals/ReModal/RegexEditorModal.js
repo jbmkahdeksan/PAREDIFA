@@ -75,10 +75,10 @@ const RegexEditorModal = ({ show, handleClose }) => {
         result: false,
       });
       if (currentDfa.id) setCurrentDfa({ id: null });
-      setFeching(false);
+     
       setRe("");
       if (showDeleteAutomata) setShowDeleteAutomata(false);
-      handleClose();
+   
       layout(
         res.nodes.map((nod, index) => ({
           ...nod,
@@ -100,6 +100,10 @@ const RegexEditorModal = ({ show, handleClose }) => {
         header: "Information",
         body: `There was an error while compiling your RE: ${e.message}`,
       });
+    }
+    finally{
+      setFeching(false);
+      handleClose()
     }
   };
   /**  This method alerts the user incase theres any data in the canvas

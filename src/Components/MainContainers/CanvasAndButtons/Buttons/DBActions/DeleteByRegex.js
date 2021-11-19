@@ -11,6 +11,7 @@ const DeleteByRegex = ({
   idDfa,
   handleShow,
   displaySuccessMsg,
+  wipeApplicationData,
 }) => {
   //YOU DELETE IS THE CURRENT DFA IN THE SCREEN???????????AD?A?D?A?SDA?SD
   const [fetchingDeleteByRe, setDeleteFetchingByRe] = useState(false);
@@ -29,6 +30,10 @@ const DeleteByRegex = ({
 
       if (!res.data.data.deleteAutomataByRegex) {
         throw new Error("Couldnt find a DFA associated to the REGEX");
+      }
+      if (sessionStorage.getItem("regex") === idDfa) {
+        wipeApplicationData();
+        sessionStorage.removeItem("regex");
       }
       displaySuccessMsg("DFA deleted successfully");
     } catch (e) {
@@ -53,7 +58,9 @@ const DeleteByRegex = ({
       <DeleteAutomataModal
         show={showDeleteDfaModalByRe}
         title={
-          "Are you sure you want to delete this DFA? This action cannot be undone!"
+          sessionStorage.getItem("regex") === idDfa
+            ? "Are you sure you want to delete this DFA? The current DFA displayed matches the RE youre about to delete!"
+            : "Are you sure you want to delete this DFA? This action cannot be undone!"
         }
         handleClose={handleCloseShowDeleteDfaModalByRe}
         cbDelete={deleteAutomataByRegex}
