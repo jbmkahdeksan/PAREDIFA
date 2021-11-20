@@ -4,7 +4,7 @@ import Toast from "react-bootstrap/Toast";
 import { useContext } from "react";
 import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
-import logo from "../../Images/network.png";
+import Reactive from '../ReactLogo/Reactive'
 /*
  *
  * Description:
@@ -35,13 +35,7 @@ const Message = () => {
             autohide
           >
             <Toast.Header>
-              <img
-                src={logo}
-                width="18"
-                height="18"
-                className="rounded me-2"
-                alt=""
-              />
+              <Reactive/>
               <strong className="me-auto">{msgInfo.header}</strong>
               <small className="text-muted">just now</small>
             </Toast.Header>
