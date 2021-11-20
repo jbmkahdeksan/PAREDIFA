@@ -37,7 +37,7 @@ const DeleteByRegex = ({
    * @returns void
    */
   const deleteAutomataByRegex = async () => {
-    if (idDfa === 0) return;
+    if (idDfa.length === 0) return;
     try {
       setDeleteFetchingByRe(true);
       const res = await axios.post(process.env.REACT_APP_BACK_END, {
@@ -64,7 +64,9 @@ const DeleteByRegex = ({
     <>
       {length === 0 && (
         <Button
-          onClick={() => setShowDeleteDfaModalByRe(true)}
+          onClick={() =>
+            idDfa.length > 0 ? setShowDeleteDfaModalByRe(true) : ""
+          }
           variant="warning"
           disabled={fetching || fetchingDelete || fetchingDeleteByRe}
         >
