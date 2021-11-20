@@ -1,4 +1,18 @@
 import d3 from "d3";
+/*
+ *
+ * Description:
+ * Utils for laying out the dfa
+ * EIF400 -- Paradigmas de Programacion
+ * @since II Term - 2021
+ * @authors Team 01-10am
+ *  - Andres Alvarez Duran 117520958
+ *  - Joaquin Barrientos Monge 117440348
+ *  - Oscar Ortiz Chavarria 208260347
+ *  - David Zarate Marin 116770797
+ *
+ */
+
 const nodeProperties = {
   selected: false,
   width: 40,
@@ -9,6 +23,16 @@ const nodeProperties = {
   shadowOpacity: 0.6,
 };
 
+/**  This method lay outs the dfa
+ * @param nodos the nodes to be painted in the canvas
+ * @param ed the edges to be painted in the canvas
+ * @param witdh the witdh of the canvas
+ * @param cbMsg a msg to let the user know that the layout has finished
+ * @param  setLayingDFA to set the laying out to true / false
+ * @param setNodes a setter for the nodes
+ * @param setEdge a setter for the edges
+ * @returns void
+ */
 export const layout = (
   nodos,
   ed,
