@@ -10,11 +10,10 @@ import { useContext } from "react";
 import { queryNfaToDfa } from "../../../../../Util/graphQLQueryUtil";
 import { layout } from "../../../../../Util/LayoutUtil";
 import axios from "axios";
-const CompileToDfa = ({ canCompileToDfa }) => {
   /*
    *
    * Description:
-   * Component for compiling a DFA to a NFA
+   * Component for compiling a NFA to a DFA
    * EIF400 -- Paradigmas de Programacion
    * @since II Term - 2021
    * @authors Team 01-10am
@@ -24,6 +23,8 @@ const CompileToDfa = ({ canCompileToDfa }) => {
    *  - David Zarate Marin 116770797
    *
    */
+const CompileToDfa = ({ canCompileToDfa }) => {
+
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
