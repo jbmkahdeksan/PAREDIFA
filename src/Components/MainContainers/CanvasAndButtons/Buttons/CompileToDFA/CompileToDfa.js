@@ -32,50 +32,63 @@ const CompileToDfa = ({ canCompileToDfa }) => {
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { stageInfo } = useContext(ThemeContextStage);
   const NfaToDfa = async () => {
-    const data = await axios.post(process.env.REACT_APP_BACK_END, {
-      query: queryNfaToDfa(generalInfo.alphabet, nodes, edge),
-    });
-    console.log(data, "respuesta dfa");
-    const res = data.data.data.convertNFA_into_DFA;
-    setGeneralInfo({
-      alphabet: res.alphabet,
-      useDefault: false,
-      wipeData: true,
-      showAlphabetDefault: false,
-      result: false,
-    });
-    //if (currentDfa.id) setCurrentDfa({ id: null });
+    try {
+      const data = await axios.post(process.env.REACT_APP_BACK_END, {
+        query: queryNfaToDfa(generalInfo.alphabet, nodes, edge),
+      });
+   
+      const res = data.data.data.convertNFA_into_DFA;
+      setGeneralInfo({
+        alphabet: res.alphabet,
+        useDefault: false,
+        wipeData: true,
+        showAlphabetDefault: false,
+        result: false,
+      });
+      //if (currentDfa.id) setCurrentDfa({ id: null });
 
-    layout(
-      res.nodes.map((nod, index) => ({
-        ...nod,
-        id: `${Date.now() + index}`,
-        final: nod.final,
-        start: nod.initial,
-      })),
-      res.edges.map((e, index) => ({
-        id: `${Date.now() + index}`,
-        source: e.source,
-        target: e.target,
-        symbol: e.symbol,
-      })),
-      stageInfo.w,
-      cbMsg,
-      setLayingDFA,
-      setNodes,
-      setEdge
-    );
+      layout(
+        res.nodes.map((nod, index) => ({
+          ...nod,
+          id: `${Date.now() + index}`,
+          final: nod.final,
+          start: nod.initial,
+        })),
+        res.edges.map((e, index) => ({
+          id: `${Date.now() + index}`,
+          source: e.source,
+          target: e.target,
+          symbol: e.symbol,
+        })),
+        stageInfo.w,
+        cbMsg,
+        setLayingDFA,
+        setNodes,
+        setEdge
+      );
+    } catch (e) {
+      displayErrorMsg(e)
+    } finally {
+      setLayingDFA(false);
+    }
   };
-
-  const cbMsg = () => {
-    setLayingDFA(false);
+  const displayMessage = (bg, header, body) => {
     setMsgShow(true);
     setMsgInfo({
-      bg: "light",
-      header: "Information",
-      body: "Im done",
+      bg: bg,
+      header: header,
+      body: body,
     });
   };
+
+  const displayErrorMsg = (err) =>
+    displayMessage(
+      "warning",
+      "Error",
+      `Ooops, there was an error while compiling this dfa: ${err.message}`
+    );
+
+  const cbMsg = () => displayMessage("light", "Information", "Im done");
 
   return (
     <>

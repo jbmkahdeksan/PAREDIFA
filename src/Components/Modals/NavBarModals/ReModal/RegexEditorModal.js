@@ -56,6 +56,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const sendReToCompile = async () => {
     try {
       setFeching(true);
+
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryCompileRe(
           manualName ? dfaName : Date.now(),
@@ -105,6 +106,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
         body: `There was an error while compiling your RE: ${e.message}`,
       });
     } finally {
+      setSimplifyRe(false)
       setFeching(false);
       handleClose();
     }
