@@ -4,7 +4,7 @@ const AnimationLayingDfa = () => {
   /*
    *
    * Description:
-   * A loverly hammer and a graph anmation  which are displayed while the DFA is  being layed out
+   * A lovely hammer and a graph anmation  which are displayed while the DFA is  being layed out
    * EIF400 -- Paradigmas de Programacion
    * @since II Term - 2021
    * @authors Team 01-10am
