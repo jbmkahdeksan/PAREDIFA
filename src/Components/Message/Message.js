@@ -4,6 +4,7 @@ import Toast from "react-bootstrap/Toast";
 import { useContext } from "react";
 import ThemeContextMsg from "../Context/ContextMessage";
 import ThemeContextMsgInfo from "../Context/ContextMsg";
+import logo from "../../Images/network.png";
 /*
  *
  * Description:
@@ -11,7 +12,7 @@ import ThemeContextMsgInfo from "../Context/ContextMsg";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -34,7 +35,15 @@ const Message = () => {
             autohide
           >
             <Toast.Header>
+              <img
+                src={logo}
+                width="18"
+                height="18"
+                className="rounded me-2"
+                alt=""
+              />
               <strong className="me-auto">{msgInfo.header}</strong>
+              <small className="text-muted">just now</small>
             </Toast.Header>
             <Toast.Body>{msgInfo.body}</Toast.Body>
           </Toast>
