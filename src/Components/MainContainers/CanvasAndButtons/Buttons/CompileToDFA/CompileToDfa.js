@@ -31,12 +31,16 @@ const CompileToDfa = ({ canCompileToDfa }) => {
   const { setMsgShow } = useContext(ThemeContextMsg);
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { stageInfo } = useContext(ThemeContextStage);
+
+  /**Converts current canvas nfa to dfa
+   * @returns void
+   */
   const NfaToDfa = async () => {
     try {
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryNfaToDfa(generalInfo.alphabet, nodes, edge),
       });
-   
+
       const res = data.data.data.convertNFA_into_DFA;
       setGeneralInfo({
         alphabet: res.alphabet,
@@ -67,7 +71,7 @@ const CompileToDfa = ({ canCompileToDfa }) => {
         setEdge
       );
     } catch (e) {
-      displayErrorMsg(e)
+      displayErrorMsg(e);
     } finally {
       setLayingDFA(false);
     }
