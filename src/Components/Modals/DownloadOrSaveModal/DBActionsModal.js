@@ -43,7 +43,8 @@ const DBActionsModal = ({
   const [fetchingDelete, setFetchingDelete] = useState(false);
   const { setGeneralInfo } = useContext(ThemeContextGeneral);
   const [idDfa, setIdDfa] = useState("");
-
+  const [filterByRe, setFilterByRe] = useState(false);
+  const [dfaInfoSearch, setDfaInfoSearch] = useState("");
   //displa of dfa
   const [displayDFA, setDisplayDfa] = useState(false);
   const handleCloseDisplayDfa = () => {
@@ -127,7 +128,7 @@ const DBActionsModal = ({
     if (automata.regex.length !== 0)
       sessionStorage.setItem("regex", automata.regex);
     if (automata.regex.length === 0 && sessionStorage.getItem("regex"))
-      sessionStorage.clear()
+      sessionStorage.clear();
     setCurrentDfa({ id: automata.id }); //***************** *******************************/
     setNodes(mapStates(automata));
 
@@ -163,7 +164,7 @@ const DBActionsModal = ({
         query: queryMutationDelete(selectedDFA),
       });
       if (currentDfaId && currentDfaId === selectedDFA) {
-        if (sessionStorage.getItem("regex")) sessionStorage.clear()
+        if (sessionStorage.getItem("regex")) sessionStorage.clear();
         wipeApplicationData();
       }
       displaySuccessMsg(`The DFA was successfully deleted!`);
@@ -226,7 +227,7 @@ const DBActionsModal = ({
   };
 
   /**  Method to pick wether the user wants to download an DFA or delete
-   * @param automataId the id of the  DFA selected 
+   * @param automataId the id of the  DFA selected
    * @returns void
    */
   const checkForDisplayData = (automataId) => {
@@ -254,6 +255,8 @@ const DBActionsModal = ({
               setDbDAta={setDbDAta}
               displayErrorMsg={displayErrorMsg}
               handleShow={handleShow}
+              setFilterByRe={setFilterByRe}
+              dbData={dbData}
             />
           </Modal.Title>
         </Modal.Header>
@@ -269,11 +272,29 @@ const DBActionsModal = ({
               />
             </div>
           )}
+          {dbData.length > 0 && !fetching && !fetchingDelete && (
+            <div className="mb-3">
+              <Form.Control
+                type="text"
+                value={dfaInfoSearch}
+                onChange={(e) => setDfaInfoSearch(e.target.value)}
+                placeholder={filterByRe ? "Search by RE" : "Search by id"}
+              />
+            </div>
+          )}
           {fetching && <SpinnerCont text="Retrieving data..." />}
           {fetchingDelete && <SpinnerCont text="Deleting automata..." />}
           {!fetching && !fetchingDelete && (
             <DfaList
-              dbData={dbData}
+              dbData={
+                !filterByRe && dfaInfoSearch.length > 0
+                  ? dbData.filter((data) => data.id.includes(dfaInfoSearch))
+                  : filterByRe && dfaInfoSearch.length > 0
+                  ? dbData.filter((data) => data.regex.includes(dfaInfoSearch))
+                  : filterByRe
+                  ? dbData.filter((data) => data.regex.length > 0)
+                  : dbData
+              }
               setOptionTodo={setOptionTodo}
               setShowDeleteDfaModal={setShowDeleteDfaModal}
               setSelectedDFA={setSelectedDFA}

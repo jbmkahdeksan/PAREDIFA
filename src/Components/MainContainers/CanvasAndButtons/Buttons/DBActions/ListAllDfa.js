@@ -1,7 +1,6 @@
 import axios from "axios";
-import { FcMultipleInputs } from "react-icons/fc";
+import { FcMultipleInputs, FcFilledFilter } from "react-icons/fc";
 import { queryAllAutomatas } from "../../../../../Util/graphQLQueryUtil";
-
 /*
  *
  * Description:
@@ -20,12 +19,15 @@ const ListAllDfa = ({
   setDbDAta,
   displayErrorMsg,
   handleShow,
+  setFilterByRe,
+  dbData
 }) => {
   /**  This method fetches all the DFAs stored in the dB
    * @returns void
    */
   const fetchData = async () => {
     try {
+      setFilterByRe(false);
       setFetching(true);
       const res = await axios.post(process.env.REACT_APP_BACK_END, {
         query: queryAllAutomatas,
@@ -46,7 +48,15 @@ const ListAllDfa = ({
         title="Click here to list them all"
         onClick={fetchData}
         className="downloadAllDfa"
-      />
+      />{" "}
+      {dbData.length > 0 && (
+        <FcFilledFilter
+          onClick={() => setFilterByRe(true)}
+          size={30}
+          className="filterData"
+          title="Filter by regex only"
+        />
+      )}
     </>
   );
 };

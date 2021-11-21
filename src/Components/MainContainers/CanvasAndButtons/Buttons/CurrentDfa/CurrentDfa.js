@@ -1,4 +1,4 @@
-import { FcProcess, FcEmptyTrash } from "react-icons/fc";
+import { FcProcess, FcFullTrash } from "react-icons/fc";
 import ThemeContext from "../../../../Context/ContextStates";
 import ThemeContextTr from "../../../../Context/ContextTransitions";
 import ThemeContextGeneral from "../../../../Context/GeneralInfo";
@@ -90,7 +90,7 @@ const CurrentDfa = ({
     <>
       {dfaId && (
         <>
-          <FcEmptyTrash
+          <FcFullTrash
             title="Delete the current DFA"
             className="trashCurrentDfa"
             onClick={() => setShowDeleteCurrentDfa(true)}
