@@ -49,7 +49,7 @@ const DeleteByRegex = ({
       }
       if (sessionStorage.getItem("regex") === idDfa) {
         wipeApplicationData();
-        sessionStorage.removeItem("regex");
+        sessionStorage.clear()
       }
       displaySuccessMsg("DFA deleted successfully");
     } catch (e) {

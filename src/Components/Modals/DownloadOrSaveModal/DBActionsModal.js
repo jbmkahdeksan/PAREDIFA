@@ -127,7 +127,7 @@ const DBActionsModal = ({
     if (automata.regex.length !== 0)
       sessionStorage.setItem("regex", automata.regex);
     if (automata.regex.length === 0 && sessionStorage.getItem("regex"))
-      sessionStorage.removeItem("regex");
+      sessionStorage.clear()
     setCurrentDfa({ id: automata.id }); //***************** *******************************/
     setNodes(mapStates(automata));
 
@@ -163,7 +163,7 @@ const DBActionsModal = ({
         query: queryMutationDelete(selectedDFA),
       });
       if (currentDfaId && currentDfaId === selectedDFA) {
-        if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
+        if (sessionStorage.getItem("regex")) sessionStorage.clear()
         wipeApplicationData();
       }
       displaySuccessMsg(`The DFA was successfully deleted!`);

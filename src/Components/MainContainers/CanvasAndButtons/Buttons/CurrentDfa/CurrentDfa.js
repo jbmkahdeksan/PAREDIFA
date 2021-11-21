@@ -55,7 +55,7 @@ const CurrentDfa = ({
         ),
       });
       wipeApplicationData();
-      if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
+      if (sessionStorage.getItem("regex")) sessionStorage.clear()
       displaySuccessMsg("The DFA was updated successfully!");
     } catch (e) {
       displayFailMessage(`There was an while updating the DFA:  ${e.message}`);
@@ -74,7 +74,7 @@ const CurrentDfa = ({
         query: queryMutationDelete(dfaId),
       });
       displaySuccessMsg(`The DFA was successfully deleted!`);
-      if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
+      if (sessionStorage.getItem("regex")) sessionStorage.clear()
       wipeApplicationData();
     } catch (e) {
       displayFailMessage(

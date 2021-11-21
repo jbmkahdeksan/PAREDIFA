@@ -57,17 +57,14 @@ const RegexEditorModal = ({ show, handleClose }) => {
     try {
       setFeching(true);
 
+      const id = manualName ? dfaName : automatico ? `${Date.now()}` : "";
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryCompileRe(
-          manualName ? dfaName : Date.now(),
-          checkSintax,
-          simplifyRe,
-          re
-        ),
+        query: queryCompileRe(id, checkSintax, simplifyRe, re),
       });
 
       const res = data.data.data.compileRE;
       sessionStorage.setItem("regex", re);
+      if (id.length > 0) sessionStorage.setItem("idDfa", id);
       setGeneralInfo({
         alphabet: res.alphabet,
         useDefault: false,
@@ -106,7 +103,6 @@ const RegexEditorModal = ({ show, handleClose }) => {
         body: `There was an error while compiling your RE: ${e.message}`,
       });
     } finally {
-      setSimplifyRe(false)
       setFeching(false);
       handleClose();
     }

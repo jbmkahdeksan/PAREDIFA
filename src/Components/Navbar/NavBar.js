@@ -82,7 +82,7 @@ const NavBar = () => {
       </Navbar>
       {showAbout && <About show={showAbout} handleShow={handleShow} />}
       <Instructions handleShow={handleShowIns} lgShow={lgShow} />
-      <RegexEditorModal show={showEditor} handleClose={handleShowEditor} />
+      {showEditor && <RegexEditorModal show={showEditor} handleClose={handleShowEditor} />}
     </>
   );
 };

@@ -32,7 +32,7 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
   const { setMsgShow } = useContext(ThemeContextMsg);
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const [addingID, setAddingID] = useState(false);
-  const [dfaID, setDfaID] = useState("");
+  const [dfaID, setDfaID] = useState(sessionStorage.getItem("idDfa") || "");
 
   /**  This method displays a toast with important information for the user
    * @param bg the color of the Toast
@@ -68,7 +68,7 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         ),
       });
 
-      if (sessionStorage.getItem("regex")) sessionStorage.removeItem("regex");
+      if (sessionStorage.getItem("regex")) sessionStorage.clear();
 
       navigator.clipboard.writeText(data.data.data.saveAutomata.id);
       displayMessage(
@@ -119,6 +119,14 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
                 placeholder="DFA Id"
               />
             )}
+            {addingID &&
+              !loading &&
+              sessionStorage.getItem("idDfa") &&
+              dfaID === sessionStorage.getItem("idDfa") && (
+                <Form.Text className="text-muted">
+                  This ID is the one provided by the compiler
+                </Form.Text>
+              )}
             {!loading && !addingID && (
               <h4>Would you like to add your own id to the DFA?</h4>
             )}
