@@ -12,7 +12,7 @@ import ThemeContextMsgInfo from "../../Context/ContextMsg";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -31,11 +31,12 @@ const AlphabetModal = (props) => {
     const filteredAlphabet = [...new Set(alphabet.match(regex))];
 
     if (filteredAlphabet.length === 0) {
+      props.handleClose()
       setMsgShow(true);
       setMsgInfo({
         bg: "info",
         header: "Alphabet not accepted",
-        body: "Only letters and numbers are allowed!",
+        body: "Only lower case letters and numbers are allowed!",
       });
       return;
     }
@@ -66,7 +67,7 @@ const AlphabetModal = (props) => {
             placeholder="Alphabet"
           />
           <Form.Text className="text-muted">
-            Remeber: Only letters and numbers are accepted
+            Remeber: Only lowercase letters and numbers are accepted
           </Form.Text>
         </Modal.Body>
         <Modal.Footer>

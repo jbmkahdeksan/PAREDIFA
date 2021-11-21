@@ -272,7 +272,7 @@ const DBActionsModal = ({
               />
             </div>
           )}
-          {dbData.length > 0 && !fetching && !fetchingDelete && (
+          {dbData.length > 1  && !fetching && !fetchingDelete && (
             <div className="mb-3">
               <Form.Control
                 type="text"
