@@ -68,6 +68,9 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         ),
       });
 
+      if (data.data.data.saveAutomata.repeatedID) {
+        throw new Error("Repeteated DFA ID!");
+      }
       if (sessionStorage.getItem("regex")) sessionStorage.clear();
 
       navigator.clipboard.writeText(data.data.data.saveAutomata.id);
@@ -77,15 +80,15 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         "Automata was uploaded successfully to the server,  copied the automata ID to your clipboard"
       );
       //limpiar datos application
-      setNodes((e) => []);
-      setEdge((e) => []);
-      setGeneralInfo((e) => ({
+      setNodes([]);
+      setEdge([]);
+      setGeneralInfo({
         alphabet: [],
         useDefault: false,
         wipeData: true,
         showAlphabetDefault: false,
         result: false,
-      }));
+      });
       //
       if (addingID) {
         setDfaID("");
@@ -98,7 +101,7 @@ const DfaSaveModal = ({ handleClose, show, addingTr }) => {
         `Oops! Looks lke there was an issue while uploading the data to the server: ${e.message}`
       );
     } finally {
-      setLoading((e) => false);
+      setLoading(false);
       handleClose();
     }
   };

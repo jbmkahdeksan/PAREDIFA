@@ -65,6 +65,7 @@ export const queryMutationSaveSingleDfa = (
     edge
   )}]){
         id
+        repeatedID
       }
     }`;
 
