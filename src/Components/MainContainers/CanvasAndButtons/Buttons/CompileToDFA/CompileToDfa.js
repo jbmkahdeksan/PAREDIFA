@@ -10,21 +10,20 @@ import { useContext } from "react";
 import { queryNfaToDfa } from "../../../../../Util/graphQLQueryUtil";
 import { layout } from "../../../../../Util/LayoutUtil";
 import axios from "axios";
-  /*
-   *
-   * Description:
-   * Component for compiling a NFA to a DFA
-   * EIF400 -- Paradigmas de Programacion
-   * @since II Term - 2021
-   * @authors Team 01-10am
-   *  - Andres Alvarez Duran 117520958
-   *  - Joaquin Barrientos Monge 117440348
-   *  - Oscar Ortiz Chavarria 208260347
-   *  - David Zarate Marin 116770797
-   *
-   */
-const CompileToDfa = ({ canCompileToDfa }) => {
-
+/*
+ *
+ * Description:
+ * Component for compiling a NFA to a DFA
+ * EIF400 -- Paradigmas de Programacion
+ * @since II Term - 2021
+ * @authors Team 01-10am
+ *  - Andres Alvarez Duran 117520958
+ *  - Joaquin Barrientos Monge 117440348
+ *  - Oscar Ortiz Chavarria 208260347
+ *  - David Zarate Marin 116770797
+ *
+ */
+const CompileToDfa = ({ addingTr, canCompileToDfa }) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
@@ -39,7 +38,11 @@ const CompileToDfa = ({ canCompileToDfa }) => {
   const NfaToDfa = async () => {
     try {
       const data = await axios.post(process.env.REACT_APP_BACK_END, {
-        query: queryNfaToDfa(generalInfo.alphabet, nodes, edge),
+        query: queryNfaToDfa(
+          generalInfo.alphabet,
+          nodes,
+          addingTr.state ? edge.filter((ed) => ed.type === "fixed") : edge
+        ),
       });
 
       const res = data.data.data.convertNFA_into_DFA;

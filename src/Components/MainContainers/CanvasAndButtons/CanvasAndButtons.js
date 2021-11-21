@@ -190,6 +190,7 @@ const CanvasAndButtons = ({
               nowRunning={runInfo.nowRunning}
               fetchingUpdateDfa={fetchingUpdateDfa}
               canCompileToDfa={canCompileToDfa}
+              addingTr={addingTr}
             />
 
             <div className="d-grid col-5 mx-0 text-center border-start border-2">

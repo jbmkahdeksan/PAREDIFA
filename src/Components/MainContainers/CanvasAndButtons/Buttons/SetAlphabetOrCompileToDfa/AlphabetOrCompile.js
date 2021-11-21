@@ -17,6 +17,7 @@ const AlphabetOrCompile = ({
   fetchingUpdateDfa,
   nowRunning,
   canCompileToDfa,
+  addingTr,
 }) => {
   return (
     <div className="d-grid col-3 mx-0 text-center border-start border-2">
@@ -25,7 +26,7 @@ const AlphabetOrCompile = ({
           nowRunning={nowRunning}
           fetchingUpdateDfa={fetchingUpdateDfa}
         />
-        <CompileToDfa canCompileToDfa={canCompileToDfa} />
+        <CompileToDfa addingTr={addingTr} canCompileToDfa={canCompileToDfa} />
       </div>
     </div>
   );
