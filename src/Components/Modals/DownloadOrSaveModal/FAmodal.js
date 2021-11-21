@@ -1,5 +1,4 @@
 import DBActionsModal from "./DBActionsModal";
-import Message from "../../Message/Message";
 
 /*
  *
@@ -25,7 +24,7 @@ const FAmodal = (props) => {
         setCurrentDfa={props.setCurrentDfa}
         currentDfaId={props.currentDfaId}
       />
-      <Message />
+      
     </>
   );
 };

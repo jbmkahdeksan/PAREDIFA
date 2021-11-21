@@ -113,7 +113,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
     setMsgInfo({
       bg: "light",
       header: "Information",
-      body: "Im done",
+      body: "DFA layout is done",
     });
   };
   /**  This method alerts the user incase theres any data in the canvas
