@@ -22,35 +22,32 @@ const Errors = ({
   INITALSTATE,
   FINALSTATE,
   automataComplete,
-  createError
+  createError,
 }) => {
   const { nodes } = useContext(ThemeContext);
   const { generalInfo } = useContext(ThemeContextGeneral);
 
-
-    /**
+  /**
    * This method is to display on the screen that the automata is ready to go
    * @returns html code
    * */
-     const automataReady = () => {
-      if (!ready) {
-        setTimeout(() =>{
-          setReady(true);
-        },0)
-      }
-  
-      const obj = (
-        <div>
-          <b>
-            ERROR - <i> NONE </i>
-          </b>
-          <br></br> automata is good to go <br></br>
-          <br></br>
-        </div>
-      );
-      return obj;
-    };
+  const automataReady = () => {
+    if (!ready) {
+      setTimeout(() => {
+        setReady(true);
+      }, 0);
+    }
 
+    return (
+      <div>
+        <b>
+          ERROR - <i> NONE </i>
+        </b>
+        <br></br> automata is good to go <br></br>
+        <br></br>
+      </div>
+    );
+  };
 
   return (
     <div className={""}>
