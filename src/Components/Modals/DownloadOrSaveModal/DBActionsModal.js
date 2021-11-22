@@ -16,7 +16,7 @@ import DeleteByRegex from "../../MainContainers/CanvasAndButtons/Buttons/DBActio
 import DfaDownload from "../../MainContainers/CanvasAndButtons/Buttons/DBActions/DfaDownload";
 import ListAllDfa from "../../MainContainers/CanvasAndButtons/Buttons/DBActions/ListAllDfa";
 import { queryMutationDelete } from "../../../Util/graphQLQueryUtil";
-//Handle todos, tasks todo in Todo
+
 /*
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
