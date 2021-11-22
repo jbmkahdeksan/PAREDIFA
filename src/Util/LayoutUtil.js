@@ -46,12 +46,15 @@ export const layout = (
     nodes: nodos,
     edges: ed,
   };
+
+  const linkDis = 400 - nodos.length * 10;
   var force = d3.layout
     .force()
     .nodes(dataset.nodes)
     .links(dataset.edges)
     .size([width, 450])
-    .linkDistance(200)
+    .linkDistance(linkDis < 0 ? 1 : linkDis)
+    .linkStrength(0.1)
     .charge(-900)
     .gravity(0.2)
     .theta(0.8)
