@@ -31,10 +31,12 @@ const TemporaryEdge = ({ id, node1, node2, mouseCoord, x, y, w }) => {
   const arrowEnd = endArrow(node1, angle);
 
   const arrowCurve = curveArrow(angle, node1, node2, w);
+
+  const mouseOverState = isMouseOverState(node2, mouseCoord)
   return (
     <>
       <Group>
-        {!isMouseOverState(node2, mouseCoord) && (
+        {!mouseOverState && (
           <Arrow
             id={id}
             type="arrow"
@@ -57,7 +59,7 @@ const TemporaryEdge = ({ id, node1, node2, mouseCoord, x, y, w }) => {
             shadowOffsetY={15}
           />
         )}
-        {isMouseOverState(node2, mouseCoord) && (
+        {mouseOverState && (
           <>
             <Arc
               id={id}

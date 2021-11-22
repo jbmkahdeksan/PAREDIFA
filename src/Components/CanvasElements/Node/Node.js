@@ -61,6 +61,7 @@ const Node = ({
     setSelected("-1");
   };
 
+  const SHADOWVAL = nodeInfo.final ? 0 : selected === nodeInfo.id ? 10 : 5
   return (
     <>
       <Group
@@ -90,8 +91,8 @@ const Node = ({
         <Circle
           id={nodeInfo.id}
           {...nodeInfo}
-          shadowOffsetX={nodeInfo.final ? 0 : selected === nodeInfo.id ? 10 : 5}
-          shadowOffsetY={nodeInfo.final ? 0 : selected === nodeInfo.id ? 10 : 5}
+          shadowOffsetX={SHADOWVAL}
+          shadowOffsetY={SHADOWVAL}
           fill={
             nodeRunningId && nodeRunningId === nodeInfo.id
               ? "#a29bfe"
@@ -130,7 +131,6 @@ const Node = ({
           <Shape
             type="nodo"
             id={nodeInfo.id}
-            qq
             sceneFunc={(ctx, shape) => {
               ctx.beginPath();
               ctx.arc(
