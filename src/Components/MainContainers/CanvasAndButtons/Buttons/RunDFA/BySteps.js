@@ -21,7 +21,7 @@ const BySteps = ({
   setDisablePrev,
 }) => {
   return (
-    <div className="btn-group-sm m-auto text-center" id="stepsDiv">
+    <div className="btn-group-sm m-auto text-center mb-4" id="stepsDiv">
       <Button
         variant="danger"
         id="run-prev"
