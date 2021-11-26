@@ -148,7 +148,7 @@ canvas{
 
 
 
-@keyframes dfa { 100% { transform-origin: left top;transform: rotateZ(3.142rad);} }
+@keyframes dfa { 10% { transform-origin: left top;transform: rotateZ(3.142rad);} }
 
 
 

@@ -223,7 +223,7 @@ export const queryAllAutomatas = `{
  */
 export const queryCompileRe = (dfaId, checkSintax, simplifyRe, re) => `
 {
-  compileRE(re:{id:"${dfaId}",checkSintax:${checkSintax},simpBeforeComp:${simplifyRe},RE:"${re}"}){
+  compileRE(re:{id:"${dfaId}",simpBeforeComp:${simplifyRe},RE:"${re}"}){
     nodes{
       name
       label
