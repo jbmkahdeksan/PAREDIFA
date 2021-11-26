@@ -195,7 +195,7 @@ const CanvasAndButtons = ({
 
             <div className="d-grid col-5 mx-0 text-center border-start border-2">
               {runInfo.nowRunning && !isByStep && (
-                <div className="automataRun m-auto">
+                <div className="automataRun m-auto mb-4">
                   <h4>Automata is running...</h4>
                   <div className="spinner">
                     <Reactive />
