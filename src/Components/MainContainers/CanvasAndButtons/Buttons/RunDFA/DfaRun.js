@@ -17,6 +17,7 @@ import Form from "react-bootstrap/Form";
 const DfaRun = ({ inputString, handleInputChanges, handleInput, ready }) => {
   return (
     <div>
+      <div style={{paddingTop:'1%'}}>
       <Form.Control
         className="m-auto w-75"
         value={inputString}
@@ -25,6 +26,7 @@ const DfaRun = ({ inputString, handleInputChanges, handleInput, ready }) => {
         id="testString"
         placeholder="Test string"
       />
+      </div>
       <div className="btn-group-sm my-2">
         <Button
           variant="primary"

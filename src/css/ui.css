@@ -107,7 +107,7 @@ canvas{
 
 .errors,
 .accepted {
-    height: 350px;
+    height: 288px;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;

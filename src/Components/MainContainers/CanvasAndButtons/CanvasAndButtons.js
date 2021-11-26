@@ -182,7 +182,7 @@ const CanvasAndButtons = ({
 
   return (
     <div className="h-100 col-9">
-      <div className="d-flex justify-content-center my-4">
+      <div className="d-flex justify-content-center mt-2 mb-1">
         {layingDFA && <AnimationLayingDfa />}
         {!layingDFA && (
           <>

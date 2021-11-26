@@ -1,6 +1,4 @@
 import { useState, useContext } from "react";
-import axios from "axios";
-import { querySaveImage } from "../../../../../Util/graphQLQueryUtil";
 import ThemeContext from "../../../../Context/ContextStates";
 import Button from "react-bootstrap/Button";
 import InformationModal from "../../../../Modals/ClearOrSaveAsImgModal/InformationModal";
@@ -13,7 +11,7 @@ import ClearCanvasModal from "../../../../Modals/ClearOrSaveAsImgModal/ClearCanv
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -36,9 +34,6 @@ const ClearOrSend = ({
   //
   const [showInformationModal, setShowInformationModal] = useState(false);
   const handleCloseInformation = () => setShowInformationModal(false);
-  // some states for handling fetching
-  const [fetching, setFeching] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   /** Checks if  the canvas is empty
    * @returns void
@@ -55,60 +50,6 @@ const ClearOrSend = ({
     }
   };
 
-  /** Method to download an image of the canvas and send it to the server
-   * @param uri stage reference
-   * @param firstName first name of the student
-   * @param lastName last name of the student
-   * @param id id of the student
-   * @param time time of the  student schedule-> 10am, 12 pm ....
-   * @returns void
-   */
-  const downloadURI = async (uri, firstName, lastName, id, time) => {
-    const link = document.createElement("a");
-    const COURSE = {
-      code: "400",
-      subject: "HOMEWORK",
-      year: "2020",
-      cycle: "||",
-    };
-    const DESCRIPTION = `EIF${COURSE.code}_${COURSE.subject}_${COURSE.cycle}_${COURSE.year}_${firstName} ${lastName}_${id}_${time}.png`;
-    link.download = DESCRIPTION;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setFeching(true);
-    setProgress(50);
-
-    try {
-       await axios.post(process.env.REACT_APP_BACK_END, {
-        query: querySaveImage(link.href, firstName, lastName, id, time),
-      });
-      
-      setProgress(100);
-      setFeching(false);
-      displaySuccessMsg("The image was sent successfully!");
-    } catch (e) {
-      displayFailMessage(
-        `There was an error while sending the image:  ${e.message}`
-      );
-    } finally {
-      handleCloseInformation();
-    }
-  };
-
-  /** Method to download an image of the canvas and send it to the server
-   * @param firstName first name of the student
-   * @param lastName last name of the student
-   * @param id id of the student
-   * @param time time of the  student schedule-> 10am, 12 pm ....
-   * @returns void
-   */
-  const handleImage = (firstName, lastName, id, time) => {
-    const uri = stageRef.current.toDataURL();
-
-    downloadURI(uri, firstName, lastName, id, time);
-  };
   return (
     <>
       <div className="canvasActions">
@@ -135,17 +76,17 @@ const ClearOrSend = ({
                 : setShowInformationModal(true)
             }
           >
-            Save as PNG
+            Save/Send as PNG
           </Button>
         </div>
       </div>
       {showInformationModal && (
         <InformationModal
-          cb={handleImage}
           show={showInformationModal}
           handleClose={handleCloseInformation}
-          fetching={fetching}
-          progress={progress}
+          stageRef={stageRef}
+          displaySuccessMsg={displaySuccessMsg}
+          displayFailMessage={displayFailMessage}
         />
       )}
       <ClearCanvasModal
@@ -157,6 +98,5 @@ const ClearOrSend = ({
     </>
   );
 };
-
 
 export default ClearOrSend;
