@@ -641,7 +641,7 @@ const Canvas = ({ stageRef, addingTr, setAddingTr }) => {
               currentChar={
                 runInfo.input
                   ? runInfo.prevPressed
-                    ? runInfo.input[runInfo.currentChar]
+                    ? runInfo.input[runInfo.currentChar-1]
                     : runInfo.input[runInfo.currentChar - 1]
                   : ""
               }
