@@ -187,7 +187,7 @@ const Body = () => {
    */
   useEffect(() => {
     window.onbeforeunload = () => {
-      if (sessionStorage.getItem("regex")) sessionStorage.clear()
+      if (sessionStorage.getItem("regex")) sessionStorage.clear();
     };
   }, []);
   return (

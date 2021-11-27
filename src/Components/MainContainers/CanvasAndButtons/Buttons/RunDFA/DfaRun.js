@@ -1,4 +1,4 @@
-import Button from 'react-bootstrap/Button'
+import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 /*
@@ -8,7 +8,7 @@ import Form from "react-bootstrap/Form";
  * EIF400 -- Paradigmas de Programacion
  * @since II Term - 2021
  * @authors Team 01-10am
- *  - Andres Alvarez Duran 117520958 
+ *  - Andres Alvarez Duran 117520958
  *  - Joaquin Barrientos Monge 117440348
  *  - Oscar Ortiz Chavarria 208260347
  *  - David Zarate Marin 116770797
@@ -17,15 +17,15 @@ import Form from "react-bootstrap/Form";
 const DfaRun = ({ inputString, handleInputChanges, handleInput, ready }) => {
   return (
     <div>
-      <div style={{paddingTop:'1%'}}>
-      <Form.Control
-        className="m-auto w-75"
-        value={inputString}
-        onChange={(e) => handleInputChanges(e)}
-        type="text"
-        id="testString"
-        placeholder="Test string"
-      />
+      <div className="dfaRun">
+        <Form.Control
+          className="m-auto w-75"
+          value={inputString}
+          onChange={(e) => handleInputChanges(e)}
+          type="text"
+          id="testString"
+          placeholder="Test string"
+        />
       </div>
       <div className="btn-group-sm my-2">
         <Button

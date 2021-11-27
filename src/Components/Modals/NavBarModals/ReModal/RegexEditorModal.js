@@ -10,6 +10,7 @@ import ThemeContextCurrentDFA from "../../../Context/ContextCurrentDFA";
 import ThemeContextMsgInfo from "../../../Context/ContextMsg";
 import ThemeContextMsg from "../../../Context/ContextMessage";
 import ThemeContextLayingDFA from "../../../Context/ContextLayingDFA";
+import ThemeContextRunInfo from "../../../Context/ContextRunInfo";
 import ThemeContextStage from "../../../Context/StageInfo";
 import SpinnerCont from "../../../Spinner/SpinnerCont";
 import { queryCompileRe } from "../../../../Util/graphQLQueryUtil";
@@ -42,6 +43,7 @@ const RegexEditorModal = ({ show, handleClose }) => {
   const { setMsgInfo } = useContext(ThemeContextMsgInfo);
   const { stageInfo } = useContext(ThemeContextStage);
   const { currentDfa, setCurrentDfa } = useContext(ThemeContextCurrentDFA);
+  const { runInfo, setRunInfo } = useContext(ThemeContextRunInfo);
   //application laying out dfa
   const { layingDFA, setLayingDFA } = useContext(ThemeContextLayingDFA);
   //delete modal if theres data
@@ -62,16 +64,12 @@ const RegexEditorModal = ({ show, handleClose }) => {
         query: queryCompileRe(id, checkSintax, simplifyRe, re),
       });
 
+      wipeRunInfo();
+
       const res = data.data.data.compileRE;
       sessionStorage.setItem("regex", re);
       if (id.length > 0) sessionStorage.setItem("idDfa", id);
-      setGeneralInfo({
-        alphabet: res.alphabet,
-        useDefault: false,
-        wipeData: true,
-        showAlphabetDefault: false,
-        result: false,
-      });
+      updateGeneralInfo(res);
       if (currentDfa.id) setCurrentDfa({ id: null });
 
       setRe("");
@@ -126,6 +124,36 @@ const RegexEditorModal = ({ show, handleClose }) => {
       } else {
         sendReToCompile();
       }
+    }
+  };
+
+  /**  This method updates general information
+   * @param res the result of the promise
+   * @returns void
+   */
+  const updateGeneralInfo = (res) => {
+    setGeneralInfo({
+      alphabet: res.alphabet,
+      useDefault: false,
+      wipeData: true,
+      showAlphabetDefault: false,
+      result: false,
+    });
+  };
+  /**  This method wipes run information incase the user was running the DFA by steps
+   * @returns void
+   */
+  const wipeRunInfo = () => {
+    if (runInfo.nowRunning) {
+      setRunInfo({
+        nowRunning: false,
+        transitionID: null,
+        stateID: null,
+        input: null,
+        currentChar: null,
+        finalState: "",
+        prevPressed: false,
+      });
     }
   };
 

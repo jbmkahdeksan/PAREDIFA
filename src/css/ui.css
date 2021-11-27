@@ -47,7 +47,9 @@ body {
     overflow-x: hidden;
   
 }
-
+.dfaRun{
+    padding-top:1%;
+}
 #teamInfo,.emptyDb,.savingDFA,.deleteDFA {
     margin: auto;
     text-align: center;
