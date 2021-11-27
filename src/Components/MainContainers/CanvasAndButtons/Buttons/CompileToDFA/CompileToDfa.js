@@ -23,7 +23,7 @@ import axios from "axios";
  *  - David Zarate Marin 116770797
  *
  */
-const CompileToDfa = ({ addingTr, canCompileToDfa }) => {
+const CompileToDfa = ({ addingTr, canCompileToDfa, fetchingUpdateDfa}) => {
   const { nodes, setNodes } = useContext(ThemeContext);
   const { edge, setEdge } = useContext(ThemeContextTr);
   const { generalInfo, setGeneralInfo } = useContext(ThemeContextGeneral);
@@ -101,7 +101,11 @@ const CompileToDfa = ({ addingTr, canCompileToDfa }) => {
   return (
     <>
       {canCompileToDfa && (
-        <Button onClick={NfaToDfa} variant="outline-warning">
+        <Button
+          onClick={NfaToDfa}
+          disabled={fetchingUpdateDfa}
+          variant="outline-warning"
+        >
           Convert to DFA
         </Button>
       )}

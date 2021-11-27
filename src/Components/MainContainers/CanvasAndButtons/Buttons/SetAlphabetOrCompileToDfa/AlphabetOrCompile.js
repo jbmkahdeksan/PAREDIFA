@@ -26,7 +26,11 @@ const AlphabetOrCompile = ({
           nowRunning={nowRunning}
           fetchingUpdateDfa={fetchingUpdateDfa}
         />
-        <CompileToDfa addingTr={addingTr} canCompileToDfa={canCompileToDfa} />
+        <CompileToDfa
+          addingTr={addingTr}
+          fetchingUpdateDfa={fetchingUpdateDfa}
+          canCompileToDfa={canCompileToDfa}
+        />
       </div>
     </div>
   );
