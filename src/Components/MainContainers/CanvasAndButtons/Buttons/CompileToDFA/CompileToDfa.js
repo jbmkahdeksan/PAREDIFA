@@ -96,7 +96,7 @@ const CompileToDfa = ({ addingTr, canCompileToDfa, fetchingUpdateDfa}) => {
       `Ooops, there was an error while compiling this dfa: ${err.message}`
     );
 
-  const cbMsg = () => displayMessage("light", "Information", "Im done");
+  const cbMsg = () => displayMessage("light", "Information", "DFA is done laying out");
 
   return (
     <>
