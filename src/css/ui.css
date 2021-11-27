@@ -45,7 +45,7 @@
 body {
     overflow: scroll;
     overflow-x: hidden;
-    margin-bottom: 2%;
+  
 }
 
 #teamInfo,.emptyDb,.savingDFA,.deleteDFA {

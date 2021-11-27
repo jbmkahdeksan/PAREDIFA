@@ -49,7 +49,7 @@ const ListAllDfa = ({
         onClick={fetchData}
         className="downloadAllDfa"
       />{" "}
-      {dbData.length > 0 && (
+      {dbData.length > 1 && (
         <FcFilledFilter
           onClick={() => setFilterByRe(true)}
           size={30}

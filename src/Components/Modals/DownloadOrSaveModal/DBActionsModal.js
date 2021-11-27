@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import { useState, useContext } from "react";
+import { useState, useContext} from "react";
 import axios from "axios";
 import ThemeContext from "../../Context/ContextStates";
 import ThemeContextMsgInfo from "../../Context/ContextMsg";
@@ -183,6 +183,7 @@ const DBActionsModal = ({
     setDbDAta([]);
     setSelectedDFA("");
     setOptionTodo(0);
+    setFilterByRe(false);
   };
 
   /**  Method to map states so we can show them when the user is peeking
@@ -238,6 +239,7 @@ const DBActionsModal = ({
     }
     handleAutomataDownload(automataId);
   };
+
 
   return (
     <>
